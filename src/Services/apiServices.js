@@ -72,3 +72,21 @@ export const CarMode = async (data) => {
         console.log("error");
     }
 }
+
+export const CarCompanies = async () => {
+    const response = await axios.get(`${BASE_URL}/api/car-companies`);
+    if (response?.data) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}
+
+export const Brands = async () => {
+    const response = await axios.get(`${BASE_URL}/api/brand`);
+    if (response?.data) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}

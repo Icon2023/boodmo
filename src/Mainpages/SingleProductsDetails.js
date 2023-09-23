@@ -67,11 +67,11 @@ const SingleProductsDetails = () => {
                                                         data-gallery="product-media-preview"
                                                         href="assets/img/product/big-product/product2.webp"
                                                     >
-                                                        <img
+                                                        {/* <img
                                                             className="product__media--preview__items--img"
                                                             src={add_Details?.images[0]?.image}
                                                             alt="product-media-img"
-                                                        />
+                                                        /> */}
                                                     </a>
                                                 </div>
                                             </div>

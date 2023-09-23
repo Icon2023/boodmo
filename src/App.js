@@ -11,6 +11,10 @@ import Login from './Mainpages/Login'
 import PrivacyPolicy from './Mainpages/PrivacyPolicy'
 import CategoryProducts from './Mainpages/CategoryProducts'
 import ProductsView from './Mainpages/ProductsView'
+import CarMakers from './Subpages/CarMakers'
+import BrandsAll from './Subpages/Brands'
+import "../node_modules/slick-carousel/slick/slick.css";
+import "../node_modules/slick-carousel/slick/slick-theme.css";
 
 function App() {
   return (
@@ -24,6 +28,8 @@ function App() {
         <Route path='/cart' element={<Cart/>}/>
         <Route path='/wishlist' element={<WishList/>}/>
         <Route path='/login' element={<Login/>}/>
+        <Route path='/vehicles' element={<CarMakers/>}/>
+        <Route path='/brands' element={<BrandsAll/>}/>
         <Route path='/privacy-policy' element={<PrivacyPolicy/>}/>
       </Routes>
       <Footer />

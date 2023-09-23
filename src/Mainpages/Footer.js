@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Footer = () => {
     return (
@@ -258,7 +259,7 @@ const Footer = () => {
                                     </ul>
                                 </div>
                             </div>
-                            <div className="col-lg-2 col-md-4">
+                            {/* <div className="col-lg-2 col-md-4">
                                 <div className="footer__widget">
                                     <h2 className="footer__widget--title ">
                                         FIND IT FAST{" "}
@@ -282,28 +283,84 @@ const Footer = () => {
                                     </h2>
                                     <ul className="footer__widget--menu footer__widget--inner">
                                         <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="shop.html">
+                                            <a className="footer__widget--menu__text" href="#">
                                                 Smartphone ablet
                                             </a>
                                         </li>
                                         <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="shop.html">
+                                            <a className="footer__widget--menu__text" href="#">
                                                 Computer Laptop
                                             </a>
                                         </li>
                                         <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="shop.html">
+                                            <a className="footer__widget--menu__text" href="#">
                                                 TV &amp; Audio
                                             </a>
                                         </li>
                                         <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="shop.html">
+                                            <a className="footer__widget--menu__text" href="#">
                                                 Car Accessories
                                             </a>
                                         </li>
                                         <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="shop.html">
+                                            <a className="footer__widget--menu__text" href="#">
                                                 Cameras Photos
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div> */}
+                            <div className="col-lg-2 col-md-4">
+                                <div className="footer__widget">
+                                    <h2 className="footer__widget--title ">
+                                    Useful links
+                                        <button
+                                            className="footer__widget--button"
+                                            aria-label="footer widget button"
+                                        />
+                                        <svg
+                                            className="footer__widget--title__arrowdown--icon"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="12.355"
+                                            height="8.394"
+                                            viewBox="0 0 10.355 6.394"
+                                        >
+                                            <path
+                                                d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z"
+                                                transform="translate(-6 -8.59)"
+                                                fill="currentColor"
+                                            />
+                                        </svg>
+                                    </h2>
+                                    <ul className="footer__widget--menu footer__widget--inner">
+                                        <li className="footer__widget--menu__list">
+                                            <Link className="footer__widget--menu__text" to="/">
+                                            Articles
+                                            </Link>
+                                        </li>
+                                        <li className="footer__widget--menu__list">
+                                            <Link className="footer__widget--menu__text" to="/brands">
+                                            Brands
+                                            </Link>
+                                        </li>
+                                        <li className="footer__widget--menu__list">
+                                            <a className="footer__widget--menu__text" href="#">
+                                            Catalogues
+                                            </a>
+                                        </li>
+                                        <li className="footer__widget--menu__list">
+                                            <Link className="footer__widget--menu__text" to="/vehicles">
+                                            Car Makers
+                                            </Link>
+                                        </li>
+                                        <li className="footer__widget--menu__list">
+                                            <a className="footer__widget--menu__text" href="#">
+                                            Sitemap
+                                            </a>
+                                        </li>
+                                        <li className="footer__widget--menu__list">
+                                            <a className="footer__widget--menu__text" href="#">
+                                            Sitemap2
                                             </a>
                                         </li>
                                     </ul>
