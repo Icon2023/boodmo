@@ -257,7 +257,7 @@ const Header = () => {
                                                 Home
                                             </a>
                                         </li>
-                                        <li className="header__menu--items mega__menu--items">
+                                        {/* <li className="header__menu--items mega__menu--items">
                                             <a className="header__menu--link" href="/shop">
                                                 Shop
                                                 <svg
@@ -276,7 +276,7 @@ const Header = () => {
                                                 </svg>
                                             </a>
                                             <ul className="header__mega--menu d-flex">
-                                                {/* <li className="header__mega--menu__li">
+                                                <li className="header__mega--menu__li">
                                                     <ul className="header__mega--sub__menu">
                                                         <li className="header__mega--sub__menu_li">
                                                             <a
@@ -319,8 +319,8 @@ const Header = () => {
                                                             </a>
                                                         </li>
                                                     </ul>
-                                                </li> */}
-                                                {/* <li className="header__mega--menu__li">
+                                                </li>
+                                                <li className="header__mega--menu__li">
                                                     <ul className="header__mega--sub__menu">
                                                         <li className="header__mega--sub__menu_li">
                                                             <a
@@ -363,7 +363,7 @@ const Header = () => {
                                                             </a>
                                                         </li>
                                                     </ul>
-                                                </li> */}
+                                                </li>
                                                 <li className="header__mega--menu__li fullscreen__style d-flex">
                                                     <a
                                                         className="header__mega--menu__banner display-block"
@@ -412,7 +412,7 @@ const Header = () => {
                                                     </a>
                                                 </li>
                                             </ul>
-                                        </li>
+                                        </li> */}
                                         <li className="header__menu--items">
                                             <a className="header__menu--link" href="shop.html">
                                                 Accesories

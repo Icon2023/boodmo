@@ -4879,8 +4879,18 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .product__card--thumbnail {
     position: relative;
     overflow: hidden;
-    height: 250px;
-    width: 280px;
+    height: 230px;
+}
+.load_btn button{
+    margin-top: 20px;
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    text-align: center;
+    background-color: #ed1d24;
+    color: white;
+    border: 0;
+    border-radius: 5px;
+    padding: 3px 20px;
 }
 
 @media only screen and (min-width:1200px) {
@@ -8607,7 +8617,7 @@ input.quickview__value--number {
 
 .widget__categories--menu__label {
     cursor: pointer;
-    padding: .5rem 1rem;
+    padding: 3px 0px;
     position: relative;
     -webkit-transition: var(--transition);
     transition: var(--transition)

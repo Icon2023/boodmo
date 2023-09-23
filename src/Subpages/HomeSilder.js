@@ -1,6 +1,52 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { CarCompines, CarMode, CarModel, CarYear } from '../Services/apiServices'
 
 const HomeSilder = () => {
+    const [carName, setCarName] = useState([]);
+    const [carValName, setCarValName] = useState('');
+
+    const [carModel, setCarModel] = useState([]);
+    const [carValModel, setCarValModel] = useState('')
+
+    const [carYear, setCarYear] = useState([]);
+    const [carValYear, setCarValYear] = useState('')
+
+    const [carModei, setCarModei] = useState([]);
+    const [carValModei, setValModei] = useState('')
+
+    useEffect(() => {
+        CarCompines().then((res) => {
+            setCarName(res?.data)
+        })
+    }, [])
+
+    const handleChange = (e) => {
+        setCarValName(e.target.value)
+        CarModel(e.target.value).then((res) => {
+            setCarModel(res?.data)
+        })
+    }
+
+    const handleChange1 = (e) => {
+        setCarValModel(e.target.value)
+        let val = e.target.value
+        setCarValYear(val)
+        CarYear({ carValName, val }).then((res) => {
+            setCarYear(res?.data)
+            console.log(res?.data);
+        })
+    }
+
+    const handleChange2 = (e) => {
+        setValModei(e.target.value)
+        let val = e.target.value
+        console.log({ carValName, carValYear, val });
+        CarMode({ carValName, carValYear, val }).then((res) => {
+            setCarModei(res?.data)
+            console.log(res?.data);
+        })
+    }
+
     return (
         <>
             <section className="hero__slider--section">
@@ -29,57 +75,59 @@ const HomeSilder = () => {
                             <div className="search__filter--inner style5">
                                 <form className="search__filter--form__style2 d-flex" action="#">
                                     <div className="search__filter--select select search__filter--width">
-                                        <select className="search__filter--select__field">
-                                            <option selected="" value={1}>
-                                                Select Make
+                                        <select className="search__filter--select__field" onChange={handleChange}>
+                                            <option selected="" value={0}>
+                                                Select Car Maker
                                             </option>
-                                            <option value={2}>Brake Calipers </option>
-                                            <option value={3}>Engine Oil </option>
-                                            <option value={4}>Motor Oil </option>
-                                            <option value={5}>Oil Filters </option>
+                                            {
+                                                carName.map((e, index) => {
+                                                    return (
+                                                        <option value={e?.id} key={index} >{e?.name}</option>
+                                                    )
+                                                })
+                                            }
                                         </select>
                                     </div>
                                     <div className="search__filter--select select search__filter--width">
-                                        <select className="search__filter--select__field">
-                                            <option selected="" value={1}>
+                                        <select className="search__filter--select__field" disabled={carValName.length <= 0 ? true : false} onChange={handleChange1}>
+                                            <option selected="" value={0}>
                                                 Select Model
                                             </option>
-                                            <option value={2}>Toyota Combo </option>
-                                            <option value={3}>Model 2022 </option>
-                                            <option value={4}>Air Boxes</option>
+                                            {
+                                                carModel.map((e, index) => {
+                                                    return (
+                                                        <option value={e?.id} key={index}>{e?.name}</option>
+                                                    )
+                                                })
+                                            }
                                         </select>
                                     </div>
                                     <div className="search__filter--select select search__filter--width">
-                                        <select className="search__filter--select__field">
-                                            <option selected="" value={1}>
+                                        <select className="search__filter--select__field"  disabled={carValModel.length <= 0 ? true : false} onChange={handleChange2}>
+                                            <option selected="" value={0}>
                                                 Choose Year
                                             </option>
-                                            <option value={2}>Year 2020 </option>
-                                            <option value={3}>Year 2022 </option>
-                                            <option value={4}>Year 2024</option>
-                                            <option value={5}>Year 2026 </option>
+                                            {
+                                                carYear.map((e, index) => {
+                                                    return (
+                                                        <option value={e?.id} key={index} >{e?.year}</option>
+                                                    )
+                                                })
+                                            }
                                         </select>
                                     </div>
                                     <div className="search__filter--select select search__filter--width">
-                                        <select className="search__filter--select__field">
-                                            <option selected="" value={1}>
+                                        <select className="search__filter--select__field" disabled={carValModei.length <= 0 ? true : false} >
+                                            <option selected="" value={0}>
                                                 Select Class
                                             </option>
-                                            <option value={2}>Class One </option>
-                                            <option value={3}>Class Two </option>
-                                            <option value={4}>Class Three </option>
-                                            <option value={5}>Class Four </option>
-                                        </select>
-                                    </div>
-                                    <div className="search__filter--select select search__filter--width">
-                                        <select className="search__filter--select__field">
-                                            <option selected="" value={1}>
-                                                Select Type
-                                            </option>
-                                            <option value={2}>Tail Lights</option>
-                                            <option value={3}>Car Covers</option>
-                                            <option value={4}>Hoods</option>
-                                            <option value={5}>Bumpers</option>
+                                            {
+                                                carModei.map((e, index) => {
+                                                    return (
+                                                        <option value={e?.id} key={index} >{e?.modification}</option>
+                                                    )
+                                                })
+                                            }
                                         </select>
                                     </div>
                                     <div className="search__filter--width">

@@ -1,24 +1,36 @@
 import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { Product } from '../Services/apiServices';
+import { useDispatch, useSelector } from 'react-redux';
+import { addProducts } from '../store/reducers/ProductSlice';
 import { CgMenuGridR } from "react-icons/cg";
 import { TfiMenuAlt } from "react-icons/tfi";
 import { AiOutlineFilter, AiOutlineStar } from "react-icons/ai";
-import { AllProduct } from '../Services/apiServices'
-import { useDispatch, useSelector } from 'react-redux';
-import { addProduct } from '../store/reducers/ProductSlice';
 
-const AllProductsListView = () => {
-    const [gridOpen, setGridOpen] = useState(true)
-    const [trifOpen, setTrifOpen] = useState(true)
+//matrial ui 
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+const ProductsView = () => {
+    const { cate_id, subcategory } = useParams();
+    const [gridOpen, setGridOpen] = useState(true);
+    const [trifOpen, setTrifOpen] = useState(true);
+    const [expanded, setExpanded] = useState(false);
+
     const dispatch = useDispatch();
-    const { all_shop_product } = useSelector((state) => ({ ...state.products }));
+    const { add_product, category_list } = useSelector((state) => ({ ...state.products }));
 
     useEffect(() => {
-        AllProduct().then((res) => {
+        const data = {
+            category: cate_id,
+            sub_category: subcategory
+        }
+        Product(data).then((res) => {
             if (res.success) {
-                dispatch(addProduct(res?.data));
+                dispatch(addProducts(res?.data))
             }
-        }).catch((e) => {
-            console.log(e);
         })
     }, [])
 
@@ -29,8 +41,13 @@ const AllProductsListView = () => {
     const handleTfiClick = () => {
         gridOpen ? setGridOpen(false) : setTrifOpen(true)
     }
+
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
+
     return (
-        <>
+        <div>
             <main className="main__content_wrapper">
                 {/* Start breadcrumb section */}
                 <section className="breadcrumb__section breadcrumb__bg">
@@ -60,168 +77,58 @@ const AllProductsListView = () => {
                                 <div className="shop__sidebar--widget widget__area d-none d-lg-block">
                                     <div className="single__widget widget__bg">
                                         <h2 className="widget__title h3">Categories</h2>
-                                        <ul className="widget__categories--menu">
-                                            <li className="widget__categories--menu__list">
-                                                <label className="widget__categories--menu__label d-flex align-items-center">
-                                                    <img
-                                                        className="widget__categories--menu__img"
-                                                        src="assets/img/product/small-product/product1.webp"
-                                                        alt="categories-img"
-                                                    />
-                                                    <span className="widget__categories--menu__text">
-                                                        Smart Devices
-                                                    </span>
-                                                    <svg
-                                                        className="widget__categories--menu__arrowdown--icon"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        width="12.355"
-                                                        height="8.394"
-                                                    >
-                                                        <path
-                                                            d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z"
-                                                            transform="translate(-6 -8.59)"
-                                                            fill="currentColor"
-                                                        />
-                                                    </svg>
-                                                </label>
-                                                <ul className="widget__categories--sub__menu">
-                                                    <li className="widget__categories--sub__menu--list">
-                                                        <a
-                                                            className="widget__categories--sub__menu--link d-flex align-items-center"
-                                                            href="shop.html"
-                                                        >
-                                                            <img
-                                                                className="widget__categories--sub__menu--img"
-                                                                src="assets/img/product/small-product/product2.webp"
-                                                                alt="categories-img"
-                                                            />
-                                                            <span className="widget__categories--sub__menu--text">
-                                                                Discount Weekly
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li className="widget__categories--sub__menu--list">
-                                                        <a
-                                                            className="widget__categories--sub__menu--link d-flex align-items-center"
-                                                            href="shop.html"
-                                                        >
-                                                            <img
-                                                                className="widget__categories--sub__menu--img"
-                                                                src="assets/img/product/small-product/product3.webp"
-                                                                alt="categories-img"
-                                                            />
-                                                            <span className="widget__categories--sub__menu--text">
-                                                                Green dhaniya
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li className="widget__categories--sub__menu--list">
-                                                        <a
-                                                            className="widget__categories--sub__menu--link d-flex align-items-center"
-                                                            href="shop.html"
-                                                        >
-                                                            <img
-                                                                className="widget__categories--sub__menu--img"
-                                                                src="assets/img/product/small-product/product4.webp"
-                                                                alt="categories-img"
-                                                            />
-                                                            <span className="widget__categories--sub__menu--text">
-                                                                resh Nuts
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li className="widget__categories--sub__menu--list">
-                                                        <a
-                                                            className="widget__categories--sub__menu--link d-flex align-items-center"
-                                                            href="shop.html"
-                                                        >
-                                                            <img
-                                                                className="widget__categories--sub__menu--img"
-                                                                src="assets/img/product/small-product/product5.webp"
-                                                                alt="categories-img"
-                                                            />
-                                                            <span className="widget__categories--sub__menu--text">
-                                                                Millk Cream
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="single__widget widget__bg">
-                                        <h2 className="widget__title h3">Dietary Needs</h2>
-                                        <ul className="widget__form--check">
-                                            <li className="widget__form--check__list">
-                                                <label
-                                                    className="widget__form--check__label"
-                                                    htmlFor="check1"
-                                                >
-                                                    Body Parts
-                                                </label>
-                                                <input
-                                                    className="widget__form--check__input"
-                                                    id="check1"
-                                                    type="checkbox"
-                                                />
-                                                <span className="widget__form--checkmark" />
-                                            </li>
-                                            <li className="widget__form--check__list">
-                                                <label
-                                                    className="widget__form--check__label"
-                                                    htmlFor="check2"
-                                                >
-                                                    Oiles Fluids
-                                                </label>
-                                                <input
-                                                    className="widget__form--check__input"
-                                                    id="check2"
-                                                    type="checkbox"
-                                                />
-                                                <span className="widget__form--checkmark" />
-                                            </li>
-                                            <li className="widget__form--check__list">
-                                                <label
-                                                    className="widget__form--check__label"
-                                                    htmlFor="check3"
-                                                >
-                                                    Car care kits
-                                                </label>
-                                                <input
-                                                    className="widget__form--check__input"
-                                                    id="check3"
-                                                    type="checkbox"
-                                                />
-                                                <span className="widget__form--checkmark" />
-                                            </li>
-                                            <li className="widget__form--check__list">
-                                                <label
-                                                    className="widget__form--check__label"
-                                                    htmlFor="check4"
-                                                >
-                                                    Brake disks
-                                                </label>
-                                                <input
-                                                    className="widget__form--check__input"
-                                                    id="check4"
-                                                    type="checkbox"
-                                                />
-                                                <span className="widget__form--checkmark" />
-                                            </li>
-                                            <li className="widget__form--check__list">
-                                                <label
-                                                    className="widget__form--check__label"
-                                                    htmlFor="check5"
-                                                >
-                                                    Repair Parts
-                                                </label>
-                                                <input
-                                                    className="widget__form--check__input"
-                                                    id="check5"
-                                                    type="checkbox"
-                                                />
-                                                <span className="widget__form--checkmark" />
-                                            </li>
+                                        <ul className="widget__categories--menu" style={{ height: "70vh", overflowY: "scroll" }}>
+                                            {
+                                                category_list.map((e, index) => {
+                                                    return (
+                                                        <>
+                                                            <Accordion expanded={expanded === e?.id} onChange={handleChange(e?.id)} key={index}>
+                                                                <AccordionSummary
+                                                                    expandIcon={<ExpandMoreIcon style={{ fontSize: "28px" }} />}
+                                                                    aria-controls="panel1bh-content"
+                                                                    id="panel1bh-header"
+                                                                >
+                                                                    <a href={`/shop/${e?.id}`}>
+                                                                        <label className="widget__categories--menu__label d-flex align-items-center">
+                                                                            <img
+                                                                                className="widget__categories--menu__img"
+                                                                                src={e?.image}
+                                                                                alt="categories-img"
+                                                                            />
+                                                                            <span className="widget__categories--menu__text">
+                                                                                {e?.name}
+                                                                            </span>
+                                                                        </label>
+                                                                    </a>
+                                                                </AccordionSummary>
+                                                                <AccordionDetails>
+                                                                    {
+                                                                        e?.sub_category?.map((i, index) => {
+                                                                            return (
+                                                                                <li className="widget__categories--menu__list" key={index}>
+                                                                                    <a href={`/shop/${e?.id}/${i?.id}`}>
+                                                                                        <label label className="widget__categories--menu__label d-flex align-items-center" >
+                                                                                            <img
+                                                                                                className="widget__categories--menu__img"
+                                                                                                src={i?.image}
+                                                                                                alt="categories-img"
+                                                                                            />
+                                                                                            <span className="widget__categories--menu__text">
+                                                                                                {i?.name}
+                                                                                            </span>
+                                                                                        </label>
+                                                                                    </a>
+                                                                                </li>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                </AccordionDetails>
+                                                            </Accordion >
+                                                        </>
+                                                    )
+                                                })
+                                            }
+
                                         </ul>
                                     </div>
                                     <div className="single__widget price__filter widget__bg">
@@ -280,359 +187,9 @@ const AllProductsListView = () => {
                                             </button>
                                         </form>
                                     </div>
-                                    <div className="single__widget widget__bg">
-                                        <h2 className="widget__title h3">Top Rated Product</h2>
-                                        <div className="shop__sidebar--product">
-                                            <div className="small__product--card d-flex">
-                                                <div className="small__product--thumbnail">
-                                                    <a className="display-block" href="product-details.html">
-                                                        <img
-                                                            src="assets/img/product/small-product/product6.webp"
-                                                            alt="product-img"
-                                                        />
-                                                    </a>
-                                                </div>
-                                                <div className="small__product--content">
-                                                    <h3 className="small__product--card__title">
-                                                        <a href="product-details.html">Black Air Pods </a>
-                                                    </h3>
-                                                    <div className="small__product--card__price">
-                                                        <span className="current__price">$239.52</span>
-                                                    </div>
-                                                    <ul className="rating small__product--rating d-flex">
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M12.4141 4.53125L8.99219 4.03906L7.44531 0.921875C7.1875 0.382812 6.39062 0.359375 6.10938 0.921875L4.58594 4.03906L1.14062 4.53125C0.53125 4.625 0.296875 5.375 0.742188 5.82031L3.20312 8.23438L2.61719 11.6328C2.52344 12.2422 3.17969 12.7109 3.71875 12.4297L6.78906 10.8125L9.83594 12.4297C10.375 12.7109 11.0312 12.2422 10.9375 11.6328L10.3516 8.23438L12.8125 5.82031C13.2578 5.375 13.0234 4.625 12.4141 4.53125ZM9.53125 7.95312L10.1875 11.75L6.78906 9.96875L3.36719 11.75L4.02344 7.95312L1.25781 5.28125L5.07812 4.71875L6.78906 1.25L8.47656 4.71875L12.2969 5.28125L9.53125 7.95312Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div className="small__product--card d-flex">
-                                                <div className="small__product--thumbnail">
-                                                    <a className="display-block" href="product-details.html">
-                                                        <img
-                                                            src="assets/img/product/small-product/product7.webp"
-                                                            alt="product-img"
-                                                        />
-                                                    </a>
-                                                </div>
-                                                <div className="small__product--content">
-                                                    <h3 className="small__product--card__title">
-                                                        <a href="product-details.html">Amazon Cloud</a>
-                                                    </h3>
-                                                    <div className="small__product--card__price">
-                                                        <span className="current__price">$178.52</span>
-                                                    </div>
-                                                    <ul className="rating small__product--rating d-flex">
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M12.4141 4.53125L8.99219 4.03906L7.44531 0.921875C7.1875 0.382812 6.39062 0.359375 6.10938 0.921875L4.58594 4.03906L1.14062 4.53125C0.53125 4.625 0.296875 5.375 0.742188 5.82031L3.20312 8.23438L2.61719 11.6328C2.52344 12.2422 3.17969 12.7109 3.71875 12.4297L6.78906 10.8125L9.83594 12.4297C10.375 12.7109 11.0312 12.2422 10.9375 11.6328L10.3516 8.23438L12.8125 5.82031C13.2578 5.375 13.0234 4.625 12.4141 4.53125ZM9.53125 7.95312L10.1875 11.75L6.78906 9.96875L3.36719 11.75L4.02344 7.95312L1.25781 5.28125L5.07812 4.71875L6.78906 1.25L8.47656 4.71875L12.2969 5.28125L9.53125 7.95312Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div className="small__product--card d-flex">
-                                                <div className="small__product--thumbnail">
-                                                    <a className="display-block" href="product-details.html">
-                                                        <img
-                                                            src="assets/img/product/small-product/product8.webp"
-                                                            alt="product-img"
-                                                        />
-                                                    </a>
-                                                </div>
-                                                <div className="small__product--content">
-                                                    <h3 className="small__product--card__title">
-                                                        <a href="product-details.html">Lorem ipsum sit. </a>
-                                                    </h3>
-                                                    <div className="small__product--card__price">
-                                                        <span className="current__price">$276.52</span>
-                                                    </div>
-                                                    <ul className="rating small__product--rating d-flex">
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                        <li className="rating__list">
-                                                            <span className="rating__icon">
-                                                                <svg
-                                                                    width={14}
-                                                                    height={13}
-                                                                    viewBox="0 0 14 13"
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        d="M12.4141 4.53125L8.99219 4.03906L7.44531 0.921875C7.1875 0.382812 6.39062 0.359375 6.10938 0.921875L4.58594 4.03906L1.14062 4.53125C0.53125 4.625 0.296875 5.375 0.742188 5.82031L3.20312 8.23438L2.61719 11.6328C2.52344 12.2422 3.17969 12.7109 3.71875 12.4297L6.78906 10.8125L9.83594 12.4297C10.375 12.7109 11.0312 12.2422 10.9375 11.6328L10.3516 8.23438L12.8125 5.82031C13.2578 5.375 13.0234 4.625 12.4141 4.53125ZM9.53125 7.95312L10.1875 11.75L6.78906 9.96875L3.36719 11.75L4.02344 7.95312L1.25781 5.28125L5.07812 4.71875L6.78906 1.25L8.47656 4.71875L12.2969 5.28125L9.53125 7.95312Z"
-                                                                        fill="currentColor"
-                                                                    />
-                                                                </svg>
-                                                            </span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="single__widget widget__bg">
-                                        <h2 className="widget__title h3">Brands</h2>
-                                        <ul className="widget__tagcloud">
-                                            <li className="widget__tagcloud--list">
-                                                <a className="widget__tagcloud--link" href="shop.html">
-                                                    {" "}
-                                                    Paintworks
-                                                </a>
-                                            </li>
-                                            <li className="widget__tagcloud--list">
-                                                <a className="widget__tagcloud--link" href="shop.html">
-                                                    Lighting
-                                                </a>
-                                            </li>
-                                            <li className="widget__tagcloud--list">
-                                                <a className="widget__tagcloud--link" href="shop.html">
-                                                    Gaming
-                                                </a>
-                                            </li>
-                                            <li className="widget__tagcloud--list">
-                                                <a className="widget__tagcloud--link" href="shop.html">
-                                                    Bumpers{" "}
-                                                </a>
-                                            </li>
-                                            <li className="widget__tagcloud--list">
-                                                <a className="widget__tagcloud--link" href="shop.html">
-                                                    Hoods{" "}
-                                                </a>
-                                            </li>
-                                            <li className="widget__tagcloud--list">
-                                                <a className="widget__tagcloud--link" href="shop.html">
-                                                    Air Boxes
-                                                </a>
-                                            </li>
-                                            <li className="widget__tagcloud--list">
-                                                <a className="widget__tagcloud--link" href="shop.html">
-                                                    Fog Lights
-                                                </a>
-                                            </li>
-                                            <li className="widget__tagcloud--list">
-                                                <a className="widget__tagcloud--link" href="shop.html">
-                                                    Interior{" "}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </div>
                             </div>
+
                             <div className="col-xl-9 col-lg-8 shop-col-width-lg-8">
                                 <div className="shop__right--sidebar">
                                     <div className="shop__product--wrapper">
@@ -707,7 +264,7 @@ const AllProductsListView = () => {
                                                             <div className="product__section--inner">
                                                                 <div className="row mb--n30">
                                                                     {
-                                                                        all_shop_product.map((e, index) => {
+                                                                        add_product.map((e, index) => {
                                                                             return (
                                                                                 <>
                                                                                     <div className="col-lg-4 col-md-4 col-sm-6 col-6 custom-col mb-30" key={index}>
@@ -715,7 +272,7 @@ const AllProductsListView = () => {
                                                                                             <div className="product__card--thumbnail">
                                                                                                 <a
                                                                                                     className="product__card--thumbnail__link display-block"
-                                                                                                    href={`/shop/details/${e?.id}`}
+                                                                                                    href={`/productsdetail/${e?.id}`}
                                                                                                 >
                                                                                                     <img
                                                                                                         className="product__card--thumbnail__img product__primary--img"
@@ -813,7 +370,7 @@ const AllProductsListView = () => {
                                                             <div className="product__section--inner product__section--style3__inner">
                                                                 <div className="row row-cols-1 mb--n30">
                                                                     {
-                                                                        all_shop_product.map((e, index) => {
+                                                                        add_product.map((e, index) => {
                                                                             return (
                                                                                 <>
                                                                                     <div className="col mb-30" key={index}>
@@ -821,7 +378,7 @@ const AllProductsListView = () => {
                                                                                             <div className="product__card--thumbnail product__list--thumbnail">
                                                                                                 <a
                                                                                                     className="product__card--thumbnail__link display-block"
-                                                                                                    href="/shop/details"
+                                                                                                    href={`/productsdetail/${e?.id}`}
                                                                                                 >
                                                                                                     <img
                                                                                                         className="product__card--thumbnail__img product__primary--img"
@@ -1041,8 +598,8 @@ const AllProductsListView = () => {
                     </div>
                 </div>
             </main>
-        </>
+        </div>
     )
 }
 
-export default AllProductsListView
+export default ProductsView

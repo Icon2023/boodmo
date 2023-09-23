@@ -8,6 +8,7 @@ import { AiOutlineStar } from 'react-icons/ai';
 
 const SingleProductsDetails = () => {
     const { id } = useParams();
+    console.log(id);
     const dispatch = useDispatch();
     const [reviewOpen, setReviewOpen] = useState(true)
     const [addOpen, setAddOpen] = useState(true)
@@ -17,7 +18,7 @@ const SingleProductsDetails = () => {
         SingleProductDetails(id).then((res) => {
             if (res.success) {
                 dispatch(addProductDetails(res?.data?.product))
-                //    console.log(res.data.product);
+                   console.log(res?.data);
             }
         })
     }, [])
@@ -54,8 +55,8 @@ const SingleProductsDetails = () => {
                 {/* Start product details section */}
                 <section className="product__details--section section--padding">
                     <div className="container">
-                        <div className="row row-cols-lg-2 row-cols-md-2">
-                            <div className="col">
+                        <div className="row">
+                            <div className="col-md-6">
                                 <div className="product__details--media">
                                     <div className="single__product--preview  swiper mb-25">
                                         <div className="swiper-wrapper">
@@ -68,7 +69,7 @@ const SingleProductsDetails = () => {
                                                     >
                                                         <img
                                                             className="product__media--preview__items--img"
-                                                            src={add_Details?.images[0].image}
+                                                            src={add_Details?.images[0]?.image}
                                                             alt="product-media-img"
                                                         />
                                                     </a>
@@ -78,7 +79,7 @@ const SingleProductsDetails = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col">
+                            <div className="col-md-6">
                                 <div className="product__details--info">
                                     <form action="#">
                                         <h2 className="product__details--info__title mb-15">
