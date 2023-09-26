@@ -237,7 +237,7 @@ const Header = () => {
                                         >
                                             <AiOutlineShoppingCart style={{ fontSize: "28px" }} />
                                             {
-                                                addto_cart?.length !== 0 ? <span className="items__count">{addto_cart.length}</span> : ""
+                                                addto_cart?.length !== 0 ? <span className="items__count">{addto_cart?.length}</span> : ""
                                             }
 
                                         </a>
@@ -283,7 +283,7 @@ const Header = () => {
                                 <AiOutlineShoppingCart style={{ fontSize: "20px" }} />
                                 <span className="offcanvas__stikcy--toolbar__label">Cart</span>
                                 {
-                                    addto_cart?.length !== 0 ? <span className="items__count">{addto_cart.length}</span> : ""
+                                    addto_cart?.length !== 0 ? <span className="items__count">{addto_cart?.length}</span> : ""
                                 }
                             </a>
                         </li>
@@ -292,7 +292,7 @@ const Header = () => {
                                 <AiOutlineHeart style={{ fontSize: "24px" }} />
                                 <span className="offcanvas__stikcy--toolbar__label">Wishlist</span>
                                 {
-                                    add_wish?.length !== 0 ? <span className="items__count">{add_wish.length}</span> : ""
+                                    add_wish?.length !== 0 ? <span className="items__count">{add_wish?.length}</span> : ""
                                 }
                             </a>
                         </li>

@@ -4,13 +4,16 @@ import { RxDoubleArrowLeft } from "react-icons/rx";
 
 function PrevArrow({ onClick }) {
   return (
-    <div className="arrow_click_prev">
-      <div className="prev_arrow" onClick={onClick}>
+    <div className="arrow_click_prev" style={{position: "absolute",
+      right: "77%",
+      top: "-32%",
+      transform: "translate(-50%, -50%)"}}>
+      <h2 className="prev_arrow" onClick={onClick}>
         <RxDoubleArrowLeft
           className="mb-1 arrow_click_svg"
         />
         {/* <img src={img1} alt="" /> */}
-      </div>
+      </h2>
     </div>
   );
 }

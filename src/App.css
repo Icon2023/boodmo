@@ -13063,3 +13063,13 @@ details>summary::-webkit-details-marker {
         font-size: 1.6rem
     }
 }
+
+/* auth */
+.error_form{
+    color: red;
+}
+
+.center-img {
+    display: inline-block;
+    margin: 0 auto;
+}
