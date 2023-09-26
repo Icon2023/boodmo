@@ -9,6 +9,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ShippingAddress from '../Subpages/ShippingAddress'
 
 const CategoryProducts = () => {
     const dispatch = useDispatch();
@@ -29,6 +30,7 @@ const CategoryProducts = () => {
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+
     return (
         <>
             <main className="main__content_wrapper">
@@ -60,7 +62,7 @@ const CategoryProducts = () => {
                                 <div className="shop__sidebar--widget widget__area d-none d-lg-block">
                                     <div className="single__widget widget__bg">
                                         <h2 className="widget__title h3">Categories</h2>
-                                        <ul className="widget__categories--menu" style={{ height: "70vh", overflowY: "scroll" }}>
+                                        <ul className="widget__categories--menu" style={{ height: "80vh", overflowY: "scroll" }}>
                                             {
                                                 category_list.map((e, index) => {
                                                     return (
@@ -82,7 +84,7 @@ const CategoryProducts = () => {
                                                                                 {e?.name}
                                                                             </span>
                                                                         </label>
-                                                                    </a>
+                                                                    </a>  
                                                                 </AccordionSummary>
                                                                 <AccordionDetails>
                                                                     {
@@ -111,10 +113,9 @@ const CategoryProducts = () => {
                                                     )
                                                 })
                                             }
-
                                         </ul>
                                     </div>
-                                    <div className="single__widget price__filter widget__bg">
+                                    {/* <div className="single__widget price__filter widget__bg">
                                         <h2 className="widget__title h3">Filter By Price</h2>
                                         <form className="price__filter--form" action="#">
                                             <div className="price__filter--form__inner mb-15 d-flex align-items-center">
@@ -169,7 +170,7 @@ const CategoryProducts = () => {
                                                 Filter
                                             </button>
                                         </form>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                             <div className="col-xl-9 col-lg-8 shop-col-width-lg-8">
@@ -213,6 +214,7 @@ const CategoryProducts = () => {
                         </div>
                     </div>
                 </div>
+                <ShippingAddress/>
             </main >
         </>
     )

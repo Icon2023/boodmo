@@ -4881,11 +4881,22 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     overflow: hidden;
     height: 230px;
 }
-.load_btn button{
+
+.load_btn button {
     margin-top: 20px;
-    /* margin-left: auto; */
-    /* margin-right: auto; */
     text-align: center;
+    background-color: #ed1d24;
+    color: white;
+    border: 0;
+    border-radius: 5px;
+    padding: 3px 20px;
+}
+
+.load_btn {
+    text-align: center;
+}
+
+.checkout_btn {
     background-color: #ed1d24;
     color: white;
     border: 0;
@@ -8597,7 +8608,7 @@ input.quickview__value--number {
 
 .widget__categories--menu__list {
     border: 1px solid var(--border-color);
-    margin-bottom: 1.5rem;
+    margin-bottom: 3px;
     border-radius: .5rem
 }
 
@@ -8753,26 +8764,26 @@ input.quickview__value--number {
     display: none
 }
 
-.price__filter--group {
-    width: 46%
+.form_filter {
+    display: flex;
 }
 
-.price__filter--label {
-    font-weight: 600;
-    margin-bottom: .6rem;
-    display: inline-block
+.form_filter input {
+    width: 100px;
+    border-radius: 5px;
+    border: 1px solid #ED1D24;
+    padding-left: 10px;
 }
 
-@media only screen and (min-width:992px) {
-    .price__filter--label {
-        font-size: 1.5rem
-    }
+.form_filter_btn button {
+    margin-top: 20px;
+    background-color: #ed1d24;
+    color: white;
+    border: 0;
+    border-radius: 5px;
+    padding: 2px 28px;
 }
 
-.price__filter--input {
-    border: 1px solid var(--border-color);
-    padding: .3rem .7rem
-}
 
 .price__filter--currency {
     font-weight: 700;
@@ -8923,6 +8934,13 @@ input.quickview__value--number {
     .product__list--content {
         text-align: center
     }
+}
+
+.product_name {
+    width: 250px;
+    height: 50px;
+    overflow: hidden;
+    /* text-overflow: ellipsis !important; */
 }
 
 .product__list--content .product__card--title {

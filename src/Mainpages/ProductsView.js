@@ -12,15 +12,34 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Pagination, PaginationItem } from '@mui/material';
 
 const ProductsView = () => {
     const { cate_id, subcategory } = useParams();
     const [gridOpen, setGridOpen] = useState(true);
     const [trifOpen, setTrifOpen] = useState(true);
     const [expanded, setExpanded] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 9; // Set the number of items to show per page here.
+    const [Stprice, setStPrice] = useState('')
+    const [endPrice, setEndPrice] = useState('')
 
     const dispatch = useDispatch();
     const { add_product, category_list } = useSelector((state) => ({ ...state.products }));
+
+    // Calculate the indexes of the items to show on the current page.
+    const totalPages = Math.ceil(add_product.length / itemsPerPage);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = add_product.slice(
+        indexOfFirstItem,
+        indexOfLastItem
+    );
+
+    const handlePageChange = (event, pageNumber) => {
+        window.scrollTo(0, 0);
+        setCurrentPage(pageNumber);
+    };
 
     useEffect(() => {
         const data = {
@@ -32,7 +51,38 @@ const ProductsView = () => {
                 dispatch(addProducts(res?.data))
             }
         })
+
+
     }, [])
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const price = {
+            category: cate_id,
+            sub_category: subcategory,
+            price_start: Stprice,
+            price_end: endPrice
+        }
+        Product(price).then((res) => {
+            if (res.success) {
+                dispatch(addProducts(res?.data))
+            }
+        })
+    }
+
+    const sortClick = (val1) => {
+        let data = {
+            category: cate_id,
+            sub_category: subcategory,
+            sort_by: val1.split(",")[0],
+            sort_action: val1.split(",")[1]
+        }
+        Product(data).then((res) => {
+            if (res.success) {
+                dispatch(addProducts(res?.data))
+            }
+        })
+    }
 
     const handleGridClick = () => {
         gridOpen ? setTrifOpen(false) : setGridOpen(true)
@@ -58,7 +108,7 @@ const ProductsView = () => {
                                     <h1 className="breadcrumb__content--title">Product</h1>
                                     <ul className="breadcrumb__content--menu d-flex justify-content-center">
                                         <li className="breadcrumb__content--menu__items">
-                                            <a href="index.html">Home</a>
+                                            <a href="/">Home</a>
                                         </li>
                                         <li className="breadcrumb__content--menu__items">
                                             <span>Product</span>
@@ -133,58 +183,20 @@ const ProductsView = () => {
                                     </div>
                                     <div className="single__widget price__filter widget__bg">
                                         <h2 className="widget__title h3">Filter By Price</h2>
-                                        <form className="price__filter--form" action="#">
-                                            <div className="price__filter--form__inner mb-15 d-flex align-items-center">
-                                                <div className="price__filter--group">
-                                                    <label
-                                                        className="price__filter--label"
-                                                        htmlFor="Filter-Price-GTE2"
-                                                    >
-                                                        From
-                                                    </label>
-                                                    <div className="price__filter--input border-radius-5 d-flex align-items-center">
-                                                        <span className="price__filter--currency">$</span>
-                                                        <input
-                                                            className="price__filter--input__field border-0"
-                                                            name="filter.v.price.gte"
-                                                            id="Filter-Price-GTE2"
-                                                            type="number"
-                                                            placeholder={0}
-                                                            min={0}
-                                                            max={250.0}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="price__divider">
-                                                    <span>-</span>
-                                                </div>
-                                                <div className="price__filter--group">
-                                                    <label
-                                                        className="price__filter--label"
-                                                        htmlFor="Filter-Price-LTE2"
-                                                    >
-                                                        To
-                                                    </label>
-                                                    <div className="price__filter--input border-radius-5 d-flex align-items-center">
-                                                        <span className="price__filter--currency">$</span>
-                                                        <input
-                                                            className="price__filter--input__field border-0"
-                                                            name="filter.v.price.lte"
-                                                            id="Filter-Price-LTE2"
-                                                            type="number"
-                                                            min={0}
-                                                            placeholder={250.0}
-                                                            max={250.0}
-                                                        />
-                                                    </div>
-                                                </div>
+                                        <form onSubmit={handleSubmit}>
+                                            <div className='form_filter'>
+                                                <label>
+                                                    From
+                                                    <input type="number" placeholder='0' value={Stprice} onChange={(e) => setStPrice(e.target.value)} />
+                                                </label>
+                                                <label>To
+
+                                                    <input type="number" placeholder='250' value={endPrice} onChange={(e) => setEndPrice(e.target.value)} />
+                                                </label>
                                             </div>
-                                            <button
-                                                className="primary__btn price__filter--btn"
-                                                type="submit"
-                                            >
-                                                Filter
-                                            </button>
+                                            <div className='form_filter_btn'>
+                                                <button>Filter</button>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -210,22 +222,22 @@ const ProductsView = () => {
                                                                 65
                                                             </option>
                                                             <option value={2}>40</option>
-                                                            <option value={3}>42</option>
-                                                            <option value={4}>57 </option>
-                                                            <option value={5}>60 </option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div className="product__view--mode__list product__short--by align-items-center d-flex">
                                                     <label className="product__view--label">Sort By :</label>
                                                     <div className="select shop__header--select">
-                                                        <select className="product__view--select">
-                                                            <option selected="" value={1}>
-                                                                Sort by latest
+                                                        <select className="product__view--select" onChange={(e) => sortClick(e.target.value)}>
+                                                            <option selected="" value={("price, ASC")}>
+                                                                Sort by Populity
                                                             </option>
-                                                            <option value={2}>Sort by popularity</option>
-                                                            <option value={3}>Sort by newness</option>
-                                                            <option value={4}>Sort by rating </option>
+                                                            <option value={("price, ASC")}>
+                                                                LOW  TO HIGH
+                                                            </option>
+                                                            <option value={("price, DESC")}>HIGH TO LOW</option>
+                                                            <option value={("latest, ASC")}>OLD TO NEW</option>
+                                                            <option value={("latest, DESC")}>NEW TO OLD</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -253,7 +265,7 @@ const ProductsView = () => {
                                                 </div>
                                             </div>
                                             <p className="product__showing--count">
-                                                Showing 1–9 of 21 results
+                                                Showing 1 of {add_product.length} results
                                             </p>
                                         </div>
                                         <div className="tab_content">
@@ -264,7 +276,7 @@ const ProductsView = () => {
                                                             <div className="product__section--inner">
                                                                 <div className="row mb--n30">
                                                                     {
-                                                                        add_product.map((e, index) => {
+                                                                        currentItems.map((e, index) => {
                                                                             return (
                                                                                 <>
                                                                                     <div className="col-lg-4 col-md-4 col-sm-6 col-6 custom-col mb-30" key={index}>
@@ -286,7 +298,7 @@ const ProductsView = () => {
                                                                                                     />
                                                                                                 </a>
                                                                                                 <span className="product__badge">-14%</span>
-                                                                                                <ul className="product__card--action d-flex align-items-center justify-content-center">
+                                                                                                {/* <ul className="product__card--action d-flex align-items-center justify-content-center">
                                                                                                     <li className="product__card--action__list">
                                                                                                         <a
                                                                                                             className="product__card--action__btn"
@@ -311,12 +323,12 @@ const ProductsView = () => {
                                                                                                             </span>
                                                                                                         </a>
                                                                                                     </li>
-                                                                                                </ul>
+                                                                                                </ul> */}
                                                                                             </div>
                                                                                             <div className="product__card--content">
                                                                                                 <ul className="rating product__card--rating d-flex">
                                                                                                     <li className="rating__list">
-                                                                                                        <span className="rating__icon">
+                                                                                                        <span className="rating__icon mt-2">
                                                                                                             <AiOutlineStar />
                                                                                                             <AiOutlineStar />
                                                                                                             <AiOutlineStar />
@@ -325,19 +337,19 @@ const ProductsView = () => {
                                                                                                         </span>
                                                                                                     </li>
                                                                                                 </ul>
-                                                                                                <h3 className="product__card--title">
-                                                                                                    <a href="product-details.html">
+                                                                                                <h3 className="product_name">
+                                                                                                    <a href={`/productsdetail/${e?.id}`} title={e?.name}>
                                                                                                         {e?.name}
                                                                                                     </a>
                                                                                                 </h3>
                                                                                                 <div className="product__card--price">
-                                                                                                    <span className="current__price">${e?.selling_price}</span>
-                                                                                                    <span className="old__price">{e?.original_price}/-</span>
+                                                                                                    <span className="current__price">${e?.original_price}.52/-</span>
+                                                                                                    <span className="old__price">${e?.original_price * 1.5}</span>
                                                                                                 </div>
                                                                                                 <div className="product__card--footer">
                                                                                                     <a
                                                                                                         className="product__card--btn primary__btn"
-                                                                                                        href="cart.html"
+                                                                                                        href={`/productsdetail/${e?.id}`}
                                                                                                     >
                                                                                                         <svg
                                                                                                             width={14}
@@ -365,12 +377,13 @@ const ProductsView = () => {
                                                             </div>
                                                         </div>
                                                     </>
-                                                    : <>
+                                                    :
+                                                    <>
                                                         <div className="tab_pane active">
                                                             <div className="product__section--inner product__section--style3__inner">
                                                                 <div className="row row-cols-1 mb--n30">
                                                                     {
-                                                                        add_product.map((e, index) => {
+                                                                        currentItems.map((e, index) => {
                                                                             return (
                                                                                 <>
                                                                                     <div className="col mb-30" key={index}>
@@ -392,56 +405,8 @@ const ProductsView = () => {
                                                                                                     />
                                                                                                 </a>
                                                                                                 <span className="product__badge">-20%</span>
-                                                                                                <ul className="product__card--action d-flex align-items-center justify-content-center">
-                                                                                                    <li className="product__card--action__list">
-                                                                                                        <a
-                                                                                                            className="product__card--action__btn"
-                                                                                                            title="Quick View"
-                                                                                                            data-open="modal1"
-                                                                                                            href="javascript:void(0)"
-                                                                                                        >
-                                                                                                            <svg
-                                                                                                                className="product__card--action__btn--svg"
-                                                                                                                width={16}
-                                                                                                                height={16}
-                                                                                                                viewBox="0 0 16 16"
-                                                                                                                fill="none"
-                                                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                                                            >
-                                                                                                                <path
-                                                                                                                    d="M15.6952 14.4991L11.7663 10.5588C12.7765 9.4008 13.33 7.94381 13.33 6.42703C13.33 2.88322 10.34 0 6.66499 0C2.98997 0 0 2.88322 0 6.42703C0 9.97085 2.98997 12.8541 6.66499 12.8541C8.04464 12.8541 9.35938 12.4528 10.4834 11.6911L14.4422 15.6613C14.6076 15.827 14.8302 15.9184 15.0687 15.9184C15.2944 15.9184 15.5086 15.8354 15.6711 15.6845C16.0166 15.364 16.0276 14.8325 15.6952 14.4991ZM6.66499 1.67662C9.38141 1.67662 11.5913 3.8076 11.5913 6.42703C11.5913 9.04647 9.38141 11.1775 6.66499 11.1775C3.94857 11.1775 1.73869 9.04647 1.73869 6.42703C1.73869 3.8076 3.94857 1.67662 6.66499 1.67662Z"
-                                                                                                                    fill="currentColor"
-                                                                                                                />
-                                                                                                            </svg>
-                                                                                                            <span className="visually-hidden">
-                                                                                                                Quick View
-                                                                                                            </span>
-                                                                                                        </a>
-                                                                                                    </li>
-                                                                                                    <li className="product__card--action__list">
-                                                                                                        <a
-                                                                                                            className="product__card--action__btn"
-                                                                                                            title="Compare"
-                                                                                                            href="compare.html"
-                                                                                                        >
-                                                                                                            <svg
-                                                                                                                className="product__card--action__btn--svg"
-                                                                                                                width={17}
-                                                                                                                height={17}
-                                                                                                                viewBox="0 0 14 13"
-                                                                                                                fill="none"
-                                                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                                                            >
-                                                                                                                <path
-                                                                                                                    d="M6.89137 6.09375C6.89137 6.47656 7.16481 6.75 7.54762 6.75H10.1453C10.7195 6.75 11.0203 6.06641 10.5828 5.65625L9.8445 4.89062L12.907 1.82812C13.0437 1.69141 13.0437 1.47266 12.907 1.36328L12.2781 0.734375C12.1687 0.597656 11.95 0.597656 11.8132 0.734375L8.75075 3.79688L7.98512 3.05859C7.57496 2.62109 6.89137 2.92188 6.89137 3.49609V6.09375ZM1.94215 12.793L5.00465 9.73047L5.77028 10.4688C6.18043 10.9062 6.89137 10.6055 6.89137 10.0312V7.40625C6.89137 7.05078 6.59059 6.75 6.23512 6.75H3.61012C3.0359 6.75 2.73512 7.46094 3.17262 7.87109L3.9109 8.63672L0.848402 11.6992C0.711683 11.8359 0.711683 12.0547 0.848402 12.1641L1.47731 12.793C1.58668 12.9297 1.80543 12.9297 1.94215 12.793Z"
-                                                                                                                    fill="currentColor"
-                                                                                                                />
-                                                                                                            </svg>
-                                                                                                            <span className="visually-hidden">
-                                                                                                                Compare
-                                                                                                            </span>
-                                                                                                        </a>
-                                                                                                    </li>
+                                                                                                {/* <ul className="product__card--action d-flex align-items-center justify-content-center">
+                                                                                                   
                                                                                                     <li className="product__card--action__list">
                                                                                                         <a
                                                                                                             className="product__card--action__btn"
@@ -466,7 +431,7 @@ const ProductsView = () => {
                                                                                                             </span>
                                                                                                         </a>
                                                                                                     </li>
-                                                                                                </ul>
+                                                                                                </ul> */}
                                                                                             </div>
                                                                                             <div className="product__card--content product__list--content">
                                                                                                 <h3 className="product__card--title">
@@ -492,12 +457,12 @@ const ProductsView = () => {
                                                                                                     </li>
                                                                                                 </ul>
                                                                                                 <div className="product__list--price">
-                                                                                                    <span className="current__price">$188.52</span>
-                                                                                                    <span className="old__price"> $268.00</span>
+                                                                                                    <span className="current__price">{e?.selling_price}</span>
+                                                                                                    <span className="old__price">${e?.original_price}/-</span>
                                                                                                 </div>
                                                                                                 <a
                                                                                                     className="product__card--btn primary__btn"
-                                                                                                    href="cart.html"
+                                                                                                    href={`/productsdetail/${e?.id}`}
                                                                                                 >
                                                                                                     + Add to cart
                                                                                                 </a>
@@ -516,80 +481,22 @@ const ProductsView = () => {
                                         </div>
 
                                         <div className="pagination__area">
-                                            <nav className="pagination justify-content-center">
-                                                <ul className="pagination__wrapper d-flex align-items-center justify-content-center">
-                                                    <li className="pagination__list">
-                                                        <a
-                                                            href="shop.html"
-                                                            className="pagination__item--arrow  link "
-                                                        >
-                                                            <svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="22.51"
-                                                                height="20.443"
-                                                                viewBox="0 0 512 512"
-                                                            >
-                                                                <path
-                                                                    fill="none"
-                                                                    stroke="currentColor"
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                    strokeWidth={48}
-                                                                    d="M244 400L100 256l144-144M120 256h292"
-                                                                />
-                                                            </svg>
-                                                            <span className="visually-hidden">page left arrow</span>
-                                                        </a>
-                                                    </li>
-                                                    <li></li>
-                                                    <li className="pagination__list">
-                                                        <span className="pagination__item pagination__item--current">
-                                                            1
-                                                        </span>
-                                                    </li>
-                                                    <li className="pagination__list">
-                                                        <a href="shop.html" className="pagination__item link">
-                                                            2
-                                                        </a>
-                                                    </li>
-                                                    <li className="pagination__list">
-                                                        <a href="shop.html" className="pagination__item link">
-                                                            3
-                                                        </a>
-                                                    </li>
-                                                    <li className="pagination__list">
-                                                        <a href="shop.html" className="pagination__item link">
-                                                            4
-                                                        </a>
-                                                    </li>
-                                                    <li className="pagination__list">
-                                                        <a
-                                                            href="shop.html"
-                                                            className="pagination__item--arrow  link "
-                                                        >
-                                                            <svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="22.51"
-                                                                height="20.443"
-                                                                viewBox="0 0 512 512"
-                                                            >
-                                                                <path
-                                                                    fill="none"
-                                                                    stroke="currentColor"
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                    strokeWidth={48}
-                                                                    d="M268 112l144 144-144 144M392 256H100"
-                                                                />
-                                                            </svg>
-                                                            <span className="visually-hidden">
-                                                                page right arrow
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li></li>
-                                                </ul>
-                                            </nav>
+                                            <ul className="pagination__wrapper d-flex align-items-center justify-content-center">
+                                                <li className="pagination__list">
+                                                    <Pagination
+                                                        count={totalPages}
+                                                        page={currentPage}
+                                                        onChange={handlePageChange}
+                                                        renderItem={(item) => (
+                                                            <PaginationItem
+                                                                component="button"
+                                                                onClick={() => handlePageChange(null, item.page)}
+                                                                {...item}
+                                                            />
+                                                        )}
+                                                    />
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>

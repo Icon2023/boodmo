@@ -13,24 +13,28 @@ import CategoryProducts from './Mainpages/CategoryProducts'
 import ProductsView from './Mainpages/ProductsView'
 import CarMakers from './Subpages/CarMakers'
 import BrandsAll from './Subpages/Brands'
+import Checkout from './Mainpages/Checkout'
+import ScrollToTop from "react-scroll-to-top";
 import "../node_modules/slick-carousel/slick/slick.css";
 import "../node_modules/slick-carousel/slick/slick-theme.css";
 
 function App() {
   return (
     <>
+      <ScrollToTop smooth color="#ED1D24" />
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/shop/:id' element={<CategoryProducts/>}/>
-        <Route path='/shop/:cate_id/:subcategory' element={<ProductsView/>}/>
-        <Route path='/productsdetail/:id' element={<SingleProductsDetails/>}/>
-        <Route path='/cart' element={<Cart/>}/>
-        <Route path='/wishlist' element={<WishList/>}/>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/vehicles' element={<CarMakers/>}/>
-        <Route path='/brands' element={<BrandsAll/>}/>
-        <Route path='/privacy-policy' element={<PrivacyPolicy/>}/>
+        <Route path='/shop/:id' element={<CategoryProducts />} />
+        <Route path='/shop/:cate_id/:subcategory' element={<ProductsView />} />
+        <Route path='/productsdetail/:id' element={<SingleProductsDetails />} />
+        <Route path='/wishlist' element={<WishList />} />
+        <Route path='/cart' element={<Cart />} />
+        <Route path='/checkout' element={<Checkout />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/vehicles' element={<CarMakers />} />
+        <Route path='/brands' element={<BrandsAll />} />
+        <Route path='/privacy-policy' element={<PrivacyPolicy />} />
       </Routes>
       <Footer />
     </>

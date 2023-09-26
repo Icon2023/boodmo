@@ -1,6 +1,15 @@
 import React from 'react'
+import { AiOutlineClose } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeProductWishlist } from '../store/reducers/ProductSlice';
 
 const WishList = () => {
+    const dispatch = useDispatch();
+    const { add_wish } = useSelector((state) => ({ ...state.products }));
+
+    const removeElement = (id) => {
+        dispatch(removeProductWishlist(id))
+    };
     return (
         <>
             <main className="main__content_wrapper">
@@ -46,288 +55,69 @@ const WishList = () => {
                                             </tr>
                                         </thead>
                                         <tbody className="cart__table--body">
-                                            <tr className="cart__table--body__items">
-                                                <td className="cart__table--body__list">
-                                                    <div className="cart__product d-flex align-items-center">
-                                                        <button
-                                                            className="cart__remove--btn"
-                                                            aria-label="search button"
-                                                            type="button"
-                                                        >
-                                                            <svg
-                                                                fill="currentColor"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                viewBox="0 0 24 24"
-                                                                width="16px"
-                                                                height="16px"
-                                                            >
-                                                                <path d="M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z" />
-                                                            </svg>
-                                                        </button>
-                                                        <div className="cart__thumbnail">
-                                                            <a href="product-details.html">
-                                                                <img
-                                                                    className="border-radius-5"
-                                                                    src="assets/img/product/small-product/product9.webp"
-                                                                    alt="cart-product"
-                                                                />
-                                                            </a>
-                                                        </div>
-                                                        <div className="cart__content">
-                                                            <h3 className="cart__content--title h4">
-                                                                <a href="product-details.html">
-                                                                    Fluids &amp; Chemicals
+                                            {
+                                                add_wish.map((e, index) => {
+                                                    return (
+                                                        <tr className="cart__table--body__items" key={index}>
+                                                            <td className="cart__table--body__list">
+                                                                <div className="cart__product d-flex align-items-center">
+                                                                    <button
+                                                                        className="cart__remove--btn"
+                                                                        aria-label="search button"
+                                                                        type="button"
+                                                                        onClick={()=>removeElement(e?.proId)}
+                                                                    >
+                                                                        <AiOutlineClose/>
+                                                                    </button>
+                                                                    <div className="cart__thumbnail">
+                                                                        <a href="product-details.html">
+                                                                            <img
+                                                                                className="border-radius-5"
+                                                                                src={e?.image}
+                                                                                alt="cart-product"
+                                                                            />
+                                                                        </a>
+                                                                    </div>
+                                                                    <div className="cart__content">
+                                                                        <h3 className="cart__content--title h4">
+                                                                            <a href="product-details.html">
+                                                                               {e?.name}
+                                                                            </a>
+                                                                        </h3>
+                                                                        <span className="cart__content--variant">
+                                                                            COLOR: Blue
+                                                                        </span>
+                                                                        <span className="cart__content--variant">
+                                                                            WEIGHT: 2 Kg
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td className="cart__table--body__list">
+                                                                <span className="cart__price">${e?.price}/-</span>
+                                                            </td>
+                                                            <td className="cart__table--body__list text-center">
+                                                                <span className="in__stock text__secondary">in stock</span>
+                                                            </td>
+                                                            <td className="cart__table--body__list text-right">
+                                                                <a
+                                                                    className="wishlist__cart--btn primary__btn"
+                                                                    href="cart.html"
+                                                                >
+                                                                    Add To Cart
                                                                 </a>
-                                                            </h3>
-                                                            <span className="cart__content--variant">
-                                                                COLOR: Blue
-                                                            </span>
-                                                            <span className="cart__content--variant">
-                                                                WEIGHT: 2 Kg
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="cart__table--body__list">
-                                                    <span className="cart__price">£65.00</span>
-                                                </td>
-                                                <td className="cart__table--body__list text-center">
-                                                    <span className="in__stock text__secondary">in stock</span>
-                                                </td>
-                                                <td className="cart__table--body__list text-right">
-                                                    <a
-                                                        className="wishlist__cart--btn primary__btn"
-                                                        href="cart.html"
-                                                    >
-                                                        Add To Cart
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr className="cart__table--body__items">
-                                                <td className="cart__table--body__list">
-                                                    <div className="cart__product d-flex align-items-center">
-                                                        <button
-                                                            className="cart__remove--btn"
-                                                            aria-label="search button"
-                                                            type="button"
-                                                        >
-                                                            <svg
-                                                                fill="currentColor"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                viewBox="0 0 24 24"
-                                                                width="16px"
-                                                                height="16px"
-                                                            >
-                                                                <path d="M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z" />
-                                                            </svg>
-                                                        </button>
-                                                        <div className="cart__thumbnail">
-                                                            <a href="product-details.html">
-                                                                <img
-                                                                    className="border-radius-5"
-                                                                    src="assets/img/product/small-product/product8.webp"
-                                                                    alt="cart-product"
-                                                                />
-                                                            </a>
-                                                        </div>
-                                                        <div className="cart__content">
-                                                            <h3 className="cart__content--title h4">
-                                                                <a href="product-details.html">Cargo Accessories</a>
-                                                            </h3>
-                                                            <span className="cart__content--variant">
-                                                                COLOR: Blue
-                                                            </span>
-                                                            <span className="cart__content--variant">
-                                                                WEIGHT: 2 Kg
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="cart__table--body__list">
-                                                    <span className="cart__price">£65.00</span>
-                                                </td>
-                                                <td className="cart__table--body__list text-center">
-                                                    <span className="in__stock text__secondary">in stock</span>
-                                                </td>
-                                                <td className="cart__table--body__list text-right">
-                                                    <a
-                                                        className="wishlist__cart--btn primary__btn"
-                                                        href="cart.html"
-                                                    >
-                                                        Add To Cart
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr className="cart__table--body__items">
-                                                <td className="cart__table--body__list">
-                                                    <div className="cart__product d-flex align-items-center">
-                                                        <button
-                                                            className="cart__remove--btn"
-                                                            aria-label="search button"
-                                                            type="button"
-                                                        >
-                                                            <svg
-                                                                fill="currentColor"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                viewBox="0 0 24 24"
-                                                                width="16px"
-                                                                height="16px"
-                                                            >
-                                                                <path d="M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z" />
-                                                            </svg>
-                                                        </button>
-                                                        <div className="cart__thumbnail">
-                                                            <a href="product-details.html">
-                                                                <img
-                                                                    className="border-radius-5"
-                                                                    src="assets/img/product/small-product/product7.webp"
-                                                                    alt="cart-product"
-                                                                />
-                                                            </a>
-                                                        </div>
-                                                        <div className="cart__content">
-                                                            <h3 className="cart__content--title h4">
-                                                                <a href="product-details.html">
-                                                                    Engine &amp; Drivetrain
-                                                                </a>
-                                                            </h3>
-                                                            <span className="cart__content--variant">
-                                                                COLOR: Blue
-                                                            </span>
-                                                            <span className="cart__content--variant">
-                                                                WEIGHT: 2 Kg
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="cart__table--body__list">
-                                                    <span className="cart__price">£65.00</span>
-                                                </td>
-                                                <td className="cart__table--body__list text-center">
-                                                    <span className="in__stock text__secondary">in stock</span>
-                                                </td>
-                                                <td className="cart__table--body__list text-right">
-                                                    <a
-                                                        className="wishlist__cart--btn primary__btn"
-                                                        href="cart.html"
-                                                    >
-                                                        Add To Cart
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr className="cart__table--body__items">
-                                                <td className="cart__table--body__list">
-                                                    <div className="cart__product d-flex align-items-center">
-                                                        <button
-                                                            className="cart__remove--btn"
-                                                            aria-label="search button"
-                                                            type="button"
-                                                        >
-                                                            <svg
-                                                                fill="currentColor"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                viewBox="0 0 24 24"
-                                                                width="16px"
-                                                                height="16px"
-                                                            >
-                                                                <path d="M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z" />
-                                                            </svg>
-                                                        </button>
-                                                        <div className="cart__thumbnail">
-                                                            <a href="product-details.html">
-                                                                <img
-                                                                    className="border-radius-5"
-                                                                    src="assets/img/product/small-product/product6.webp"
-                                                                    alt="cart-product"
-                                                                />
-                                                            </a>
-                                                        </div>
-                                                        <div className="cart__content">
-                                                            <h3 className="cart__content--title h4">
-                                                                <a href="product-details.html">Motorbike Care</a>
-                                                            </h3>
-                                                            <span className="cart__content--variant">
-                                                                COLOR: Blue
-                                                            </span>
-                                                            <span className="cart__content--variant">
-                                                                WEIGHT: 2 Kg
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="cart__table--body__list">
-                                                    <span className="cart__price">£65.00</span>
-                                                </td>
-                                                <td className="cart__table--body__list text-center">
-                                                    <span className="in__stock text__secondary">in stock</span>
-                                                </td>
-                                                <td className="cart__table--body__list text-right">
-                                                    <a
-                                                        className="wishlist__cart--btn primary__btn"
-                                                        href="cart.html"
-                                                    >
-                                                        Add To Cart
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
                                         </tbody>
                                     </table>
-                                    <div className="continue__shopping d-flex justify-content-between">
-                                        <a className="continue__shopping--link" href="index.html">
-                                            Continue shopping
-                                        </a>
-                                        <a className="continue__shopping--clear" href="shop.html">
-                                            View All Products
-                                        </a>
-                                    </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </section>
-
-                {/* Start brand section */}
-                <div className="brand__section section--padding pt-0">
-                    <div className="container">
-                        <div className="brand__section--inner d-flex justify-content-between align-items-center">
-                            <div className="brang__logo--items">
-                                <img
-                                    className="brang__logo--img"
-                                    src="assets/img/logo/brand-logo1.webp"
-                                    alt="brand-logo"
-                                />
-                            </div>
-                            <div className="brang__logo--items">
-                                <img
-                                    className="brang__logo--img"
-                                    src="assets/img/logo/brand-logo2.webp"
-                                    alt="brand-logo"
-                                />
-                            </div>
-                            <div className="brang__logo--items">
-                                <img
-                                    className="brang__logo--img"
-                                    src="assets/img/logo/brand-logo3.webp"
-                                    alt="brand-logo"
-                                />
-                            </div>
-                            <div className="brang__logo--items">
-                                <img
-                                    className="brang__logo--img"
-                                    src="assets/img/logo/brand-logo4.webp"
-                                    alt="brand-logo"
-                                />
-                            </div>
-                            <div className="brang__logo--items">
-                                <img
-                                    className="brang__logo--img"
-                                    src="assets/img/logo/brand-logo5.webp"
-                                    alt="brand-logo"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 {/* Start shipping section */}
                 <section className="shipping__section">

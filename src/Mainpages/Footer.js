@@ -37,7 +37,7 @@ const Footer = () => {
                             <div className="col-lg-4 col-md-10">
                                 <div className="footer__widget">
                                     <h2 className="footer__widget--title">
-                                        About Us{" "}
+                                        About Us 
                                         <button
                                             className="footer__widget--button"
                                             aria-label="footer widget button"
@@ -154,7 +154,7 @@ const Footer = () => {
                             <div className="col-lg-3 col-md-4">
                                 <div className="footer__widget">
                                     <h2 className="footer__widget--title ">
-                                        My Account{" "}
+                                        My Account 
                                         <button
                                             className="footer__widget--button"
                                             aria-label="footer widget button"
@@ -208,7 +208,7 @@ const Footer = () => {
                             <div className="col-lg-3 col-md-4">
                                 <div className="footer__widget">
                                     <h2 className="footer__widget--title ">
-                                        Resources{" "}
+                                        Resources 
                                         <button
                                             className="footer__widget--button"
                                             aria-label="footer widget button"
@@ -262,7 +262,7 @@ const Footer = () => {
                             {/* <div className="col-lg-2 col-md-4">
                                 <div className="footer__widget">
                                     <h2 className="footer__widget--title ">
-                                        FIND IT FAST{" "}
+                                        FIND IT FAST 
                                         <button
                                             className="footer__widget--button"
                                             aria-label="footer widget button"
@@ -373,14 +373,14 @@ const Footer = () => {
                     <div className="container">
                         <div className="footer__bottom--inenr d-flex justify-content-between align-items-center">
                             <p className="copyright__content">
-                                <span className="text__secondary">© 2022</span> Powered by{" "}
+                                <span className="text__secondary">© 2023</span> Powered by &nbsp;
                                 <a
                                     className="copyright__content--link"
                                     target="_blank"
                                     href="https://themeforest.net/search/hooktheme"
                                 >
-                                    Hooktheme
-                                </a>{" "}
+                                Iconfisys
+                                </a> 
                                 . All Rights Reserved.
                             </p>
                             <div className="footer__payment">

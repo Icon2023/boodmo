@@ -1,35 +1,73 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { SingleProductDetails } from '../Services/apiServices';
 import ShippingAddress from '../Subpages/ShippingAddress';
 import { useDispatch, useSelector } from 'react-redux';
-import { addProductDetails } from '../store/reducers/ProductSlice';
+import { addProductDetails, addToCart, addToWishlist, removeProductWishlist } from '../store/reducers/ProductSlice';
 import { AiOutlineStar } from 'react-icons/ai';
+import { BsHeart, BsHeartFill } from 'react-icons/bs';
+
 
 const SingleProductsDetails = () => {
     const { id } = useParams();
-    console.log(id);
     const dispatch = useDispatch();
     const [reviewOpen, setReviewOpen] = useState(true)
     const [addOpen, setAddOpen] = useState(true)
-    const { add_Details } = useSelector((state) => ({ ...state.products }));
+    const { add_Details, add_wish, addto_cart } = useSelector((state) => ({ ...state.products }));
+
+    var productwishIdsArray = [];
+    add_wish.forEach(function (obj) {
+        productwishIdsArray.push(obj.proId);
+    })
+
+    var productIdsArray = [];
+    addto_cart.forEach(function (obj) {
+        productIdsArray.push(obj.proId);
+    })
 
     useEffect(() => {
         SingleProductDetails(id).then((res) => {
             if (res.success) {
                 dispatch(addProductDetails(res?.data?.product))
-                   console.log(res?.data);
+                console.log(res?.data.product);
             }
         })
     }, [])
 
-
     const handleReviewClick = () => {
         reviewOpen ? setAddOpen(false) : setReviewOpen(true)
     }
+
     const handleAddClick = () => {
         reviewOpen ? setReviewOpen(false) : setAddOpen(true)
     }
+
+    const handleWish = () => {
+        let data = {
+            proId: add_Details?.id,
+            price: add_Details?.original_price,
+            qty: 1,
+            name: add_Details?.name,
+            image: add_Details?.images[0].image,
+        }
+        dispatch(addToWishlist(data))
+    }
+
+    const handleAddcart = () => {
+        let data = {
+            proId: add_Details?.id,
+            price: add_Details?.original_price,
+            qty: 1,
+            name: add_Details?.name,
+            image: add_Details?.images[0].image,
+        }
+        dispatch(addToCart(data))
+    }
+
+    const removeElement = (id) => {
+        dispatch(removeProductWishlist(id))
+    };
+
     return (
         <>
             <main className="main__content_wrapper">
@@ -219,7 +257,7 @@ const SingleProductsDetails = () => {
                                                 </fieldset>
                                             </div>
                                             <div className="product__variant--list quantity d-flex align-items-center mb-20">
-                                                <div className="quantity__box">
+                                                {/* <div className="quantity__box">
                                                     <button
                                                         type="button"
                                                         className="quantity__value quickview__value--quantity decrease"
@@ -244,36 +282,43 @@ const SingleProductsDetails = () => {
                                                     >
                                                         +
                                                     </button>
-                                                </div>
-                                                <button
-                                                    className="primary__btn quickview__cart--btn"
-                                                    type="submit"
-                                                >
-                                                    Add To Cart
-                                                </button>
+                                                </div> */}
+
+                                                {
+                                                    productIdsArray.includes(parseInt(id)) ?
+                                                        <Link to={'/cart'} className="primary__btn quickview__cart--btn" >
+                                                            View Cart
+                                                        </Link>
+                                                        :
+                                                        <button
+                                                            className="primary__btn quickview__cart--btn"
+                                                            onClick={() => handleAddcart()}
+                                                        >
+                                                            Add To Cart
+                                                        </button>
+                                                }
                                             </div>
                                             <div className="product__variant--list mb-15">
-                                                <a
-                                                    className="variant__wishlist--icon mb-15"
-                                                    href="wishlist.html"
-                                                    title="Add to wishlist"
-                                                >
-                                                    <svg
-                                                        className="quickview__variant--wishlist__svg"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 512 512"
-                                                    >
-                                                        <path
-                                                            d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0018 0c96.26-65.34 184.09-143.09 183-252.42-.54-52.67-42.32-96.81-95.08-96.81z"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth={32}
-                                                        />
-                                                    </svg>
-                                                    Add to Wishlist
-                                                </a>
+                                                {
+                                                    productwishIdsArray.includes(parseInt(id)) ?
+                                                        <div className='mb-4'>
+                                                            <BsHeartFill style={{ cursor: "pointer", fontSize: "20px" }}
+                                                                onClick={() => removeElement(add_Details?.id)} />
+                                                            <span className='ms-2'>
+                                                                Add to Wishlist
+                                                            </span>
+                                                        </div>
+                                                        :
+                                                        <div className='mb-4'>
+                                                            <BsHeart
+                                                                style={{ cursor: "pointer", fontSize: "20px" }}
+                                                                onClick={() => handleWish()}
+                                                            />
+                                                            <span className='ms-2'>
+                                                                Add to Wishlist
+                                                            </span>
+                                                        </div>
+                                                }
                                                 <button
                                                     className="variant__buy--now__btn primary__btn"
                                                     type="submit"
@@ -416,7 +461,7 @@ const SingleProductsDetails = () => {
                             <div className="col">
                                 <ul className="product__tab--one product__details--tab d-flex mb-30">
                                     <li
-                                       className={`product__details--tab__list ${reviewOpen === true ? "active" : ""}`}
+                                        className={`product__details--tab__list ${reviewOpen === true ? "active" : ""}`}
                                         onClick={handleReviewClick}
                                     >
                                         Product Reviews
