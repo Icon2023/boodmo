@@ -7,7 +7,7 @@ function PrevArrow({ onClick }) {
     <div className="arrow_click_prev" style={{position: "absolute",
       right: "77%",
       top: "-32%",
-      transform: "translate(-50%, -50%)"}}>
+      transform: "translate(-50%, -50%)" , cursor:"pointer"}}>
       <h2 className="prev_arrow" onClick={onClick}>
         <RxDoubleArrowLeft
           className="mb-1 arrow_click_svg"

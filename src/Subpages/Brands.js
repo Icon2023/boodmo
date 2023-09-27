@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Brands } from "../Services/apiServices";
 import "./brands.css";
+import { useLocation } from "react-router-dom";
+import HeadingSection from "../Utils/HeadingSection";
 
 const BrandsAll = () => {
+  const location = useLocation();
+  let pathName = location.pathname;
+
   const [brands, setBrands] = useState([]);
   // State to track the filter letter
   const [filterLetter, setFilterLetter] = useState("");
@@ -53,21 +58,23 @@ const BrandsAll = () => {
   return (
     <div>
       <section className="container">
+        {
+          pathName == "/brands" ? <HeadingSection isInput title="Shop by Brand" value={filterLetter} onChange={handleInputChange} />
+            : null
+        }
         <ul className="makers-nav">
           <li
             onClick={() => setFilterLetter("")}
-            className={`makers-nav__item ${
-              filterLetter === "" ? "makers-nav-active" : ""
-            }`}
+            className={`makers-nav__item ${filterLetter === "" ? "makers-nav-active" : ""
+              }`}
           >
             All
           </li>
           {uniqueFirstLetters.map((letter, index) => (
             <li
               key={index}
-              className={`makers-nav__item ${
-                filterLetter === letter ? "makers-nav-active" : ""
-              }`}
+              className={`makers-nav__item ${filterLetter === letter ? "makers-nav-active" : ""
+                }`}
               onClick={() => setFilterLetter(letter)}
               style={{ marginRight: "10px" }}
             >

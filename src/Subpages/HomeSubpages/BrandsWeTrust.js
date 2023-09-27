@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
-// import "../../node_modules/slick-carousel/slick/slick.css";
-// import "../../node_modules/slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import NextArrow from "../Utils/NextArrow";
-import PrevArrow from "../Utils/PrevArrow";
-import { Brands } from "../Services/apiServices";
+import NextArrow from "../../Utils/NextArrow";
+import PrevArrow from "../../Utils/PrevArrow";
+import { Brands } from "../../Services/apiServices";
 import { Link } from "react-router-dom";
+import HeadingSection from "../../Utils/HeadingSection";
 
 const BrandsWeTrust = () => {
   const [brands, setBrands] = useState([]);
@@ -22,16 +21,18 @@ const BrandsWeTrust = () => {
         console.log(err);
       });
   }, []);
+
   var settings = {
     dots: false,
+    arrows:false,
     infinite: true,
     speed: 500,
     autoplay: true,
     slidesToShow: 6,
     slidesToScroll: 1,
     initialSlide: 0,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
+    // nextArrow: <NextArrow />,
+    // prevArrow: <PrevArrow />,
     responsive: [
       {
         breakpoint: 1024,
@@ -61,14 +62,15 @@ const BrandsWeTrust = () => {
   };
   return (
     <div className="container my-5" style={{position:"relative"}}>
-      <div className="section__heading border-bottom mb-30 d-flex flex-wrap justify-content-between">
+       <HeadingSection title="Brands we Trust" link="/brands"/>
+      {/* <div className="section__heading border-bottom mb-30 d-flex flex-wrap justify-content-between">
         <h2 className="section__heading--maintitle">
         Brands we  <span> Trust</span>
         </h2>
         <div>
           <Link to="/brands">VIEW ALL</Link>
         </div>
-      </div>
+      </div> */}
       <Slider {...settings}>
         {brands?.map((brand) => {
           return (

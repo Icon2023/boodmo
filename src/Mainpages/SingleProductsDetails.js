@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { SingleProductDetails } from "../Services/apiServices";
 import ShippingAddress from "../Subpages/ShippingAddress";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addProductDetails,
-  addToCart,
-  addToWishlist,
-  removeProductWishlist,
+    addProductDetails,
+    addToCart,
+    addToWishlist,
+    removeProductWishlist,
 } from "../store/reducers/ProductSlice";
 import { AiOutlineStar } from "react-icons/ai";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
@@ -22,6 +22,8 @@ const SingleProductsDetails = () => {
     const [addOpen, setAddOpen] = useState(true)
     const { add_Details, add_wish, addto_cart } = useSelector((state) => ({ ...state.products }));
 
+    const navigate = useNavigate();
+
     var productwishIdsArray = [];
     add_wish.forEach(function (obj) {
         productwishIdsArray.push(obj.proId);
@@ -32,11 +34,25 @@ const SingleProductsDetails = () => {
         productIdsArray.push(obj.proId);
     })
 
+    var settings = {
+        dots: false,
+        arrows: true,
+        infinite: true,
+        autoplay: false,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        initialSlide: 0,
+        // fade: true,
+        // nextArrow: <NextArrow />,
+        // prevArrow: <PrevArrow />,
+    };
+
     useEffect(() => {
         SingleProductDetails(id).then((res) => {
             if (res.success) {
                 dispatch(addProductDetails(res?.data?.product))
-                console.log(res?.data.product);
+                // console.log(res?.data.product);
             }
         })
     }, [])
@@ -71,269 +87,239 @@ const SingleProductsDetails = () => {
         dispatch(addToCart(data))
     }
 
-  const removeElement = (id) => {
-    dispatch(removeProductWishlist(id));
-  };
+    const handleBuyNow = () => {
+        let data = {
+            proId: add_Details?.id,
+            price: add_Details?.original_price,
+            qty: 1,
+            name: add_Details?.name,
+            image: add_Details?.images[0].image,
+        }
+        dispatch(addToCart(data))
+        navigate('/checkout')
+    }
 
-  const settings = {
-    fade: true,
-    dotsClass: "slick-dots slick-thumb",
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-  };
+    const removeElement = (id) => {
+        dispatch(removeProductWishlist(id));
+    };
 
-  return (
-    <>
-      <main className="main__content_wrapper">
-        {/* Start breadcrumb section */}
-        <section className="breadcrumb__section breadcrumb__bg">
-          <div className="container">
-            <div className="row row-cols-1">
-              <div className="col">
-                <div className="breadcrumb__content text-center">
-                  <ul className="breadcrumb__content--menu d-flex justify-content-center">
-                    <li className="breadcrumb__content--menu__items">
-                      <a href="index.html">Home</a>
-                    </li>
-                    <li className="breadcrumb__content--menu__items">
-                      <span>Product</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        {/* Start product details section */}
-        <section className="product__details--section section--padding">
-          <div className="container">
-            <div className="row">
-              <div className="col-md-6">
-                <div className="product__details--media">
-                  <div className="single__product--preview  swiper mb-25">
-                    <div
-                      className="product__media--preview__items"
-                      style={{ position: "relative" }}
-                    >
-                      <Slider {...settings}>
-                        {add_Details?.images.map((imageIndex, index) => (
-                          <div style={{ cursor: "pointer" }} key={index}>
-                            <img
-                              id="zoom1"
-                              src={imageIndex?.image}
-                              alt="big-1"
-                              width="100%"
-                              height="100%"
-                            />
-                          </div>
-                        ))}
-                      </Slider>
+
+
+    return (
+        <>
+            <main className="main__content_wrapper">
+                {/* Start breadcrumb section */}
+                <section className="breadcrumb__section breadcrumb__bg">
+                    <div className="container">
+                        <div className="row row-cols-1">
+                            <div className="col">
+                                <div className="breadcrumb__content text-center">
+                                    <ul className="breadcrumb__content--menu d-flex justify-content-center">
+                                        <li className="breadcrumb__content--menu__items">
+                                            <a href="index.html">Home</a>
+                                        </li>
+                                        <li className="breadcrumb__content--menu__items">
+                                            <span>Product</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="product__details--info">
-                  <form action="#">
-                    <h2 className="product__details--info__title mb-15">
-                      {add_Details?.name}
-                    </h2>
-                    <div className="product__details--info__price mb-12">
-                      <span className="current__price">
-                        ${add_Details?.original_price}
-                      </span>
-                      <span className="old__price">
-                        {add_Details?.selling_price}
-                      </span>
-                    </div>
-                    <ul className="rating product__card--rating mb-15 d-flex">
-                      <li className="rating__list">
-                        <span className="rating__icon">
-                          <AiOutlineStar />
-                          <AiOutlineStar />
-                          <AiOutlineStar />
-                          <AiOutlineStar />
-                          <AiOutlineStar />
-                        </span>
-                      </li>
-                      <li>
-                        <span className="rating__review--text">
-                          (126) Review
-                        </span>
-                      </li>
-                    </ul>
-                    <p className="product__details--info__desc mb-15">
-                      {add_Details?.short_desc}
-                    </p>
-                    <div className="product__variant">
-                      <div className="product__variant--list mb-10">
-                        <fieldset className="variant__input--fieldset">
-                          <legend className="product__variant--title mb-8">
-                            Color :
-                          </legend>
-                          <div className="variant__color d-flex">
-                            <div className="variant__color--list">
-                              <input
-                                id="color-red5"
-                                name="color"
-                                type="radio"
-                                defaultChecked=""
-                              />
-                              <label
-                                className="variant__color--value red"
-                                htmlFor="color-red5"
-                                title="Red"
-                              >
-                                <img
-                                  className="variant__color--value__img"
-                                  src="assets/img/product/small-product/product1.webp"
-                                  alt="variant-color-img"
-                                />
-                              </label>
+                </section>
+                {/* Start product details section */}
+                <section className="product__details--section section--padding">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md-6">
+                                <Slider {...settings}>
+                                    {add_Details?.images?.map((e, index) => (
+                                        <div style={{ cursor: "pointer" }} key={index}>
+                                            <img
+                                                id="zoom1"
+                                                src={e?.image}
+                                                alt="big-1"
+                                                width="100%"
+                                                height="100%"
+                                            />
+                                        </div>
+                                    ))}
+                                </Slider>
                             </div>
-                            <div className="variant__color--list">
-                              <input
-                                id="color-red6"
-                                name="color"
-                                type="radio"
-                              />
-                              <label
-                                className="variant__color--value red"
-                                htmlFor="color-red6"
-                                title="Black"
-                              >
-                                <img
-                                  className="variant__color--value__img"
-                                  src="assets/img/product/small-product/product2.webp"
-                                  alt="variant-color-img"
-                                />
-                              </label>
-                            </div>
-                            <div className="variant__color--list">
-                              <input
-                                id="color-red7"
-                                name="color"
-                                type="radio"
-                              />
-                              <label
-                                className="variant__color--value red"
-                                htmlFor="color-red7"
-                                title="Pink"
-                              >
-                                <img
-                                  className="variant__color--value__img"
-                                  src="assets/img/product/small-product/product3.webp"
-                                  alt="variant-color-img"
-                                />
-                              </label>
-                            </div>
-                            <div className="variant__color--list">
-                              <input
-                                id="color-red8"
-                                name="color"
-                                type="radio"
-                              />
-                              <label
-                                className="variant__color--value red"
-                                htmlFor="color-red8"
-                                title="Orange"
-                              >
-                                <img
-                                  className="variant__color--value__img"
-                                  src="assets/img/product/small-product/product4.webp"
-                                  alt="variant-color-img"
-                                />
-                              </label>
-                            </div>
-                          </div>
-                        </fieldset>
-                      </div>
-                      <div className="product__variant--list mb-20">
-                        <fieldset className="variant__input--fieldset">
-                          <legend className="product__variant--title mb-8">
-                            Weight :
-                          </legend>
-                          <ul className="variant__size d-flex">
-                            <li className="variant__size--list">
-                              <input
-                                id="weight4"
-                                name="weight"
-                                type="radio"
-                                defaultChecked=""
-                              />
-                              <label
-                                className="variant__size--value red"
-                                htmlFor="weight4"
-                              >
-                                5 kg
-                              </label>
-                            </li>
-                            <li className="variant__size--list">
-                              <input id="weight5" name="weight" type="radio" />
-                              <label
-                                className="variant__size--value red"
-                                htmlFor="weight5"
-                              >
-                                3 kg
-                              </label>
-                            </li>
-                            <li className="variant__size--list">
-                              <input id="weight6" name="weight" type="radio" />
-                              <label
-                                className="variant__size--value red"
-                                htmlFor="weight6"
-                              >
-                                2 kg
-                              </label>
-                            </li>
-                          </ul>
-                        </fieldset>
-                      </div>
-                      <div className="product__variant--list quantity d-flex align-items-center mb-20">
-                        {/* <div className="quantity__box">
-                                                    <button
-                                                        type="button"
-                                                        className="quantity__value quickview__value--quantity decrease"
-                                                        aria-label="quantity value"
-                                                        value="Decrease Value"
-                                                    >
-                                                        -
-                                                    </button>
-                                                    <label>
-                                                        <input
-                                                            type="number"
-                                                            className="quantity__number quickview__value--number"
-                                                            defaultValue={1}
-                                                            data-counter=""
-                                                        />
-                                                    </label>
-                                                    <button
-                                                        type="button"
-                                                        className="quantity__value quickview__value--quantity increase"
-                                                        aria-label="quantity value"
-                                                        value="Increase Value"
-                                                    >
-                                                        +
-                                                    </button>
-                                                </div> */}
-
+                            <div className="col-md-6">
+                                <div className="product__details--info">
+                                    <form>
+                                        <h2 className="product__details--info__title mb-15">
+                                            {add_Details?.name}
+                                        </h2>
+                                        <div className="product__details--info__price mb-12">
+                                            <span className="current__price">
+                                                ${add_Details?.original_price}
+                                            </span>
+                                            <span className="old__price">
+                                                {add_Details?.selling_price}
+                                            </span>
+                                        </div>
+                                        <ul className="rating product__card--rating mb-15 d-flex">
+                                            <li className="rating__list">
+                                                <span className="rating__icon">
+                                                    <AiOutlineStar />
+                                                    <AiOutlineStar />
+                                                    <AiOutlineStar />
+                                                    <AiOutlineStar />
+                                                    <AiOutlineStar />
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <span className="rating__review--text">
+                                                    (126) Review
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <p className="product__details--info__desc mb-15">
+                                            {add_Details?.short_desc}
+                                        </p>
+                                        <div className="product__variant">
+                                            <div className="product__variant--list mb-10">
+                                                <fieldset className="variant__input--fieldset">
+                                                    <legend className="product__variant--title mb-8">
+                                                        Color :
+                                                    </legend>
+                                                    <div className="variant__color d-flex">
+                                                        <div className="variant__color--list">
+                                                            <input
+                                                                id="color-red5"
+                                                                name="color"
+                                                                type="radio"
+                                                                defaultChecked=""
+                                                            />
+                                                            <label
+                                                                className="variant__color--value red"
+                                                                htmlFor="color-red5"
+                                                                title="Red"
+                                                            >
+                                                                <img
+                                                                    className="variant__color--value__img"
+                                                                    src="assets/img/product/small-product/product1.webp"
+                                                                    alt="variant-color-img"
+                                                                />
+                                                            </label>
+                                                        </div>
+                                                        <div className="variant__color--list">
+                                                            <input
+                                                                id="color-red6"
+                                                                name="color"
+                                                                type="radio"
+                                                            />
+                                                            <label
+                                                                className="variant__color--value red"
+                                                                htmlFor="color-red6"
+                                                                title="Black"
+                                                            >
+                                                                <img
+                                                                    className="variant__color--value__img"
+                                                                    src="assets/img/product/small-product/product2.webp"
+                                                                    alt="variant-color-img"
+                                                                />
+                                                            </label>
+                                                        </div>
+                                                        <div className="variant__color--list">
+                                                            <input
+                                                                id="color-red7"
+                                                                name="color"
+                                                                type="radio"
+                                                            />
+                                                            <label
+                                                                className="variant__color--value red"
+                                                                htmlFor="color-red7"
+                                                                title="Pink"
+                                                            >
+                                                                <img
+                                                                    className="variant__color--value__img"
+                                                                    src="assets/img/product/small-product/product3.webp"
+                                                                    alt="variant-color-img"
+                                                                />
+                                                            </label>
+                                                        </div>
+                                                        <div className="variant__color--list">
+                                                            <input
+                                                                id="color-red8"
+                                                                name="color"
+                                                                type="radio"
+                                                            />
+                                                            <label
+                                                                className="variant__color--value red"
+                                                                htmlFor="color-red8"
+                                                                title="Orange"
+                                                            >
+                                                                <img
+                                                                    className="variant__color--value__img"
+                                                                    src="assets/img/product/small-product/product4.webp"
+                                                                    alt="variant-color-img"
+                                                                />
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div className="product__variant--list mb-20">
+                                                <fieldset className="variant__input--fieldset">
+                                                    <legend className="product__variant--title mb-8">
+                                                        Weight :
+                                                    </legend>
+                                                    <ul className="variant__size d-flex">
+                                                        <li className="variant__size--list">
+                                                            <input
+                                                                id="weight4"
+                                                                name="weight"
+                                                                type="radio"
+                                                                defaultChecked=""
+                                                            />
+                                                            <label
+                                                                className="variant__size--value red"
+                                                                htmlFor="weight4"
+                                                            >
+                                                                5 kg
+                                                            </label>
+                                                        </li>
+                                                        <li className="variant__size--list">
+                                                            <input id="weight5" name="weight" type="radio" />
+                                                            <label
+                                                                className="variant__size--value red"
+                                                                htmlFor="weight5"
+                                                            >
+                                                                3 kg
+                                                            </label>
+                                                        </li>
+                                                        <li className="variant__size--list">
+                                                            <input id="weight6" name="weight" type="radio" />
+                                                            <label
+                                                                className="variant__size--value red"
+                                                                htmlFor="weight6"
+                                                            >
+                                                                2 kg
+                                                            </label>
+                                                        </li>
+                                                    </ul>
+                                                </fieldset>
+                                            </div>
+                                            <div className="product__variant--list quantity d-flex align-items-center mb-20">
                                                 {
                                                     productIdsArray.includes(parseInt(id)) ?
-                                                        <Link to={'/cart'} className="primary__btn quickview__cart--btn" >
-                                                            View Cart
+                                                        <Link to={'/cart'} >
+                                                            <button className="addto_cart_btn">
+                                                                View Cart
+                                                            </button>
                                                         </Link>
                                                         :
                                                         <button
-                                                            className="primary__btn quickview__cart--btn"
+                                                            className="addto_cart_btn"
                                                             onClick={() => handleAddcart()}
                                                         >
                                                             Add To Cart
                                                         </button>
                                                 }
+                                                <button className="buy_btn" onClick={() => handleBuyNow()}>Buy Now</button>
                                             </div>
                                             <div className="product__variant--list mb-15">
                                                 {
@@ -356,12 +342,6 @@ const SingleProductsDetails = () => {
                                                             </span>
                                                         </div>
                                                 }
-                                                <button
-                                                    className="variant__buy--now__btn primary__btn"
-                                                    type="submit"
-                                                >
-                                                    Buy it now
-                                                </button>
                                             </div>
                                             <div className="product__variant--list mb-15">
                                                 <div className="product__details--info__meta">

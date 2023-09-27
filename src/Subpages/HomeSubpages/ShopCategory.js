@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Categories } from '../Services/apiServices';
+import { Categories } from '../../Services/apiServices';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCategory } from '../store/reducers/ProductSlice';
+import { addCategory } from '../../store/reducers/ProductSlice';
 
 const ShopCategory = () => {
     const dispatch = useDispatch();

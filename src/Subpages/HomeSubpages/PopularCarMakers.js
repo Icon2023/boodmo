@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { CarCompanies } from "../Services/apiServices";
+import { CarCompanies } from "../../Services/apiServices";
 import { Link } from "react-router-dom";
-import "../Subpages/car_makers.css";
-import plceholderLogo from "../plceholder-logo.svg";
+import "../../Subpages/car_makers.css";
+import plceholderLogo from "../../plceholder-logo.svg";
+import HeadingSection from "../../Utils/HeadingSection";
+
 
 const PopularCarMakers = () => {
   const [carCompany, setCarCompany] = useState([]);
@@ -21,14 +23,15 @@ const PopularCarMakers = () => {
     <div>
       <section style={{ marginBottom: "40px" }} className="container">
         {/* <h3>Popular Vehicle Makers</h3> */}
-        <div className="section__heading border-bottom mb-30 d-flex flex-wrap justify-content-between">
+        {/* <div className="section__heading border-bottom mb-30 d-flex flex-wrap justify-content-between">
           <h2 className="section__heading--maintitle">
             Popular <span> Car Makers</span>
           </h2>
           <div>
             <Link to="/vehicles">VIEW ALL</Link>
           </div>
-        </div>
+        </div> */}
+        <HeadingSection title="Popular Car Makers" link="vehicles" />
 
         <div className="popular-brand-list">
           {carCompany.map((car) =>
@@ -43,7 +46,7 @@ const PopularCarMakers = () => {
                     onError={(e) => e.target.src = plceholderLogo
                     }
                     alt="car-logo"
-                    width={50}  
+                    width={50}
                     height={50}
                   />
                   <div className="pt-2"> {car?.name.toUpperCase()}</div>

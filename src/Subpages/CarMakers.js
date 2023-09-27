@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./car_makers.css";
 import { CarCompanies } from "../Services/apiServices";
-import PopularCarMakers from "./PopularCarMakers";
+import PopularCarMakers from "./HomeSubpages/PopularCarMakers";
+import { useLocation } from "react-router-dom";
+import HeadingSection from "../Utils/HeadingSection";
 
 const CarMakers = () => {
+
+  const location = useLocation();
+  let pathName = location.pathname;
+
   const [carCompany, setCarCompany] = useState([]);
   // State to track the filter letter
   const [filterLetter, setFilterLetter] = useState("");
@@ -56,7 +62,7 @@ const CarMakers = () => {
   return (
     <div>
       <div className="container mt-5">
-        <div className="section__heading border-bottom mb-30 d-flex flex-wrap justify-content-between">
+        {/* <div className="section__heading border-bottom mb-30 d-flex flex-wrap justify-content-between">
           <h2 className="section__heading--maintitle">
             Search Parts by <span>VEHICLE MAKERS</span>
           </h2>
@@ -66,26 +72,26 @@ const CarMakers = () => {
             value={filterLetter}
             onChange={handleInputChange}
           />
-        </div>
-        <PopularCarMakers />
-
+        </div> */}
+        {
+          pathName == "/vehicles" ? <HeadingSection isInput title="Search Parts by VEHICLE MAKERS" value={filterLetter} onChange={handleInputChange} />
+            : null
+        }
         {/* filter */}
         <section>
           <ul className="makers-nav">
             <li
               onClick={() => setFilterLetter("")}
-              className={`makers-nav__item ${
-                filterLetter === "" ? "makers-nav-active" : ""
-              }`}
+              className={`makers-nav__item ${filterLetter === "" ? "makers-nav-active" : ""
+                }`}
             >
               All
             </li>
             {uniqueFirstLetters.map((letter, index) => (
               <li
                 key={index}
-                className={`makers-nav__item ${
-                  filterLetter === letter ? "makers-nav-active" : ""
-                }`}
+                className={`makers-nav__item ${filterLetter === letter ? "makers-nav-active" : ""
+                  }`}
                 onClick={() => setFilterLetter(letter)}
                 style={{ marginRight: "10px" }}
               >

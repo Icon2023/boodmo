@@ -7,7 +7,7 @@ const NextArrow = ({ onClick }) => {
     <div className="arrow_click_next" style={{position: "absolute",
     right: "75%",
     top: "-32%",
-    transform: "translate(-50%, -50%)"}}>
+    transform: "translate(-50%, -50%)" , cursor:"pointer"}}>
       <h2 className="next_arrow" onClick={onClick}>    
         <RxDoubleArrowRight
           className="mb-1 arrow_click_svg"

@@ -1,19 +1,28 @@
 import React from "react";
-import "../Mainpages/car_makers.css";
+import { Link } from "react-router-dom";
 
-const HeadingSection = () => {
+const HeadingSection = ({ isInput, title, link, onChange, value }) => {
   return (
-    <div>
+    <div className="container">
       <div className="section__heading border-bottom mb-30 d-flex flex-wrap justify-content-between">
         <h2 className="section__heading--maintitle">
-          Search Parts by <span>VEHICLE MAKERS</span>
+          {/* Search Parts by <span>VEHICLE MAKERS</span> */}
+          {title}
         </h2>
-        <input type="text" placeholder="Search Car Makes" defaultValue="" />
+        {isInput ? <input type="text" style={{
+          border: "1px solid #E5E5E5", borderRadius: "0.5rem",
+          padding: "0.5rem 1.5rem",
+          marginBottom: "1.5rem"
+        }} placeholder="Search Car Makes" value={value} onChange={onChange} /> :
+          <Link to={link}>VIEW ALL</Link>
+        }
+        {/* {isInput ? <input type="text" placeholder="Search Car Makes" value={value} onChange={onChange} defaultValue="" /> :
+        <Link to={link}>VIEW ALL</Link>
+        } */}
+
       </div>
     </div>
   );
 };
 
 export default HeadingSection;
-
-// work in progress

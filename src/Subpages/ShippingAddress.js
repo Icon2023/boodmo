@@ -3,7 +3,7 @@ import React from 'react'
 const ShippingAddress = () => {
     return (
         <>
-            <section className="shipping__section">
+            <section className="shipping__section mt-5">
                 <div className="container">
                     <div className="shipping__inner style2 d-flex">
                         <div className="shipping__items style2 d-flex align-items-center">

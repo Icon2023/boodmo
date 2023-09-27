@@ -2,7 +2,7 @@ import React from 'react'
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import Header from './Mainpages/Header'
-import Home from './Mainpages/Home'
+import Home from './Subpages/HomeSubpages/Home'
 import Footer from './Mainpages/Footer'
 import SingleProductsDetails from './Mainpages/SingleProductsDetails'
 import Cart from './Mainpages/Cart'
@@ -15,6 +15,7 @@ import CarMakers from './Subpages/CarMakers'
 import BrandsAll from './Subpages/Brands'
 import Checkout from './Mainpages/Checkout'
 import ScrollToTop from "react-scroll-to-top";
+import ProtectedRoute from './Utils/ProtectedRoute'
 import "../node_modules/slick-carousel/slick/slick.css";
 import "../node_modules/slick-carousel/slick/slick-theme.css";
 
@@ -31,7 +32,7 @@ function App() {
         <Route path='/wishlist' element={<WishList />} />
         <Route path='/cart' element={<Cart />} />
         <Route path='/checkout' element={<Checkout />} />
-        <Route path='/login' element={<Login />} />
+        <Route path='/login' element={<ProtectedRoute><Login /></ProtectedRoute>} />
         <Route path='/vehicles' element={<CarMakers />} />
         <Route path='/brands' element={<BrandsAll />} />
         <Route path='/privacy-policy' element={<PrivacyPolicy />} />

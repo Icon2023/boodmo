@@ -1,5 +1,5 @@
 import React from 'react'
-import { AiOutlineContacts, AiOutlineHeart, AiOutlineHome, AiOutlineSearch, AiOutlineShoppingCart } from 'react-icons/ai'
+import { AiOutlineHeart, AiOutlineHome, AiOutlineLogout, AiOutlineSearch, AiOutlineShoppingCart } from 'react-icons/ai'
 import { IoIosArrowDown, IoMdContact, IoMdContacts } from 'react-icons/io'
 import { BiLogoFacebook, BiLogoInstagramAlt, BiLogoPinterest, BiLogoTwitter, BiLogoYoutube } from 'react-icons/bi'
 import { BsShop } from 'react-icons/bs'
@@ -8,6 +8,13 @@ import { useSelector } from 'react-redux'
 const Header = () => {
 
     const { add_wish, addto_cart } = useSelector((state) => ({ ...state.products }));
+    const user = JSON.parse(localStorage.getItem('USER'));
+
+    const handleLogout = () => {
+        localStorage.removeItem('USER')
+        window.location.reload();
+    }
+
     return (
         <>
             <header className="header__section">
@@ -189,11 +196,14 @@ const Header = () => {
                                                         Privacy Policy
                                                     </a>
                                                 </li>
-                                                <li className="header__sub--menu__items">
-                                                    <a href="/login" className="header__sub--menu__link">
-                                                        Login
-                                                    </a>
-                                                </li>
+                                                {
+                                                    user?.success !== true ? <li className="header__sub--menu__items">
+                                                        <a href="/login" className="header__sub--menu__link">
+                                                            Login
+                                                        </a>
+                                                    </li> : ""
+                                                }
+
                                             </ul>
                                         </li>
                                         <li className="header__menu--items">
@@ -217,10 +227,16 @@ const Header = () => {
                                         </a>
                                     </li>
                                     <li className="header__account--items d-none d-lg-block">
-                                        <a className="header__account--btn" href="my-account.html">
-                                            <IoMdContact style={{ fontSize: "28px" }} />
-                                            <span className="visually-hidden">My account</span>
-                                        </a>
+                                        {
+                                            user?.success !== true ?
+                                                <a className="header__account--btn" href="/login">
+                                                    <IoMdContact style={{ fontSize: "28px" }} />
+                                                </a>
+                                                : <a className="header__account--btn" onClick={handleLogout}>
+                                                    <AiOutlineLogout style={{ fontSize: "28px" }} />
+                                                </a>
+                                        }
+
                                     </li>
                                     <li className="header__account--items d-none d-lg-block">
                                         <a className="header__account--btn" href="/wishlist">

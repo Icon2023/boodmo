@@ -1,9 +1,9 @@
 import React from "react";
-import HomeSilder from "../Subpages/HomeSilder";
-import ShopCategory from "../Subpages/ShopCategory";
-import PopularProducts from "../Subpages/PopularProducts";
-import Banner from "../Subpages/Banner";
-import PopularCarMakers from "../Subpages/PopularCarMakers";
+import HomeSilder from "./HomeSilder";
+import ShopCategory from "./ShopCategory";
+import PopularProducts from "./PopularProducts";
+import Banner from "./Banner";
+import PopularCarMakers from "./PopularCarMakers";
 import BrandsWeTrust from "./BrandsWeTrust";
 
 const Home = () => {
@@ -18,7 +18,10 @@ const Home = () => {
       {/* start Popular Car Makers */}
       <PopularCarMakers />
 
+      {/* start Popular brand */}
       <BrandsWeTrust />
+
+      <Banner/>
 
       {/* Start product section */}
       <PopularProducts />
