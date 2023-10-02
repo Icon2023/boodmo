@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addProducts } from '../store/reducers/ProductSlice';
 import { CgMenuGridR } from "react-icons/cg";
 import { TfiMenuAlt } from "react-icons/tfi";
-import { AiOutlineFilter, AiOutlineStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineFilter, AiOutlineStar } from "react-icons/ai";
 
 //matrial ui 
 import Accordion from '@mui/material/Accordion';
@@ -297,7 +297,12 @@ const ProductsView = () => {
                                                                                                         alt="product-img"
                                                                                                     />
                                                                                                 </a>
-                                                                                                <span className="product__badge">-14%</span>
+                                                                                                {e?.discount  &&
+                                                                                                    <span className="product__badge">{e?.discount}%</span>
+                                                                                                }
+                                                                                                {e?.is_tranding === 1 &&
+                                                                                                    <span className="product__badge_tranding">Tranding</span>
+                                                                                                }
                                                                                                 {/* <ul className="product__card--action d-flex align-items-center justify-content-center">
                                                                                                     <li className="product__card--action__list">
                                                                                                         <a
@@ -329,13 +334,70 @@ const ProductsView = () => {
                                                                                                 <ul className="rating product__card--rating d-flex">
                                                                                                     <li className="rating__list">
                                                                                                         <span className="rating__icon mt-2">
-                                                                                                            <AiOutlineStar />
-                                                                                                            <AiOutlineStar />
-                                                                                                            <AiOutlineStar />
-                                                                                                            <AiOutlineStar />
-                                                                                                            <AiOutlineStar />
+                                                                                                            {
+                                                                                                                e?.average_rating === 0 &&
+                                                                                                                <>
+                                                                                                                    <AiOutlineStar />
+                                                                                                                    <AiOutlineStar />
+                                                                                                                    <AiOutlineStar />
+                                                                                                                    <AiOutlineStar />
+                                                                                                                    <AiOutlineStar />
+                                                                                                                </>
+                                                                                                            }
+                                                                                                            {
+                                                                                                                e?.average_rating === 1 &&
+                                                                                                                <>
+                                                                                                                    <AiFillStar />
+                                                                                                                    <AiOutlineStar />
+                                                                                                                    <AiOutlineStar />
+                                                                                                                    <AiOutlineStar />
+                                                                                                                    <AiOutlineStar />
+                                                                                                                </>
+                                                                                                            }
+                                                                                                            {
+                                                                                                                e?.average_rating === 2 &&
+                                                                                                                <>
+                                                                                                                    <AiFillStar />
+                                                                                                                    <AiFillStar />
+                                                                                                                    <AiOutlineStar />
+                                                                                                                    <AiOutlineStar />
+                                                                                                                    <AiOutlineStar />
+                                                                                                                </>
+                                                                                                            }
+                                                                                                            {
+                                                                                                                e?.average_rating === 3 &&
+                                                                                                                <>
+                                                                                                                    <AiFillStar />
+                                                                                                                    <AiFillStar />
+                                                                                                                    <AiFillStar />
+                                                                                                                    <AiOutlineStar />
+                                                                                                                    <AiOutlineStar />
+                                                                                                                </>
+                                                                                                            }
+                                                                                                            {
+                                                                                                                e?.average_rating === 4 &&
+                                                                                                                <>
+                                                                                                                    <AiFillStar />
+                                                                                                                    <AiFillStar />
+                                                                                                                    <AiFillStar />
+                                                                                                                    <AiFillStar />
+                                                                                                                    <AiOutlineStar />
+                                                                                                                </>
+                                                                                                            }
+                                                                                                            {
+                                                                                                                e?.average_rating === 5 &&
+                                                                                                                <>
+                                                                                                                    <AiFillStar />
+                                                                                                                    <AiFillStar />
+                                                                                                                    <AiFillStar />
+                                                                                                                    <AiFillStar />
+                                                                                                                    <AiFillStar />
+                                                                                                                </>
+                                                                                                            }
+
                                                                                                         </span>
                                                                                                     </li>
+                                                                                                    <span>({e?.review_count})</span>
                                                                                                 </ul>
                                                                                                 <h3 className="product_name">
                                                                                                     <a href={`/productsdetail/${e?.id}`} title={e?.name}>
@@ -343,8 +405,8 @@ const ProductsView = () => {
                                                                                                     </a>
                                                                                                 </h3>
                                                                                                 <div className="product__card--price">
-                                                                                                    <span className="current__price">${e?.original_price}.52/-</span>
-                                                                                                    <span className="old__price">${e?.original_price * 1.5}</span>
+                                                                                                    <span className="current__price">${e?.selling_price}/-</span>
+                                                                                                    <span className="old__price">${e?.original_price}</span>
                                                                                                 </div>
                                                                                                 <div className="product__card--footer">
                                                                                                     <a
@@ -388,7 +450,7 @@ const ProductsView = () => {
                                                                                 <>
                                                                                     <div className="col mb-30" key={index}>
                                                                                         <div className="product__card product__list d-flex align-items-center">
-                                                                                            <div className="product__card--thumbnail product__list--thumbnail">
+                                                                                            <div className="product__card--thumbnail product__list--thumbnail" style={{boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)"}}>
                                                                                                 <a
                                                                                                     className="product__card--thumbnail__link display-block"
                                                                                                     href={`/productsdetail/${e?.id}`}
@@ -404,7 +466,12 @@ const ProductsView = () => {
                                                                                                         alt="product-img"
                                                                                                     />
                                                                                                 </a>
-                                                                                                <span className="product__badge">-20%</span>
+                                                                                                {e?.discount  &&
+                                                                                                    <span className="product__badge">{e?.discount}%</span>
+                                                                                                }
+                                                                                                {e?.is_tranding === 1 &&
+                                                                                                    <span className="product__badge_tranding">Tranding</span>
+                                                                                                }
                                                                                                 {/* <ul className="product__card--action d-flex align-items-center justify-content-center">
                                                                                                    
                                                                                                     <li className="product__card--action__list">
@@ -457,8 +524,9 @@ const ProductsView = () => {
                                                                                                     </li>
                                                                                                 </ul>
                                                                                                 <div className="product__list--price">
-                                                                                                    <span className="current__price">{e?.selling_price}</span>
-                                                                                                    <span className="old__price">${e?.original_price}/-</span>
+                                                                                                {e?.selling_price  && <span className="old__price" style={{paddingRight:"5px"}}><del>${e?.selling_price}/-</del></span>}
+                                                                                                <span className="current__price">${e?.original_price}/-</span>
+                                                                                                {e?.discount  && <span className="product-discount">({e?.discount}% OFF)</span>}
                                                                                                 </div>
                                                                                                 <a
                                                                                                     className="product__card--btn primary__btn"
@@ -466,6 +534,11 @@ const ProductsView = () => {
                                                                                                 >
                                                                                                     + Add to cart
                                                                                                 </a>
+                                                                                                {
+                                                                                                    e?.out_of_stock == 1 && (
+                                                                                                            <div className='out_of_stock product__card--btn bg-text-body-tertiary'>Out of stoke</div>
+                                                                                                        )
+                                                                                                }
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
