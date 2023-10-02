@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ShippingAddress from '../Subpages/ShippingAddress';
 import { useSelector } from 'react-redux';
-import { CheckOutProduct } from '../Services/apiServices';
+import { CartList, CheckOutProduct } from '../Services/apiServices';
 
 const Checkout = () => {
-    const { addto_cart, cart_total_price } = useSelector((state) => ({ ...state.products }));
-
+    const { addto_cart } = useSelector((state) => ({ ...state.products }));
+    const user = JSON.parse(localStorage.getItem('USER'));
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
     const [companyName, setCompanyName] = useState('');
@@ -13,6 +13,14 @@ const Checkout = () => {
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
     const [pincode, setPincode] = useState('');
+    const [checkOut, setCheckOut] = useState([]);
+
+    useEffect(() => {
+        CartList().then((res) => {
+            console.log(res?.data);
+            setCheckOut(res?.data)
+        })
+    }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -25,11 +33,13 @@ const Checkout = () => {
             city: city,
             zip: pincode
         }
-        CheckOutProduct(data).then((res)=>{
+        CheckOutProduct(data).then((res) => {
             console.log(res);
         })
-        console.log({ fname, lname, companyName, address, city, state });
     }
+
+    const countTotal = (items) => items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
+
     return (
         <>
             <main className="main__content_wrapper">
@@ -483,45 +493,90 @@ const Checkout = () => {
                                         <table className="cart__table--inner">
                                             <tbody className="cart__table--body">
                                                 {
-                                                    addto_cart.map((e, index) => {
-                                                        return (
-                                                            <tr className="cart__table--body__items">
-                                                                <td className="cart__table--body__list">
-                                                                    <div className="product__image two  d-flex align-items-center">
-                                                                        <div className="product__thumbnail border-radius-5">
-                                                                            <a
-                                                                                className="display-block"
-                                                                                href="product-details.html"
-                                                                            >
-                                                                                <img
-                                                                                    className="display-block border-radius-5"
-                                                                                    src={e?.image}
-                                                                                    alt="cart-product"
-                                                                                />
-                                                                            </a>
-                                                                            <span className="product__thumbnail--quantity">
-                                                                                {e?.qty}
-                                                                            </span>
-                                                                        </div>
-                                                                        <div className="product__description">
-                                                                            <h4 className="product__description--name">
-                                                                                <a href="product-details.html">
-                                                                                    {e?.name}
-                                                                                </a>
-                                                                            </h4>
-                                                                            <span className="product__description--variant">
-                                                                                COLOR: Blue
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td className="cart__table--body__list">
-                                                                    <span className="cart__price">${e?.price}/-</span>
-                                                                </td>
-                                                            </tr>
-                                                        )
-                                                    })
+                                                    user?.success !== true ?
+                                                        <>
+                                                            {
+                                                                addto_cart?.map((e, index) => {
+                                                                    return (
+                                                                        <tr className="cart__table--body__items" key={index}>
+                                                                            <td className="cart__table--body__list">
+                                                                                <div className="product__image two  d-flex align-items-center">
+                                                                                    <div className="product__thumbnail border-radius-5">
+                                                                                        <a
+                                                                                            className="display-block"
+                                                                                        >
+                                                                                            <img
+                                                                                                className="display-block border-radius-5"
+                                                                                                src={e?.image}
+                                                                                                alt="cart-product"
+                                                                                            />
+                                                                                        </a>
+                                                                                        <span className="product__thumbnail--quantity">
+                                                                                            {e?.qty}
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <div className="product__description">
+                                                                                        <h4 className="product__description--name">
+                                                                                            <a href="product-details.html">
+                                                                                                {e?.name}
+                                                                                            </a>
+                                                                                        </h4>
+                                                                                        <span className="product__description--variant">
+                                                                                            COLOR: Blue
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td className="cart__table--body__list">
+                                                                                <span className="cart__price">${e?.qty * e?.price}/-</span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </>
+                                                        :
+                                                        <>
+                                                            {
+                                                                checkOut?.map((e, index) => {
+                                                                    return (
+                                                                        <tr className="cart__table--body__items" key={index}>
+                                                                            <td className="cart__table--body__list">
+                                                                                <div className="product__image two  d-flex align-items-center">
+                                                                                    <div className="product__thumbnail border-radius-5">
+                                                                                        <a className="display-block">
+                                                                                            <img
+                                                                                                className="display-block border-radius-5"
+                                                                                                src={e?.product?.images[0].image}
+                                                                                                alt="cart-product"
+                                                                                            />
+                                                                                        </a>
+                                                                                        <span className="product__thumbnail--quantity">
+                                                                                            {e?.qty}
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <div className="product__description">
+                                                                                        <h4 className="product__description--name">
+                                                                                            <a href="product-details.html">
+                                                                                                {e?.name}
+                                                                                            </a>
+                                                                                        </h4>
+                                                                                        <span className="product__description--variant">
+                                                                                            COLOR: Blue
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td className="cart__table--body__list">
+                                                                                <span className="cart__price">${e?.price * e?.qty}/-</span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </>
                                                 }
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -550,7 +605,18 @@ const Checkout = () => {
                                                         Subtotal
                                                     </td>
                                                     <td className="checkout__total--amount text-right">
-                                                        $ {cart_total_price}/-
+                                                        {
+                                                            user?.success !== true ?
+                                                                <>
+                                                                    <h4>${countTotal(addto_cart)}/-</h4>
+                                                                </>
+                                                                : <>
+                                                                    {
+                                                                        <h4>${countTotal(checkOut)}/-</h4>
+                                                                    }
+                                                                </>
+                                                        }
+
                                                     </td>
                                                 </tr>
                                                 <tr className="checkout__total--items">
@@ -568,7 +634,17 @@ const Checkout = () => {
                                                         Total
                                                     </td>
                                                     <td className="checkout__total--footer__amount checkout__total--footer__list text-right">
-                                                        $ {cart_total_price}/-
+                                                        {
+                                                            user?.success !== true ?
+                                                                <>
+                                                                    <h4>${countTotal(addto_cart)}/-</h4>
+                                                                </>
+                                                                : <>
+                                                                    {
+                                                                        <h4>${countTotal(checkOut)}/-</h4>
+                                                                    }
+                                                                </>
+                                                        }
                                                     </td>
                                                 </tr>
                                             </tfoot>

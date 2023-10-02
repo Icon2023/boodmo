@@ -12215,6 +12215,10 @@ details>summary::-webkit-details-marker {
     margin-bottom: 1.5rem
 }
 
+.popular_tag img {
+    /* width: 100px; */
+}
+
 @media only screen and (min-width:768px) {
     .account__login--input {
         height: 5.2rem
@@ -13099,4 +13103,54 @@ details>summary::-webkit-details-marker {
 .center-img {
     display: inline-block;
     margin: 0 auto;
+}
+
+/* ======================================================================================================================== */
+.control-arrow, .control-next {
+    background: red !important;
+}
+
+.h-50 .col-md-6 .control-dots {
+    display: none;
+}
+
+.product__card:hover .out_of_stock {
+    opacity: 1;
+    visibility: visible;
+    bottom: -15px;
+}
+
+.product__badge_tranding {
+    background: #59D8FD;
+    display: inline-block;
+    position: absolute;
+    top: 16px;
+    left: 0;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    z-index: 1;
+    padding: 0 4px;
+    line-height: 16px;
+}
+
+.product__badge_tranding:after {
+    content: "";
+    position: absolute;
+    border-color: rgba(89, 216, 253, .5) transparent rgba(89, 216, 253, .5) rgba(89, 216, 253, .8);
+    border-style: solid;
+    border-width: 8px;
+    left: 100%;
+    width: 0;
+    height: 0;
+    top: 0;
+}
+
+.product-discount {
+    /* color: #ff905a; */
+    color: green;
+    font-weight: 400;
+    font-size: 12px;
+    margin-left: 5px;
 }

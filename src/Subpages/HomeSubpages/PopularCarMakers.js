@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { CarCompanies } from "../../Services/apiServices";
-import { Link } from "react-router-dom";
 import "../../Subpages/car_makers.css";
-import plceholderLogo from "../../plceholder-logo.svg";
 import HeadingSection from "../../Utils/HeadingSection";
+import popular from '../../images/2562193.png'
 
 
 const PopularCarMakers = () => {
@@ -19,41 +18,41 @@ const PopularCarMakers = () => {
         console.log(err);
       });
   }, []);
+
   return (
     <div>
       <section style={{ marginBottom: "40px" }} className="container">
-        {/* <h3>Popular Vehicle Makers</h3> */}
-        {/* <div className="section__heading border-bottom mb-30 d-flex flex-wrap justify-content-between">
-          <h2 className="section__heading--maintitle">
-            Popular <span> Car Makers</span>
-          </h2>
-          <div>
-            <Link to="/vehicles">VIEW ALL</Link>
-          </div>
-        </div> */}
-        <HeadingSection title="Popular Car Makers" link="vehicles" />
-
+        <HeadingSection title="Car Makers" link="vehicles" />
         <div className="popular-brand-list">
-          {carCompany.map((car) =>
-            car.is_popular === 1 ? (
-              <div
-                className="popular-brand-list__item cls-loading--done"
-                key={car?.id + 2}
-              >
-                <a href="#" className="car-maker-item">
-                  <img
-                    src={car?.logo}
-                    onError={(e) => e.target.src = plceholderLogo
+          {
+            carCompany.map((e, index) => {
+              return (
+                <div
+                  className="popular-brand-list__item cls-loading--done"
+                  key={index}
+                  style={{ position: "relative" }}
+                >
+                  <div className="car-maker-item">
+                    {
+                      e?.is_popular === 1 ?
+                        <div className="popular_tag" style={{ position: "absolute", left:"50%" ,top:"-15%" }}>
+                          <img src={popular} alt="" srcset="" />
+                        </div>
+                        :
+                        ""
                     }
-                    alt="car-logo"
-                    width={50}
-                    height={50}
-                  />
-                  <div className="pt-2"> {car?.name.toUpperCase()}</div>
-                </a>
-              </div>
-            ) : null
-          )}
+                    <img
+                      src={e?.logo}
+                      alt="car-logo"
+                      width={50}
+                      height={50}
+                    />
+                    <div className="pt-2">{e?.name.toUpperCase()}</div>
+                  </div>
+                </div>
+              )
+            })
+          }
         </div>
       </section>
     </div>

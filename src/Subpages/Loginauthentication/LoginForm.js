@@ -3,14 +3,16 @@ import HideShow from "../../Utils/form/HideShow";
 import { Alert } from "@mui/material";
 import { LogIn } from "../../Services/apiServices";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { removeAllAddtocart } from "../../store/reducers/ProductSlice";
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const [emailNumber, setEmailNumber] = useState('raj.iconfisys@gmail.com')
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState('123456')
   const [passwordShown, setPasswordShown] = useState(false);
-
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -26,9 +28,11 @@ const LoginForm = () => {
         localStorage.setItem("USER", JSON.stringify(res));
         navigate("/");
         window.location.reload();
+        dispatch(removeAllAddtocart())
       }
     });
   }
+
   return (
     <>
       <form onSubmit={handleSubmit}>

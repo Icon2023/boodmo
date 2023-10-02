@@ -9,8 +9,7 @@ export const productsSlice = createSlice({
     single_category: [],
     add_wish: [],
     addto_cart: [],
-    cart_total_price: 0,
-
+    login_cart: [],
   },
 
   reducers: {
@@ -47,6 +46,10 @@ export const productsSlice = createSlice({
       state.cart_total_price = state.addto_cart.length === 0 ? 0 : state.cart_total_price
     },
 
+    removeAllAddtocart: (state) => {
+      state.addto_cart = []
+    },
+
     qtyIncrementDecrement: (state, { payload }) => {
       state.addto_cart = state.addto_cart.map((obj) => {
         if (obj.proId === parseInt(payload.id)) {
@@ -56,9 +59,15 @@ export const productsSlice = createSlice({
       })
     },
 
-    cartTotalPrice: state => {
-      state.cart_total_price = state.addto_cart.reduce((total, item) => total + (item.price * item.qty), 0);
+    addLoginCart: (state, { payload }) => {
+      state.login_cart = [...state.login_cart, payload];
     },
+
+    removeLoginAddtocart: (state, { payload }) => {
+      state.login_cart = state.login_cart.filter((e) => e.id !== payload)
+    },
+
+
   }
 })
 
@@ -72,7 +81,10 @@ export const {
   addToCart,
   removeProductAddtocart,
   qtyIncrementDecrement,
-  cartTotalPrice
+  removeAllAddtocart,
+  addLoginCart,
+  removeLoginAddtocart,
+
 
 } = productsSlice.actions;
 

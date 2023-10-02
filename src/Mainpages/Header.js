@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 
 const Header = () => {
 
-    const { add_wish, addto_cart } = useSelector((state) => ({ ...state.products }));
+    const { add_wish, addto_cart, login_cart } = useSelector((state) => ({ ...state.products }));
     const user = JSON.parse(localStorage.getItem('USER'));
 
     const handleLogout = () => {
@@ -184,9 +184,13 @@ const Header = () => {
                                                     </a>
                                                 </li>
                                                 <li className="header__sub--menu__items">
-                                                    <a href="/wishlist" className="header__sub--menu__link">
-                                                        Wishlist
-                                                    </a>
+                                                    {
+                                                        user?.success === true ? <li className="header__sub--menu__items">
+                                                            <a href="/wishlist" className="header__sub--menu__link">
+                                                                Wishlist
+                                                            </a>
+                                                        </li> : ""
+                                                    }
                                                 </li>
                                                 <li className="header__sub--menu__items">
                                                     <a
@@ -233,7 +237,7 @@ const Header = () => {
                                                     <IoMdContact style={{ fontSize: "28px" }} />
                                                 </a>
                                                 : <a className="header__account--btn" onClick={handleLogout}>
-                                                    <AiOutlineLogout style={{ fontSize: "28px" }} />
+                                                    <AiOutlineLogout style={{ fontSize: "28px", color: "red" }} />
                                                 </a>
                                         }
 
@@ -246,15 +250,26 @@ const Header = () => {
                                             }
                                         </a>
                                     </li>
-                                    <li className="header__account--items header__minicart--items">
+                                    <li className="header__account--items header__minicart--items m-3">
                                         <a
                                             className="header__account--btn minicart__open--btn"
                                             href="/cart"
                                         >
                                             <AiOutlineShoppingCart style={{ fontSize: "28px" }} />
                                             {
-                                                addto_cart?.length !== 0 ? <span className="items__count">{addto_cart?.length}</span> : ""
+                                                user?.success !== true ?
+                                                    <>
+                                                        {
+                                                            addto_cart?.length !== 0 ? <span className="items__count">{addto_cart?.length}</span> : ""
+                                                        }
+                                                    </> :
+                                                    <>
+                                                        {
+                                                            login_cart?.length !== 0 ? <span className="items__count">{login_cart?.length}</span> : ""
+                                                        }
+                                                    </>
                                             }
+
 
                                         </a>
                                     </li>

@@ -15,9 +15,12 @@ import CarMakers from './Subpages/CarMakers'
 import BrandsAll from './Subpages/Brands'
 import Checkout from './Mainpages/Checkout'
 import ScrollToTop from "react-scroll-to-top";
-import ProtectedRoute from './Utils/ProtectedRoute'
+import ProtectedRouteLogin from './Utils/ProtectedRouteLogin'
+import ProtectedRouteWishlist from './Utils/form/ProtectedRouteWishlist'
 import "../node_modules/slick-carousel/slick/slick.css";
 import "../node_modules/slick-carousel/slick/slick-theme.css";
+import "../node_modules/react-responsive-carousel/lib/styles/carousel.min.css"; 
+
 
 function App() {
   return (
@@ -29,10 +32,10 @@ function App() {
         <Route path='/shop/:id' element={<CategoryProducts />} />
         <Route path='/shop/:cate_id/:subcategory' element={<ProductsView />} />
         <Route path='/productsdetail/:id' element={<SingleProductsDetails />} />
-        <Route path='/wishlist' element={<WishList />} />
+        <Route path='/wishlist' element={<ProtectedRouteWishlist><WishList /></ProtectedRouteWishlist>} />
         <Route path='/cart' element={<Cart />} />
         <Route path='/checkout' element={<Checkout />} />
-        <Route path='/login' element={<ProtectedRoute><Login /></ProtectedRoute>} />
+        <Route path='/login' element={<ProtectedRouteLogin><Login /></ProtectedRouteLogin>} />
         <Route path='/vehicles' element={<CarMakers />} />
         <Route path='/brands' element={<BrandsAll />} />
         <Route path='/privacy-policy' element={<PrivacyPolicy />} />

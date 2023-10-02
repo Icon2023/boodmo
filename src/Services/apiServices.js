@@ -1,4 +1,5 @@
 import axios from "axios";
+import authHeader from "./apiHeader";
 
 const BASE_URL = "http://192.168.100.123:8000"
 
@@ -117,3 +118,32 @@ export const Register = async (data) => {
         console.log("login error");
     }
 };
+
+export const CartLogin = async (data) => {
+    const response = await axios.post(`${BASE_URL}/api/cart`, data ,{ headers: authHeader() });
+    if (response?.data) {
+        return response.data;
+    } else {
+        console.log("login error");
+    }
+};
+
+export const CartList = async () => {
+    const response = await axios.get(`${BASE_URL}/api/listcart`,{ headers: authHeader() } );
+    if (response?.data) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}
+
+
+export const CartLoginDelete = async (id) => {
+    console.log(id);
+    const response = await axios.delete(`${BASE_URL}/api/cart/${id}`,{ headers: authHeader() } );
+    if (response?.data) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}

@@ -21,7 +21,7 @@ const Home = () => {
       {/* start Popular brand */}
       <BrandsWeTrust />
 
-      <Banner/>
+      <Banner />
 
       {/* Start product section */}
       <PopularProducts />

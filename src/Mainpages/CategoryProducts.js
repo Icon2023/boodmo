@@ -43,7 +43,7 @@ const CategoryProducts = () => {
                                     <h1 className="breadcrumb__content--title">Product</h1>
                                     <ul className="breadcrumb__content--menu d-flex justify-content-center">
                                         <li className="breadcrumb__content--menu__items">
-                                            <a href="index.html">Home</a>
+                                            <a href="/">Home</a>
                                         </li>
                                         <li className="breadcrumb__content--menu__items">
                                             <span>Product</span>
