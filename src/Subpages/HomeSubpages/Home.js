@@ -1,7 +1,6 @@
 import React from "react";
 import HomeSilder from "./HomeSilder";
 import ShopCategory from "./ShopCategory";
-import PopularProducts from "./PopularProducts";
 import Banner from "./Banner";
 import PopularCarMakers from "./PopularCarMakers";
 import BrandsWeTrust from "./BrandsWeTrust";
@@ -21,10 +20,10 @@ const Home = () => {
       {/* start Popular brand */}
       <BrandsWeTrust />
 
+      {/* start banner brand */}
       <Banner />
 
-      {/* Start product section */}
-      <PopularProducts />
+
     </>
   );
 };

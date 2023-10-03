@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { CartLogin, SingleProductDetails } from "../Services/apiServices";
+import { AddReviewList, CartLogin, SingleProductDetails } from "../Services/apiServices";
 import ShippingAddress from "../Subpages/ShippingAddress";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -10,11 +10,14 @@ import {
     addToWishlist,
     removeProductWishlist,
 } from "../store/reducers/ProductSlice";
-import { AiOutlineStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineCaretLeft, AiOutlineCaretRight, AiOutlineStar } from "react-icons/ai";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { Carousel } from 'react-responsive-carousel';
-import NextArrow from "../Utils/NextArrow";
-import PrevArrow from "../Utils/PrevArrow";
+import { dateFormate } from "../Utils/utils";
+import Rating from '@mui/material/Rating';
+import "../../node_modules/react-responsive-carousel/lib/styles/carousel.min.css";
+
+
 
 const SingleProductsDetails = () => {
     const user = JSON.parse(localStorage.getItem('USER'));
@@ -22,13 +25,16 @@ const SingleProductsDetails = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [reviewOpen, setReviewOpen] = useState(true)
-    const [addOpen, setAddOpen] = useState(true)
+    const [addOpen, setAddOpen] = useState(true);
+    const [rating, setRating] = useState(0);
+    const [reviewText, setReviewText] = useState("");
     const { add_Details, add_wish, addto_cart, login_cart } = useSelector((state) => ({ ...state.products }));
 
     useEffect(() => {
         SingleProductDetails(id).then((res) => {
             if (res.success) {
                 dispatch(addProductDetails(res?.data?.product))
+                console.log(res?.data?.product);
             }
         })
     }, [])
@@ -63,6 +69,7 @@ const SingleProductsDetails = () => {
             qty: 1,
             name: add_Details?.name,
             image: add_Details?.images[0].image,
+            stock: add_Details?.out_of_stock
         }
         dispatch(addToWishlist(data))
     }
@@ -120,6 +127,23 @@ const SingleProductsDetails = () => {
         dispatch(removeProductWishlist(id));
     };
 
+    const handleSubmitReview = (event) => {
+        event.preventDefault();
+        let data = {
+            rating: rating,
+            text: reviewText,
+            user_id: user?.data?.id,
+            product_id: id,
+            vendor_id: add_Details?.vendor_id
+        }
+        console.log(data);
+        AddReviewList(data).then((res) => {
+            if (!res.status) {
+                alert(res.message)
+            }
+        })
+    }
+
     return (
         <>
             <main className="main__content_wrapper">
@@ -132,7 +156,7 @@ const SingleProductsDetails = () => {
                                 <div className="breadcrumb__content text-center">
                                     <ul className="breadcrumb__content--menu d-flex justify-content-center">
                                         <li className="breadcrumb__content--menu__items">
-                                            <a href="index.html">Home</a>
+                                            <a href="/">Home</a>
                                         </li>
                                         <li className="breadcrumb__content--menu__items">
                                             <span>Product</span>
@@ -150,7 +174,23 @@ const SingleProductsDetails = () => {
                     <div className="container">
                         <div className="row">
                             <div className="col-md-6">
-                                <Carousel showArrows={true} dynamicHeight={false}>
+                                <Carousel
+                                    showThumbs={true} // Display thumbnail images
+                                    showStatus={false}
+                                    infiniteLoop={true}
+                                    dynamicHeight={false}
+                                    showArrows={false} // Disable the default arrows
+                                    renderArrowPrev={(clickHandler) => (
+                                        <button onClick={clickHandler} className="custom-arrow prev">
+                                            <AiOutlineCaretLeft />
+                                        </button>
+                                    )}
+                                    renderArrowNext={(clickHandler) => (
+                                        <button onClick={clickHandler} className="custom-arrow next">
+                                            <AiOutlineCaretRight />
+                                        </button>
+                                    )}
+                                >
                                     {add_Details?.images?.map((e) => {
                                         return (
                                             <div className="image-container">
@@ -177,16 +217,72 @@ const SingleProductsDetails = () => {
                                     <ul className="rating product__card--rating mb-15 d-flex">
                                         <li className="rating__list">
                                             <span className="rating__icon">
-                                                <AiOutlineStar />
-                                                <AiOutlineStar />
-                                                <AiOutlineStar />
-                                                <AiOutlineStar />
-                                                <AiOutlineStar />
+                                                {
+                                                    add_Details?.average_rating === 0 &&
+                                                    <>
+                                                        <AiOutlineStar />
+                                                        <AiOutlineStar />
+                                                        <AiOutlineStar />
+                                                        <AiOutlineStar />
+                                                        <AiOutlineStar />
+                                                    </>
+                                                }
+                                                {
+                                                    add_Details?.average_rating === 1 &&
+                                                    <>
+                                                        <AiFillStar />
+                                                        <AiOutlineStar />
+                                                        <AiOutlineStar />
+                                                        <AiOutlineStar />
+                                                        <AiOutlineStar />
+                                                    </>
+                                                }
+                                                {
+                                                    add_Details?.average_rating === 2 &&
+                                                    <>
+                                                        <AiFillStar />
+                                                        <AiFillStar />
+                                                        <AiOutlineStar />
+                                                        <AiOutlineStar />
+                                                        <AiOutlineStar />
+                                                    </>
+                                                }
+                                                {
+                                                    add_Details?.average_rating === 3 &&
+                                                    <>
+                                                        <AiFillStar />
+                                                        <AiFillStar />
+                                                        <AiFillStar />
+                                                        <AiOutlineStar />
+                                                        <AiOutlineStar />
+                                                    </>
+                                                }
+                                                {
+                                                    add_Details?.average_rating === 4 &&
+                                                    <>
+                                                        <AiFillStar />
+                                                        <AiFillStar />
+                                                        <AiFillStar />
+                                                        <AiFillStar />
+                                                        <AiOutlineStar />
+                                                    </>
+                                                }
+                                                {
+                                                    add_Details?.average_rating === 5 &&
+                                                    <>
+                                                        <AiFillStar />
+                                                        <AiFillStar />
+                                                        <AiFillStar />
+                                                        <AiFillStar />
+                                                        <AiFillStar />
+                                                    </>
+                                                }
+
                                             </span>
                                         </li>
                                         <li>
                                             <span className="rating__review--text">
-                                                (126) Review
+                                                {add_Details?.review_count} Review
                                             </span>
                                         </li>
                                     </ul>
@@ -278,73 +374,90 @@ const SingleProductsDetails = () => {
                                         </div>
                                         <div className="product__variant--list quantity d-flex align-items-center mb-20">
                                             {
-                                                user?.success !== true ?
+                                                add_Details?.out_of_stock === 1 ?
                                                     <>
-                                                        {
-                                                            productIdsArray.includes(parseInt(id)) ?
-                                                                <Link to={'/cart'} >
-                                                                    <button className="addto_cart_btn">
-                                                                        View Cart
-                                                                    </button>
-                                                                </Link>
-                                                                :
-                                                                <button
-                                                                    className="addto_cart_btn"
-                                                                    onClick={() => handleAddcart()}
-                                                                >
-                                                                    Add To Cart
-                                                                </button>
-                                                        }
+                                                        <button className="addto_cart_btn">
+                                                            Out Of Stock
+                                                        </button>
                                                     </>
                                                     :
                                                     <>
                                                         {
-                                                            productLoginIdsArray.includes(parseInt(id)) ?
-                                                                <Link to={'/cart'} >
-                                                                    <button className="addto_cart_btn">
-                                                                        View Cart
-                                                                    </button>
-                                                                </Link>
+                                                            user?.success !== true ?
+                                                                <>
+                                                                    {
+                                                                        productIdsArray.includes(parseInt(id)) ?
+                                                                            <Link to={'/cart'} >
+                                                                                <button className="addto_cart_btn">
+                                                                                    View Cart
+                                                                                </button>
+                                                                            </Link>
+                                                                            :
+                                                                            <button
+                                                                                className="addto_cart_btn"
+                                                                                onClick={() => handleAddcart()}
+                                                                            >
+                                                                                Add To Cart
+                                                                            </button>
+                                                                    }
+                                                                </>
                                                                 :
-                                                                <button
-                                                                    className="addto_cart_btn"
-                                                                    onClick={() => handleAddcart()}
-                                                                >
-                                                                    Add To Cart
-                                                                </button>
+                                                                <>
+                                                                    {
+                                                                        productLoginIdsArray.includes(parseInt(id)) ?
+                                                                            <Link to={'/cart'} >
+                                                                                <button className="addto_cart_btn">
+                                                                                    View Cart
+                                                                                </button>
+                                                                            </Link>
+                                                                            :
+                                                                            <button
+                                                                                className="addto_cart_btn"
+                                                                                onClick={() => handleAddcart()}
+                                                                            >
+                                                                                Add To Cart
+                                                                            </button>
+                                                                    }
+                                                                </>
                                                         }
                                                     </>
                                             }
                                             {
-                                                user?.success !== true ?
-                                                    <>
-                                                        {
-                                                            productIdsArray.includes(parseInt(id)) ?
-                                                                <Link to={'/checkout'} >
-                                                                    <button className="buy_btn">
-                                                                        Buy Now
-                                                                    </button>
-                                                                </Link>
-                                                                :
-                                                                <button className="buy_btn" onClick={() => handleBuyNow()}>Buy Now</button>
+                                                add_Details?.out_of_stock !== 1 &&
+                                                <>
+                                                    {
+                                                        user?.success !== true ?
+                                                            <>
+                                                                {
+                                                                    productIdsArray.includes(parseInt(id)) ?
+                                                                        <Link to={'/checkout'} >
+                                                                            <button className="buy_btn">
+                                                                                Buy Now
+                                                                            </button>
+                                                                        </Link>
+                                                                        :
+                                                                        <button className="buy_btn" onClick={() => handleBuyNow()}>Buy Now</button>
 
-                                                        }
-                                                    </>
-                                                    :
-                                                    <>
-                                                        {
-                                                            productLoginIdsArray.includes(parseInt(id)) ?
-                                                                <Link to={'/cart'} >
-                                                                    <button className="buy_btn">
-                                                                        Buy Now
-                                                                    </button>
-                                                                </Link>
-                                                                :
-                                                                <button className="buy_btn" onClick={() => handleBuyNow()}>Buy Now</button>
+                                                                }
+                                                            </>
+                                                            :
+                                                            <>
+                                                                {
+                                                                    productLoginIdsArray.includes(parseInt(id)) ?
+                                                                        <Link to={'/cart'} >
+                                                                            <button className="buy_btn">
+                                                                                Buy Now
+                                                                            </button>
+                                                                        </Link>
+                                                                        :
+                                                                        <button className="buy_btn" onClick={() => handleBuyNow()}>Buy Now</button>
 
-                                                        }
-                                                    </>
+                                                                }
+                                                            </>
+                                                    }
+                                                </>
                                             }
+
 
                                         </div>
                                         <div className="product__variant--list mb-15">
@@ -395,7 +508,7 @@ const SingleProductsDetails = () => {
                                                     <strong>Sky:</strong> <span>4420</span>
                                                 </p>
                                                 <p className="product__details--info__meta--list">
-                                                    <strong>Vendor:</strong> <span>Belo</span>
+                                                    <strong>Vendor:</strong> <span>{add_Details?.vendor_id}</span>
                                                 </p>
                                                 <p className="product__details--info__meta--list">
                                                     <strong>Type:</strong> <span>Auto Parts</span>
@@ -543,546 +656,126 @@ const SingleProductsDetails = () => {
                                                             <h2 className="product__reviews--header__title h3 mb-20">
                                                                 Customer Reviews
                                                             </h2>
-                                                            <div className="reviews__ratting d-flex align-items-center">
-                                                                <ul className="rating d-flex">
-                                                                    <li className="rating__list">
-                                                                        <span className="rating__icon">
-                                                                            <svg
-                                                                                width={14}
-                                                                                height={13}
-                                                                                viewBox="0 0 14 13"
-                                                                                fill="none"
-                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                            >
-                                                                                <path
-                                                                                    d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                    fill="currentColor"
-                                                                                />
-                                                                            </svg>
-                                                                        </span>
-                                                                    </li>
-                                                                    <li className="rating__list">
-                                                                        <span className="rating__icon">
-                                                                            <svg
-                                                                                width={14}
-                                                                                height={13}
-                                                                                viewBox="0 0 14 13"
-                                                                                fill="none"
-                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                            >
-                                                                                <path
-                                                                                    d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                    fill="currentColor"
-                                                                                />
-                                                                            </svg>
-                                                                        </span>
-                                                                    </li>
-                                                                    <li className="rating__list">
-                                                                        <span className="rating__icon">
-                                                                            <svg
-                                                                                width={14}
-                                                                                height={13}
-                                                                                viewBox="0 0 14 13"
-                                                                                fill="none"
-                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                            >
-                                                                                <path
-                                                                                    d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                    fill="currentColor"
-                                                                                />
-                                                                            </svg>
-                                                                        </span>
-                                                                    </li>
-                                                                    <li className="rating__list">
-                                                                        <span className="rating__icon">
-                                                                            <svg
-                                                                                width={14}
-                                                                                height={13}
-                                                                                viewBox="0 0 14 13"
-                                                                                fill="none"
-                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                            >
-                                                                                <path
-                                                                                    d="M12.4141 4.53125L8.99219 4.03906L7.44531 0.921875C7.1875 0.382812 6.39062 0.359375 6.10938 0.921875L4.58594 4.03906L1.14062 4.53125C0.53125 4.625 0.296875 5.375 0.742188 5.82031L3.20312 8.23438L2.61719 11.6328C2.52344 12.2422 3.17969 12.7109 3.71875 12.4297L6.78906 10.8125L9.83594 12.4297C10.375 12.7109 11.0312 12.2422 10.9375 11.6328L10.3516 8.23438L12.8125 5.82031C13.2578 5.375 13.0234 4.625 12.4141 4.53125ZM9.53125 7.95312L10.1875 11.75L6.78906 9.96875L3.36719 11.75L4.02344 7.95312L1.25781 5.28125L5.07812 4.71875L6.78906 1.25L8.47656 4.71875L12.2969 5.28125L9.53125 7.95312Z"
-                                                                                    fill="currentColor"
-                                                                                />
-                                                                            </svg>
-                                                                        </span>
-                                                                    </li>
-                                                                    <li className="rating__list">
-                                                                        <span className="rating__icon">
-                                                                            <svg
-                                                                                width={14}
-                                                                                height={13}
-                                                                                viewBox="0 0 14 13"
-                                                                                fill="none"
-                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                            >
-                                                                                <path
-                                                                                    d="M12.4141 4.53125L8.99219 4.03906L7.44531 0.921875C7.1875 0.382812 6.39062 0.359375 6.10938 0.921875L4.58594 4.03906L1.14062 4.53125C0.53125 4.625 0.296875 5.375 0.742188 5.82031L3.20312 8.23438L2.61719 11.6328C2.52344 12.2422 3.17969 12.7109 3.71875 12.4297L6.78906 10.8125L9.83594 12.4297C10.375 12.7109 11.0312 12.2422 10.9375 11.6328L10.3516 8.23438L12.8125 5.82031C13.2578 5.375 13.0234 4.625 12.4141 4.53125ZM9.53125 7.95312L10.1875 11.75L6.78906 9.96875L3.36719 11.75L4.02344 7.95312L1.25781 5.28125L5.07812 4.71875L6.78906 1.25L8.47656 4.71875L12.2969 5.28125L9.53125 7.95312Z"
-                                                                                    fill="currentColor"
-                                                                                />
-                                                                            </svg>
-                                                                        </span>
-                                                                    </li>
-                                                                </ul>
-                                                                <span className="reviews__summary--caption">
-                                                                    Based on 2 reviews
-                                                                </span>
-                                                            </div>
-                                                            <a
-                                                                className="actions__newreviews--btn primary__btn"
-                                                                href="#writereview"
-                                                            >
-                                                                Write A Review
-                                                            </a>
                                                         </div>
                                                         <div className="reviews__comment--area">
-                                                            <div className="reviews__comment--list d-flex">
-                                                                <div className="reviews__comment--thumb">
-                                                                    <img
-                                                                        src="assets/img/other/comment-thumb1.webp"
-                                                                        alt="comment-thumb"
-                                                                    />
-                                                                </div>
-                                                                <div className="reviews__comment--content">
-                                                                    <div className="reviews__comment--top d-flex justify-content-between">
-                                                                        <div className="reviews__comment--top__left">
-                                                                            <h3 className="reviews__comment--content__title h4">
-                                                                                Jakes on
-                                                                            </h3>
-                                                                            <ul className="rating d-flex">
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
+                                                            {
+                                                                add_Details?.reviews?.map((e, index) => {
+                                                                    return (
+                                                                        <div className="reviews__comment--list d-flex" key={index}>
+                                                                            <div className="reviews__comment--thumb">
+                                                                                <img
+                                                                                    src="assets/img/other/comment-thumb1.webp"
+                                                                                    alt="comment-thumb"
+                                                                                />
+                                                                            </div>
+                                                                            <div className="reviews__comment--content">
+                                                                                <div className="reviews__comment--top d-flex justify-content-between">
+                                                                                    <div className="reviews__comment--top__left">
+                                                                                        <h3 className="reviews__comment--content__title h4">
+                                                                                            {e?.user?.name}
+                                                                                        </h3>
+                                                                                        <ul className="rating d-flex">
+                                                                                            <li className="rating__list">
+                                                                                                <span className="rating__icon">
+                                                                                                    {
+                                                                                                        e?.rating === 0 &&
+                                                                                                        <>
+                                                                                                            <AiOutlineStar />
+                                                                                                            <AiOutlineStar />
+                                                                                                            <AiOutlineStar />
+                                                                                                            <AiOutlineStar />
+                                                                                                            <AiOutlineStar />
+                                                                                                        </>
+                                                                                                    }
+                                                                                                    {
+                                                                                                        e?.rating === 1 &&
+                                                                                                        <>
+                                                                                                            <AiFillStar />
+                                                                                                            <AiOutlineStar />
+                                                                                                            <AiOutlineStar />
+                                                                                                            <AiOutlineStar />
+                                                                                                            <AiOutlineStar />
+                                                                                                        </>
+                                                                                                    }
+                                                                                                    {
+                                                                                                        e?.rating === 2 &&
+                                                                                                        <>
+                                                                                                            <AiFillStar />
+                                                                                                            <AiFillStar />
+                                                                                                            <AiOutlineStar />
+                                                                                                            <AiOutlineStar />
+                                                                                                            <AiOutlineStar />
+                                                                                                        </>
+                                                                                                    }
+                                                                                                    {
+                                                                                                        e?.rating === 3 &&
+                                                                                                        <>
+                                                                                                            <AiFillStar />
+                                                                                                            <AiFillStar />
+                                                                                                            <AiFillStar />
+                                                                                                            <AiOutlineStar />
+                                                                                                            <AiOutlineStar />
+                                                                                                        </>
+                                                                                                    }
+                                                                                                    {
+                                                                                                        e?.rating === 4 &&
+                                                                                                        <>
+                                                                                                            <AiFillStar />
+                                                                                                            <AiFillStar />
+                                                                                                            <AiFillStar />
+                                                                                                            <AiFillStar />
+                                                                                                            <AiOutlineStar />
+                                                                                                        </>
+                                                                                                    }
+                                                                                                    {
+                                                                                                        e?.rating === 5 &&
+                                                                                                        <>
+                                                                                                            <AiFillStar />
+                                                                                                            <AiFillStar />
+                                                                                                            <AiFillStar />
+                                                                                                            <AiFillStar />
+                                                                                                            <AiFillStar />
+                                                                                                        </>
+                                                                                                    }
+                                                                                                </span>
+                                                                                            </li>
+
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                    <span className="reviews__comment--content__date">
+                                                                                        {dateFormate(e?.user?.updated_at)}
                                                                                     </span>
-                                                                                </li>
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
-                                                                                    </span>
-                                                                                </li>
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
-                                                                                    </span>
-                                                                                </li>
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
-                                                                                    </span>
-                                                                                </li>
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M12.4141 4.53125L8.99219 4.03906L7.44531 0.921875C7.1875 0.382812 6.39062 0.359375 6.10938 0.921875L4.58594 4.03906L1.14062 4.53125C0.53125 4.625 0.296875 5.375 0.742188 5.82031L3.20312 8.23438L2.61719 11.6328C2.52344 12.2422 3.17969 12.7109 3.71875 12.4297L6.78906 10.8125L9.83594 12.4297C10.375 12.7109 11.0312 12.2422 10.9375 11.6328L10.3516 8.23438L12.8125 5.82031C13.2578 5.375 13.0234 4.625 12.4141 4.53125ZM9.53125 7.95312L10.1875 11.75L6.78906 9.96875L3.36719 11.75L4.02344 7.95312L1.25781 5.28125L5.07812 4.71875L6.78906 1.25L8.47656 4.71875L12.2969 5.28125L9.53125 7.95312Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
-                                                                                    </span>
-                                                                                </li>
-                                                                            </ul>
+                                                                                </div>
+                                                                                <p className="reviews__comment--content__desc">
+                                                                                    {e?.text}
+                                                                                </p>
+                                                                            </div>
                                                                         </div>
-                                                                        <span className="reviews__comment--content__date">
-                                                                            February 13, 2022
-                                                                        </span>
-                                                                    </div>
-                                                                    <p className="reviews__comment--content__desc">
-                                                                        Lorem ipsum, dolor sit amet consectetur adipisicing
-                                                                        elit. Eos ex repellat officiis neque. Veniam, rem
-                                                                        nesciunt. Assumenda distinctio, autem error repellat
-                                                                        eveniet ratione dolor facilis accusantium amet
-                                                                        pariatur, non eius!
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                            <div className="reviews__comment--list margin__left d-flex">
-                                                                <div className="reviews__comment--thumb">
-                                                                    <img
-                                                                        src="assets/img/other/comment-thumb2.webp"
-                                                                        alt="comment-thumb"
-                                                                    />
-                                                                </div>
-                                                                <div className="reviews__comment--content">
-                                                                    <div className="reviews__comment--top d-flex justify-content-between">
-                                                                        <div className="reviews__comment--top__left">
-                                                                            <h3 className="reviews__comment--content__title h4">
-                                                                                Laura Johnson
-                                                                            </h3>
-                                                                            <ul className="rating d-flex">
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
-                                                                                    </span>
-                                                                                </li>
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
-                                                                                    </span>
-                                                                                </li>
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
-                                                                                    </span>
-                                                                                </li>
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
-                                                                                    </span>
-                                                                                </li>
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M12.4141 4.53125L8.99219 4.03906L7.44531 0.921875C7.1875 0.382812 6.39062 0.359375 6.10938 0.921875L4.58594 4.03906L1.14062 4.53125C0.53125 4.625 0.296875 5.375 0.742188 5.82031L3.20312 8.23438L2.61719 11.6328C2.52344 12.2422 3.17969 12.7109 3.71875 12.4297L6.78906 10.8125L9.83594 12.4297C10.375 12.7109 11.0312 12.2422 10.9375 11.6328L10.3516 8.23438L12.8125 5.82031C13.2578 5.375 13.0234 4.625 12.4141 4.53125ZM9.53125 7.95312L10.1875 11.75L6.78906 9.96875L3.36719 11.75L4.02344 7.95312L1.25781 5.28125L5.07812 4.71875L6.78906 1.25L8.47656 4.71875L12.2969 5.28125L9.53125 7.95312Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
-                                                                                    </span>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                        <span className="reviews__comment--content__date">
-                                                                            February 13, 2022
-                                                                        </span>
-                                                                    </div>
-                                                                    <p className="reviews__comment--content__desc">
-                                                                        Lorem ipsum, dolor sit amet consectetur adipisicing
-                                                                        elit. Eos ex repellat officiis neque. Veniam, rem
-                                                                        nesciunt. Assumenda distinctio, autem error repellat
-                                                                        eveniet ratione dolor facilis accusantium amet
-                                                                        pariatur, non eius!
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                            <div className="reviews__comment--list d-flex">
-                                                                <div className="reviews__comment--thumb">
-                                                                    <img
-                                                                        src="assets/img/other/comment-thumb3.webp"
-                                                                        alt="comment-thumb"
-                                                                    />
-                                                                </div>
-                                                                <div className="reviews__comment--content">
-                                                                    <div className="reviews__comment--top d-flex justify-content-between">
-                                                                        <div className="reviews__comment--top__left">
-                                                                            <h3 className="reviews__comment--content__title h4">
-                                                                                Richard Smith
-                                                                            </h3>
-                                                                            <ul className="rating d-flex">
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
-                                                                                    </span>
-                                                                                </li>
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
-                                                                                    </span>
-                                                                                </li>
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
-                                                                                    </span>
-                                                                                </li>
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
-                                                                                    </span>
-                                                                                </li>
-                                                                                <li className="rating__list">
-                                                                                    <span className="rating__icon">
-                                                                                        <svg
-                                                                                            width={14}
-                                                                                            height={13}
-                                                                                            viewBox="0 0 14 13"
-                                                                                            fill="none"
-                                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                                        >
-                                                                                            <path
-                                                                                                d="M12.4141 4.53125L8.99219 4.03906L7.44531 0.921875C7.1875 0.382812 6.39062 0.359375 6.10938 0.921875L4.58594 4.03906L1.14062 4.53125C0.53125 4.625 0.296875 5.375 0.742188 5.82031L3.20312 8.23438L2.61719 11.6328C2.52344 12.2422 3.17969 12.7109 3.71875 12.4297L6.78906 10.8125L9.83594 12.4297C10.375 12.7109 11.0312 12.2422 10.9375 11.6328L10.3516 8.23438L12.8125 5.82031C13.2578 5.375 13.0234 4.625 12.4141 4.53125ZM9.53125 7.95312L10.1875 11.75L6.78906 9.96875L3.36719 11.75L4.02344 7.95312L1.25781 5.28125L5.07812 4.71875L6.78906 1.25L8.47656 4.71875L12.2969 5.28125L9.53125 7.95312Z"
-                                                                                                fill="currentColor"
-                                                                                            />
-                                                                                        </svg>
-                                                                                    </span>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                        <span className="reviews__comment--content__date">
-                                                                            February 13, 2022
-                                                                        </span>
-                                                                    </div>
-                                                                    <p className="reviews__comment--content__desc">
-                                                                        Lorem ipsum, dolor sit amet consectetur adipisicing
-                                                                        elit. Eos ex repellat officiis neque. Veniam, rem
-                                                                        nesciunt. Assumenda distinctio, autem error repellat
-                                                                        eveniet ratione dolor facilis accusantium amet
-                                                                        pariatur, non eius!
-                                                                    </p>
-                                                                </div>
-                                                            </div>
+                                                                    )
+                                                                })
+                                                            }
                                                         </div>
-                                                        <div
+                                                        {/* <div
                                                             id="writereview"
                                                             className="reviews__comment--reply__area"
                                                         >
-                                                            <form action="#">
+                                                            <form onSubmit={handleSubmitReview}>
                                                                 <h3 className="reviews__comment--reply__title mb-15">
-                                                                    Add a review{" "}
+                                                                    Add a review
                                                                 </h3>
                                                                 <div className="reviews__ratting mb-20">
                                                                     <ul className="rating d-flex">
-                                                                        <li className="rating__list">
-                                                                            <span className="rating__icon">
-                                                                                <svg
-                                                                                    width={14}
-                                                                                    height={13}
-                                                                                    viewBox="0 0 14 13"
-                                                                                    fill="none"
-                                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                                >
-                                                                                    <path
-                                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                        fill="currentColor"
-                                                                                    />
-                                                                                </svg>
-                                                                            </span>
-                                                                        </li>
-                                                                        <li className="rating__list">
-                                                                            <span className="rating__icon">
-                                                                                <svg
-                                                                                    width={14}
-                                                                                    height={13}
-                                                                                    viewBox="0 0 14 13"
-                                                                                    fill="none"
-                                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                                >
-                                                                                    <path
-                                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                        fill="currentColor"
-                                                                                    />
-                                                                                </svg>
-                                                                            </span>
-                                                                        </li>
-                                                                        <li className="rating__list">
-                                                                            <span className="rating__icon">
-                                                                                <svg
-                                                                                    width={14}
-                                                                                    height={13}
-                                                                                    viewBox="0 0 14 13"
-                                                                                    fill="none"
-                                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                                >
-                                                                                    <path
-                                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                        fill="currentColor"
-                                                                                    />
-                                                                                </svg>
-                                                                            </span>
-                                                                        </li>
-                                                                        <li className="rating__list">
-                                                                            <span className="rating__icon">
-                                                                                <svg
-                                                                                    width={14}
-                                                                                    height={13}
-                                                                                    viewBox="0 0 14 13"
-                                                                                    fill="none"
-                                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                                >
-                                                                                    <path
-                                                                                        d="M6.08398 0.921875L4.56055 4.03906L1.11523 4.53125C0.505859 4.625 0.271484 5.375 0.716797 5.82031L3.17773 8.23438L2.5918 11.6328C2.49805 12.2422 3.1543 12.7109 3.69336 12.4297L6.76367 10.8125L9.81055 12.4297C10.3496 12.7109 11.0059 12.2422 10.9121 11.6328L10.3262 8.23438L12.7871 5.82031C13.2324 5.375 12.998 4.625 12.3887 4.53125L8.9668 4.03906L7.41992 0.921875C7.16211 0.382812 6.36523 0.359375 6.08398 0.921875Z"
-                                                                                        fill="currentColor"
-                                                                                    />
-                                                                                </svg>
-                                                                            </span>
-                                                                        </li>
-                                                                        <li className="rating__list">
-                                                                            <span className="rating__icon">
-                                                                                <svg
-                                                                                    width={14}
-                                                                                    height={13}
-                                                                                    viewBox="0 0 14 13"
-                                                                                    fill="none"
-                                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                                >
-                                                                                    <path
-                                                                                        d="M12.4141 4.53125L8.99219 4.03906L7.44531 0.921875C7.1875 0.382812 6.39062 0.359375 6.10938 0.921875L4.58594 4.03906L1.14062 4.53125C0.53125 4.625 0.296875 5.375 0.742188 5.82031L3.20312 8.23438L2.61719 11.6328C2.52344 12.2422 3.17969 12.7109 3.71875 12.4297L6.78906 10.8125L9.83594 12.4297C10.375 12.7109 11.0312 12.2422 10.9375 11.6328L10.3516 8.23438L12.8125 5.82031C13.2578 5.375 13.0234 4.625 12.4141 4.53125ZM9.53125 7.95312L10.1875 11.75L6.78906 9.96875L3.36719 11.75L4.02344 7.95312L1.25781 5.28125L5.07812 4.71875L6.78906 1.25L8.47656 4.71875L12.2969 5.28125L9.53125 7.95312Z"
-                                                                                        fill="currentColor"
-                                                                                    />
-                                                                                </svg>
-                                                                            </span>
-                                                                        </li>
+                                                                        <Rating name="size-large" defaultValue={rating} onChange={(e) => setRating(e.target.value)} size="large" style={{ color: "red" }} />
                                                                     </ul>
                                                                 </div>
                                                                 <div className="row">
                                                                     <div className="col-12 mb-10">
                                                                         <textarea
                                                                             className="reviews__comment--reply__textarea"
-                                                                            placeholder="Your Comments...."
-                                                                            defaultValue={""}
+                                                                            placeholder="Your Reviews...."
+                                                                            value={reviewText}
+                                                                            onChange={(e) => setReviewText(e.target.value)}
                                                                         />
-                                                                    </div>
-                                                                    <div className="col-lg-6 col-md-6 mb-15">
-                                                                        <label>
-                                                                            <input
-                                                                                className="reviews__comment--reply__input"
-                                                                                placeholder="Your Name...."
-                                                                                type="text"
-                                                                            />
-                                                                        </label>
-                                                                    </div>
-                                                                    <div className="col-lg-6 col-md-6 mb-15">
-                                                                        <label>
-                                                                            <input
-                                                                                className="reviews__comment--reply__input"
-                                                                                placeholder="Your Email...."
-                                                                                type="email"
-                                                                            />
-                                                                        </label>
                                                                     </div>
                                                                 </div>
                                                                 <button
@@ -1093,7 +786,7 @@ const SingleProductsDetails = () => {
                                                                     SUBMIT
                                                                 </button>
                                                             </form>
-                                                        </div>
+                                                        </div> */}
                                                     </div>
                                                 </> :
                                                 <>

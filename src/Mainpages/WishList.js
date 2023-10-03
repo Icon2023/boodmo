@@ -7,6 +7,8 @@ const WishList = () => {
     const dispatch = useDispatch();
     const { add_wish } = useSelector((state) => ({ ...state.products }));
 
+    console.log(add_wish);
+
     const removeElement = (id) => {
         dispatch(removeProductWishlist(id))
     };
@@ -22,7 +24,7 @@ const WishList = () => {
                                     <h1 className="breadcrumb__content--title mb-20">Wishlist</h1>
                                     <ul className="breadcrumb__content--menu d-flex justify-content-center">
                                         <li className="breadcrumb__content--menu__items">
-                                            <a href="index.html">Home</a>
+                                            <a href="/">Home</a>
                                         </li>
                                         <li className="breadcrumb__content--menu__items">
                                             <span>Wishlist</span>
@@ -50,7 +52,7 @@ const WishList = () => {
                                                     STOCK STATUS
                                                 </th>
                                                 <th className="cart__table--header__list text-right">
-                                                    ADD TO CART
+                                                    VIEW PRODUCT
                                                 </th>
                                             </tr>
                                         </thead>
@@ -65,12 +67,12 @@ const WishList = () => {
                                                                         className="cart__remove--btn"
                                                                         aria-label="search button"
                                                                         type="button"
-                                                                        onClick={()=>removeElement(e?.proId)}
+                                                                        onClick={() => removeElement(e?.proId)}
                                                                     >
-                                                                        <AiOutlineClose/>
+                                                                        <AiOutlineClose />
                                                                     </button>
                                                                     <div className="cart__thumbnail">
-                                                                        <a href="product-details.html">
+                                                                        <a href={`/productsdetail/${e?.proId}`}>
                                                                             <img
                                                                                 className="border-radius-5"
                                                                                 src={e?.image}
@@ -80,8 +82,8 @@ const WishList = () => {
                                                                     </div>
                                                                     <div className="cart__content">
                                                                         <h3 className="cart__content--title h4">
-                                                                            <a href="product-details.html">
-                                                                               {e?.name}
+                                                                            <a href={`/productsdetail/${e?.proId}`}>
+                                                                                {e?.name}
                                                                             </a>
                                                                         </h3>
                                                                         <span className="cart__content--variant">
@@ -97,14 +99,19 @@ const WishList = () => {
                                                                 <span className="cart__price">${e?.price}/-</span>
                                                             </td>
                                                             <td className="cart__table--body__list text-center">
-                                                                <span className="in__stock text__secondary">in stock</span>
+                                                                <span className="in__stock text__secondary">
+                                                                    {
+                                                                        e?.stock === 0 ? " in stock" : "Out Of Stock"
+                                                                    }
+
+                                                                </span>
                                                             </td>
                                                             <td className="cart__table--body__list text-right">
                                                                 <a
                                                                     className="wishlist__cart--btn primary__btn"
-                                                                    href="cart.html"
+                                                                    href={`/productsdetail/${e?.proId}`}
                                                                 >
-                                                                    Add To Cart
+                                                                    View Details
                                                                 </a>
                                                             </td>
                                                         </tr>

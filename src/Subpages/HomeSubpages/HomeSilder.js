@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { CarCompines, CarMode, CarModel, CarYear } from '../../Services/apiServices'
+import { AiOutlineSearch } from 'react-icons/ai';
 
 const HomeSilder = () => {
     const [carName, setCarName] = useState([]);
@@ -13,6 +14,8 @@ const HomeSilder = () => {
 
     const [carModei, setCarModei] = useState([]);
     const [carValModei, setValModei] = useState('')
+
+    const [number, setNumber] = useState('');
 
     useEffect(() => {
         CarCompines().then((res) => {
@@ -58,7 +61,7 @@ const HomeSilder = () => {
                     />
                     <div className="hero__content--style5 text-center">
                         <h2 className="hero__content--style5__title h1">
-                            Comes Width The <br />{" "}
+                            Comes Width The <br />
                             <span className="text__secondary">Ultimate Protection</span>
                         </h2>
                     </div>
@@ -71,6 +74,10 @@ const HomeSilder = () => {
                                     Filter your results by entering your Vehicle to ensure you find
                                     the parts that fit.
                                 </p>
+                                {/* <div className='vehicle_btn'>
+                                    <input type="text" placeholder='MH05HK1789' value={number} maxLength={10} onChange={(e) => setNumber(e.target.value.toUpperCase())} />
+                                    <button><AiOutlineSearch /></button>
+                                </div> */}
                             </div>
                             <div className="search__filter--inner style5">
                                 <form className="search__filter--form__style2 d-flex" action="#">
@@ -103,7 +110,7 @@ const HomeSilder = () => {
                                         </select>
                                     </div>
                                     <div className="search__filter--select select search__filter--width">
-                                        <select className="search__filter--select__field"  disabled={carValModel.length <= 0 ? true : false} onChange={handleChange2}>
+                                        <select className="search__filter--select__field" disabled={carValModel.length <= 0 ? true : false} onChange={handleChange2}>
                                             <option selected="" value={0}>
                                                 Choose Year
                                             </option>
@@ -135,7 +142,7 @@ const HomeSilder = () => {
                                             className="search__filter--btn primary__btn"
                                             type="submit"
                                         >
-                                            Search
+                                            Search Parts
                                         </button>
                                     </div>
                                 </form>

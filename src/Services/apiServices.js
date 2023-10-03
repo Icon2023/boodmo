@@ -120,7 +120,7 @@ export const Register = async (data) => {
 };
 
 export const CartLogin = async (data) => {
-    const response = await axios.post(`${BASE_URL}/api/cart`, data ,{ headers: authHeader() });
+    const response = await axios.post(`${BASE_URL}/api/cart`, data, { headers: authHeader() });
     if (response?.data) {
         return response.data;
     } else {
@@ -129,7 +129,7 @@ export const CartLogin = async (data) => {
 };
 
 export const CartList = async () => {
-    const response = await axios.get(`${BASE_URL}/api/listcart`,{ headers: authHeader() } );
+    const response = await axios.get(`${BASE_URL}/api/listcart`, { headers: authHeader() });
     if (response?.data) {
         return response.data;
     } else {
@@ -137,11 +137,47 @@ export const CartList = async () => {
     }
 }
 
-
 export const CartLoginDelete = async (id) => {
     console.log(id);
-    const response = await axios.delete(`${BASE_URL}/api/cart/${id}`,{ headers: authHeader() } );
+    const response = await axios.delete(`${BASE_URL}/api/cart/${id}`, { headers: authHeader() });
     if (response?.data) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}
+
+export const AddOrderList = async () => {
+    const response = await axios.get(`${BASE_URL}/api/order`, { headers: authHeader() });
+    // console.log(response?.data?.data);
+    if (response?.data?.success) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}
+
+export const AddReviewList = async (data) => {
+    const response = await axios.post(`${BASE_URL}/api/reviews`, data, { headers: authHeader() });
+    if (response?.data?.success) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}
+
+export const GetAddressUser = async () => {
+    const response = await axios.get(`${BASE_URL}/api/address`, { headers: authHeader() });
+    if (response?.data?.success) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}
+
+export const UpdateAddressUser = async (data) => {
+    const response = await axios.post(`${BASE_URL}/api/addresses`, data , { headers: authHeader() });
+    if (response?.data?.success) {
         return response.data;
     } else {
         console.log("error");

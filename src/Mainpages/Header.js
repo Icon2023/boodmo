@@ -173,7 +173,7 @@ const Header = () => {
                                             </a>
                                         </li>
                                         <li className="header__menu--items">
-                                            <a className="header__menu--link" href="#">
+                                            <a className="header__menu--link">
                                                 Others
                                                 <IoIosArrowDown style={{ fontSize: "20px" }} />
                                             </a>
@@ -205,7 +205,11 @@ const Header = () => {
                                                         <a href="/login" className="header__sub--menu__link">
                                                             Login
                                                         </a>
-                                                    </li> : ""
+                                                    </li> : <li className="header__sub--menu__items">
+                                                        <a href="/my-account" className="header__sub--menu__link">
+                                                            My Account
+                                                        </a>
+                                                    </li>
                                                 }
 
                                             </ul>
@@ -269,8 +273,6 @@ const Header = () => {
                                                         }
                                                     </>
                                             }
-
-
                                         </a>
                                     </li>
                                 </ul>

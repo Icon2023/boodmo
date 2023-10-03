@@ -10,6 +10,7 @@ export const productsSlice = createSlice({
     add_wish: [],
     addto_cart: [],
     login_cart: [],
+    order_list:[]
   },
 
   reducers: {
@@ -66,6 +67,10 @@ export const productsSlice = createSlice({
     removeLoginAddtocart: (state, { payload }) => {
       state.login_cart = state.login_cart.filter((e) => e.id !== payload)
     },
+   
+    addOrderDetails: (state, { payload }) => {
+      state.order_list = payload
+    },
 
 
   }
@@ -84,7 +89,7 @@ export const {
   removeAllAddtocart,
   addLoginCart,
   removeLoginAddtocart,
-
+  addOrderDetails
 
 } = productsSlice.actions;
 
