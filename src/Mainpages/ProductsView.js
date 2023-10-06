@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Product } from '../Services/apiServices';
+import { Brands, Product } from '../Services/apiServices';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProducts } from '../store/reducers/ProductSlice';
 import { CgMenuGridR } from "react-icons/cg";
 import { TfiMenuAlt } from "react-icons/tfi";
 import { AiFillStar, AiOutlineFilter, AiOutlineStar } from "react-icons/ai";
+import Drawer from 'react-modern-drawer';
+
 
 //matrial ui 
 import Accordion from '@mui/material/Accordion';
@@ -15,7 +17,10 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Pagination, PaginationItem } from '@mui/material';
 
 const ProductsView = () => {
+    const dispatch = useDispatch();
+    const { add_product, category_list } = useSelector((state) => ({ ...state.products }));
     const { cate_id, subcategory } = useParams();
+
     const [gridOpen, setGridOpen] = useState(true);
     const [trifOpen, setTrifOpen] = useState(true);
     const [expanded, setExpanded] = useState(false);
@@ -23,9 +28,33 @@ const ProductsView = () => {
     const itemsPerPage = 9; // Set the number of items to show per page here.
     const [Stprice, setStPrice] = useState('')
     const [endPrice, setEndPrice] = useState('')
+    const [isOpen, setIsOpen] = useState(false);
 
-    const dispatch = useDispatch();
-    const { add_product, category_list } = useSelector((state) => ({ ...state.products }));
+    const [brands, setBrands] = useState([]);
+    const [isMore, setIsMore] = useState(false);
+    const [selectedValues, setSelectedValues] = useState([]);
+
+
+    useEffect(() => {
+        const data = {
+            category: cate_id,
+            sub_category: subcategory
+        }
+        Product(data).then((res) => {
+            if (res.success) {
+                dispatch(addProducts(res?.data))
+            }
+        })
+        Brands()
+            .then((res) => {
+                setBrands(res?.data);
+                // console.log(res?.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
 
     // Calculate the indexes of the items to show on the current page.
     const totalPages = Math.ceil(add_product.length / itemsPerPage);
@@ -40,20 +69,48 @@ const ProductsView = () => {
         window.scrollTo(0, 0);
         setCurrentPage(pageNumber);
     };
+    const handleGridClick = () => {
+        gridOpen ? setTrifOpen(false) : setGridOpen(true)
+    }
+    const handleTfiClick = () => {
+        gridOpen ? setGridOpen(false) : setTrifOpen(true)
+    }
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
+    const toggleDrawer = () => {
+        setIsOpen((prevState) => !prevState)
+    }
+    const handleLoad = () => {
+        isMore === true ? setIsMore(false) : setIsMore(true)
+    }
+    const handleReset = () => {
+        window.location.reload()
+    }
 
-    useEffect(() => {
-        const data = {
+    const sortClick = (val1) => {
+        let data = {
             category: cate_id,
-            sub_category: subcategory
+            sub_category: subcategory,
+            sort_by: val1.split(",")[0],
+            sort_action: val1.split(",")[1],
+            brand: selectedValues.join(',')
         }
         Product(data).then((res) => {
             if (res.success) {
                 dispatch(addProducts(res?.data))
             }
         })
+    }
 
-
-    }, [])
+    const handleChecked = (e) => {
+        const value = e.target.value;
+        if (selectedValues.includes(value)) {
+            setSelectedValues(selectedValues.filter((item) => item !== value));
+        } else {
+            setSelectedValues([...selectedValues, value]);
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -61,7 +118,8 @@ const ProductsView = () => {
             category: cate_id,
             sub_category: subcategory,
             price_start: Stprice,
-            price_end: endPrice
+            price_end: endPrice,
+            brand: selectedValues.join(',')
         }
         Product(price).then((res) => {
             if (res.success) {
@@ -70,31 +128,6 @@ const ProductsView = () => {
         })
     }
 
-    const sortClick = (val1) => {
-        let data = {
-            category: cate_id,
-            sub_category: subcategory,
-            sort_by: val1.split(",")[0],
-            sort_action: val1.split(",")[1]
-        }
-        Product(data).then((res) => {
-            if (res.success) {
-                dispatch(addProducts(res?.data))
-            }
-        })
-    }
-
-    const handleGridClick = () => {
-        gridOpen ? setTrifOpen(false) : setGridOpen(true)
-    }
-
-    const handleTfiClick = () => {
-        gridOpen ? setGridOpen(false) : setTrifOpen(true)
-    }
-
-    const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
 
     return (
         <div>
@@ -125,6 +158,82 @@ const ProductsView = () => {
                         <div className="row">
                             <div className="col-xl-3 col-lg-4 shop-col-width-lg-4">
                                 <div className="shop__sidebar--widget widget__area d-none d-lg-block">
+                                    <div className="single__widget price__filter widget__bg">
+                                        <div className='d-flex'>
+                                            <h2 className="">Filters</h2>
+                                            <a onClick={handleReset} className="ms-5 mt-1" style={{ textDecoration: "underline", color: "red" }}>Reset</a>
+                                        </div>
+                                        <hr />
+                                        <div>
+                                            <h3>Brand</h3>
+                                            {
+                                                isMore ?
+                                                    <>
+                                                        {
+                                                            brands?.map((e, index) => {
+                                                                return (
+                                                                    <div className='d-flex' key={index}>
+                                                                        <input
+                                                                            type='checkbox'
+                                                                            value={e?.id}
+                                                                            onChange={handleChecked}
+                                                                        />
+                                                                        &nbsp;&nbsp;
+                                                                        <p className='mt-1'>{e?.name}&nbsp;({e?.product_count})</p>
+                                                                    </div>
+                                                                )
+                                                            })
+                                                        }
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <div className='d-flex'>
+                                                            <input
+                                                                type='checkbox'
+                                                                value={brands[0]?.id}
+                                                                onChange={handleChecked}
+                                                            />&nbsp;&nbsp;
+                                                            <p className='mt-1'>{brands[0]?.name}&nbsp;({brands[0]?.product_count})</p>
+                                                        </div>
+                                                        <div className='d-flex'>
+                                                            <input
+                                                                type='checkbox'
+                                                                value={brands[1]?.id}
+                                                                onChange={handleChecked}
+                                                            />&nbsp;&nbsp;
+                                                            <p className='mt-1'>{brands[1]?.name}&nbsp;({brands[1]?.product_count})</p>
+                                                        </div>
+                                                        <div className='d-flex'>
+                                                            <input
+                                                                type='checkbox'
+                                                                value={brands[2]?.id}
+                                                                onChange={handleChecked}
+                                                            />&nbsp;&nbsp;
+                                                            <p className='mt-1'>{brands[2]?.name}&nbsp;({brands[2]?.product_count})</p>
+                                                        </div>
+                                                    </>
+                                            }
+                                            {
+                                                isMore == false ? <a onClick={handleLoad} style={{ fontWeight: "bold" }}>+{brands?.length} More</a> : <a onClick={handleLoad} style={{ fontWeight: "bold" }}>Less</a>
+                                            }
+                                        </div>
+                                        <form onSubmit={handleSubmit}>
+                                            <h3 className='mt-4'>Price</h3>
+                                            <div className='form_filter'>
+                                                <label>
+                                                    From
+                                                    <input type="number" placeholder='0' value={Stprice} onChange={(e) => setStPrice(e.target.value)} />
+                                                </label>
+                                                <label>To
+
+                                                    <input type="number" placeholder='250' value={endPrice} onChange={(e) => setEndPrice(e.target.value)} />
+                                                </label>
+                                            </div>
+                                            <div className='form_filter_btn'>
+                                                <button>Filter</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                     <div className="single__widget widget__bg">
                                         <h2 className="widget__title h3">Categories</h2>
                                         <ul className="widget__categories--menu" style={{ height: "70vh", overflowY: "scroll" }}>
@@ -181,24 +290,7 @@ const ProductsView = () => {
 
                                         </ul>
                                     </div>
-                                    <div className="single__widget price__filter widget__bg">
-                                        <h2 className="widget__title h3">Filter By Price</h2>
-                                        <form onSubmit={handleSubmit}>
-                                            <div className='form_filter'>
-                                                <label>
-                                                    From
-                                                    <input type="number" placeholder='0' value={Stprice} onChange={(e) => setStPrice(e.target.value)} />
-                                                </label>
-                                                <label>To
 
-                                                    <input type="number" placeholder='250' value={endPrice} onChange={(e) => setEndPrice(e.target.value)} />
-                                                </label>
-                                            </div>
-                                            <div className='form_filter_btn'>
-                                                <button>Filter</button>
-                                            </div>
-                                        </form>
-                                    </div>
                                 </div>
                             </div>
 
@@ -209,22 +301,11 @@ const ProductsView = () => {
                                             <div className="product__view--mode d-flex align-items-center">
                                                 <button
                                                     className="widget__filter--btn d-flex d-lg-none align-items-center"
-                                                    data-offcanvas=""
+                                                    onClick={toggleDrawer}
                                                 >
                                                     <AiOutlineFilter />
-                                                    <span className="widget__filter--btn__text">Filter</span>
+                                                    <span className="widget__filter--btn__text" >Filter</span>
                                                 </button>
-                                                {/* <div className="product__view--mode__list product__short--by align-items-center d-flex ">
-                                                    <label className="product__view--label">Prev Page :</label>
-                                                    <div className="select shop__header--select">
-                                                        <select className="product__view--select">
-                                                            <option selected="" value={1}>
-                                                                65
-                                                            </option>
-                                                            <option value={2}>40</option>
-                                                        </select>
-                                                    </div>
-                                                </div> */}
                                                 <div className="product__view--mode__list product__short--by align-items-center d-flex">
                                                     <label className="product__view--label">Sort By :</label>
                                                     <div className="select shop__header--select">
@@ -405,8 +486,12 @@ const ProductsView = () => {
                                                                                                     </a>
                                                                                                 </h3>
                                                                                                 <div className="product__card--price">
-                                                                                                    <span className="current__price">₹{e?.selling_price}/-</span>
-                                                                                                    <span className="old__price">₹{e?.original_price}/-</span>
+                                                                                                    {
+                                                                                                        e?.selling_price && <span className="current__price">₹{e?.selling_price}/-</span>
+                                                                                                    }
+                                                                                                    <span className="old__price">
+                                                                                                        ₹{e?.original_price}/-
+                                                                                                    </span>
                                                                                                 </div>
                                                                                                 <div className="product__card--footer">
                                                                                                     {
@@ -447,7 +532,7 @@ const ProductsView = () => {
                                                                                 <>
                                                                                     <div className="col mb-30" key={index}>
                                                                                         <div className="product__card product__list d-flex align-items-center">
-                                                                                            <div className="product__card--thumbnail product__list--thumbnail" style={{ boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)" }}>
+                                                                                            <div className="product__card--thumbnail product__list--thumbnail">
                                                                                                 <a
                                                                                                     className="product__card--thumbnail__link display-block"
                                                                                                     href={`/productsdetail/${e?.id}`}
@@ -575,20 +660,24 @@ const ProductsView = () => {
                                                                                                     </li>
                                                                                                 </ul>
                                                                                                 <div className="product__list--price">
-                                                                                                    {e?.selling_price && <span className="old__price" style={{ paddingRight: "5px" }}><del>${e?.selling_price}/-</del></span>}
+                                                                                                    {e?.selling_price && <span className="old__price" style={{ paddingRight: "5px" }}>${e?.selling_price}/-</span>}
                                                                                                     <span className="current__price">${e?.original_price}/-</span>
                                                                                                     {e?.discount && <span className="product-discount">({e?.discount}% OFF)</span>}
                                                                                                 </div>
-                                                                                                <a
-                                                                                                    className="product__card--btn primary__btn"
-                                                                                                    href={`/productsdetail/${e?.id}`}
-                                                                                                >
-                                                                                                    View To Details
-                                                                                                </a>
                                                                                                 {
-                                                                                                    e?.out_of_stock == 1 && (
-                                                                                                        <div className='out_of_stock product__card--btn bg-text-body-tertiary'>Out of stoke</div>
-                                                                                                    )
+                                                                                                    e?.out_of_stock === 1 ?
+                                                                                                        <a
+                                                                                                            className="product__card--btn primary__btn"
+                                                                                                            href={`/productsdetail/${e?.id}`}
+                                                                                                        >
+                                                                                                            Out Of Stock
+                                                                                                        </a> :
+                                                                                                        <a
+                                                                                                            className="product__card--btn primary__btn"
+                                                                                                            href={`/productsdetail/${e?.id}`}
+                                                                                                        >
+                                                                                                            View to Details
+                                                                                                        </a>
                                                                                                 }
                                                                                             </div>
                                                                                         </div>
@@ -628,6 +717,64 @@ const ProductsView = () => {
                         </div>
                     </div>
                 </div>
+
+                <Drawer
+                    open={isOpen}
+                    onClose={toggleDrawer}
+                    direction='left'
+                    className='bla bla bla'
+                >
+                    <ul className="widget__categories--menu" style={{ height: "100vh", overflowY: "scroll" }}>
+                        {
+                            category_list.map((e, index) => {
+                                return (
+                                    <>
+                                        <Accordion expanded={expanded === e?.id} onChange={handleChange(e?.id)} key={index}>
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon style={{ fontSize: "28px" }} />}
+                                                aria-controls="panel1bh-content"
+                                                id="panel1bh-header"
+                                            >
+                                                <label className="widget__categories--menu__label d-flex align-items-center">
+                                                    <img
+                                                        className="widget__categories--menu__img"
+                                                        src={e?.image}
+                                                        alt="categories-img"
+                                                    />
+                                                    <span className="widget__categories--menu__text">
+                                                        {e?.name}
+                                                    </span>
+                                                </label>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                {
+                                                    e?.sub_category?.map((i, index) => {
+                                                        return (
+                                                            <li className="widget__categories--menu__list" key={index}>
+                                                                <a href={`/shop/${e?.id}/${i?.id}`}>
+                                                                    <label label className="widget__categories--menu__label d-flex align-items-center" >
+                                                                        <img
+                                                                            className="widget__categories--menu__img"
+                                                                            src={i?.image}
+                                                                            alt="categories-img"
+                                                                        />
+                                                                        <span className="widget__categories--menu__text">
+                                                                            {i?.name}
+                                                                        </span>
+                                                                    </label>
+                                                                </a>
+                                                            </li>
+                                                        )
+                                                    })
+                                                }
+                                            </AccordionDetails>
+                                        </Accordion >
+                                    </>
+                                )
+                            })
+                        }
+                    </ul>
+                </Drawer>
             </main>
         </div>
     )

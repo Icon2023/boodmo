@@ -12,7 +12,7 @@ const PrivacyPolicy = () => {
                                 <div className="breadcrumb__content text-center">
                                     <ul className="breadcrumb__content--menu d-flex justify-content-center">
                                         <li className="breadcrumb__content--menu__items">
-                                            <a href="index.html">Home</a>
+                                            <a href="/">Home</a>
                                         </li>
                                         <li className="breadcrumb__content--menu__items">
                                             <span>Privacy Policy</span>
@@ -23,7 +23,6 @@ const PrivacyPolicy = () => {
                         </div>
                     </div>
                 </section>
-                {/* End breadcrumb section */}
                 {/* Start privacy policy section */}
                 <div className="privacy__policy--section section--padding">
                     <div className="container">
@@ -149,7 +148,6 @@ const PrivacyPolicy = () => {
                         </div>
                     </div>
                 </div>
-                {/* End privacy policy section */}
                 {/* Start shipping section */}
                 <section className="shipping__section">
                     <div className="container">
@@ -195,7 +193,6 @@ const PrivacyPolicy = () => {
                         </div>
                     </div>
                 </section>
-                {/* End shipping section */}
             </main>
         </>
     )

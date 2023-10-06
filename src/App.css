@@ -8808,7 +8808,7 @@ input.quickview__value--number {
     color: white;
     border: 0;
     border-radius: 5px;
-    padding: 2px 28px;
+    padding: 5px 100px;
 }
 
 
@@ -8899,13 +8899,20 @@ input.quickview__value--number {
 @media only screen and (max-width:479px) {
     .product__list {
         -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
+        /* flex-wrap: wrap; */
         -webkit-box-pack: center;
         -ms-flex-pack: center;
         justify-content: center
     }
 }
-
+.filter_btn{
+    background-color: #e94235;
+    border: 0;
+    color: white;
+    padding:3px 20px;
+    margin-left: 10px;
+    border-radius: 3px;
+}
 .product__list .product__card--price {
     opacity: 1;
     visibility: visible

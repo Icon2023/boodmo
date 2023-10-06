@@ -3,6 +3,7 @@ import { CategoryProduct } from '../Services/apiServices'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addSingleCategory } from '../store/reducers/ProductSlice'
+import Drawer from 'react-modern-drawer';
 
 //matrial ui 
 import Accordion from '@mui/material/Accordion';
@@ -16,6 +17,7 @@ const CategoryProducts = () => {
     const { id } = useParams();
     const [expanded, setExpanded] = useState(false);
     const { single_category, category_list } = useSelector((state) => ({ ...state.products }));
+    const [isOpen, setIsOpen] = useState(false)
 
     useEffect(() => {
         CategoryProduct(id).then((res) => {
@@ -30,6 +32,10 @@ const CategoryProducts = () => {
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+
+    const toggleDrawer = () => {
+        setIsOpen((prevState) => !prevState)
+    }
 
     return (
         <>
@@ -84,7 +90,7 @@ const CategoryProducts = () => {
                                                                                 {e?.name}
                                                                             </span>
                                                                         </label>
-                                                                    </a>  
+                                                                    </a>
                                                                 </AccordionSummary>
                                                                 <AccordionDetails>
                                                                     {
@@ -115,72 +121,17 @@ const CategoryProducts = () => {
                                             }
                                         </ul>
                                     </div>
-                                    {/* <div className="single__widget price__filter widget__bg">
-                                        <h2 className="widget__title h3">Filter By Price</h2>
-                                        <form className="price__filter--form" action="#">
-                                            <div className="price__filter--form__inner mb-15 d-flex align-items-center">
-                                                <div className="price__filter--group">
-                                                    <label
-                                                        className="price__filter--label"
-                                                        htmlFor="Filter-Price-GTE2"
-                                                    >
-                                                        From
-                                                    </label>
-                                                    <div className="price__filter--input border-radius-5 d-flex align-items-center">
-                                                        <span className="price__filter--currency">$</span>
-                                                        <input
-                                                            className="price__filter--input__field border-0"
-                                                            name="filter.v.price.gte"
-                                                            id="Filter-Price-GTE2"
-                                                            type="number"
-                                                            placeholder={0}
-                                                            min={0}
-                                                            max={250.0}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="price__divider">
-                                                    <span>-</span>
-                                                </div>
-                                                <div className="price__filter--group">
-                                                    <label
-                                                        className="price__filter--label"
-                                                        htmlFor="Filter-Price-LTE2"
-                                                    >
-                                                        To
-                                                    </label>
-                                                    <div className="price__filter--input border-radius-5 d-flex align-items-center">
-                                                        <span className="price__filter--currency">$</span>
-                                                        <input
-                                                            className="price__filter--input__field border-0"
-                                                            name="filter.v.price.lte"
-                                                            id="Filter-Price-LTE2"
-                                                            type="number"
-                                                            min={0}
-                                                            placeholder={250.0}
-                                                            max={250.0}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <button
-                                                className="primary__btn price__filter--btn"
-                                                type="submit"
-                                            >
-                                                Filter
-                                            </button>
-                                        </form>
-                                    </div> */}
                                 </div>
                             </div>
                             <div className="col-xl-9 col-lg-8 shop-col-width-lg-8">
                                 <div className="shop__right--sidebar">
                                     {/* Start categories section */}
                                     <div className="categories__shop mb-50">
-                                        <div className="section__heading border-bottom mb-30">
+                                        <div className="section__heading border-bottom mb-30 d-flex">
                                             <h2 className="section__heading--maintitle">
                                                 Shop By <span>Categories</span>
                                             </h2>
+                                            <button className='filter_btn' onClick={toggleDrawer}>Filter</button>
                                         </div>
                                         <ul className="categories__shop--inner">
                                             {
@@ -214,7 +165,64 @@ const CategoryProducts = () => {
                         </div>
                     </div>
                 </div>
-                <ShippingAddress/>
+                <Drawer
+                    open={isOpen}
+                    onClose={toggleDrawer}
+                    direction='left'
+                    className='bla bla bla'
+                >
+                    <ul className="widget__categories--menu" style={{ height: "100vh", overflowY: "scroll" }}>
+                        {
+                            category_list.map((e, index) => {
+                                return (
+                                    <>
+                                        <Accordion expanded={expanded === e?.id} onChange={handleChange(e?.id)} key={index}>
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon style={{ fontSize: "28px" }} />}
+                                                aria-controls="panel1bh-content"
+                                                id="panel1bh-header"
+                                            >
+                                                <label className="widget__categories--menu__label d-flex align-items-center">
+                                                    <img
+                                                        className="widget__categories--menu__img"
+                                                        src={e?.image}
+                                                        alt="categories-img"
+                                                    />
+                                                    <span className="widget__categories--menu__text">
+                                                        {e?.name}
+                                                    </span>
+                                                </label>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                {
+                                                    e?.sub_category?.map((i, index) => {
+                                                        return (
+                                                            <li className="widget__categories--menu__list" key={index}>
+                                                                <a href={`/shop/${e?.id}/${i?.id}`}>
+                                                                    <label label className="widget__categories--menu__label d-flex align-items-center" >
+                                                                        <img
+                                                                            className="widget__categories--menu__img"
+                                                                            src={i?.image}
+                                                                            alt="categories-img"
+                                                                        />
+                                                                        <span className="widget__categories--menu__text">
+                                                                            {i?.name}
+                                                                        </span>
+                                                                    </label>
+                                                                </a>
+                                                            </li>
+                                                        )
+                                                    })
+                                                }
+                                            </AccordionDetails>
+                                        </Accordion >
+                                    </>
+                                )
+                            })
+                        }
+                    </ul>
+                </Drawer>
+                <ShippingAddress />
             </main >
         </>
     )

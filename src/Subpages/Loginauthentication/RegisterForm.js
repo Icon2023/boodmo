@@ -39,18 +39,17 @@ const RegisterForm = () => {
     setType('email')
     if (e.target.value.length > 0) {
       setIsopen1(false)
-      console.log(type);
     } else {
       setIsopen1(true)
     }
 
   }
+  
   const handleChange1 = (e) => {
     setNumber(e.target.value);
     setType('mobile')
     if (e.target.value.length > 0) {
       setIsopen(false)
-      console.log(type);
     } else {
       setIsopen(true)
     }

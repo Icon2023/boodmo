@@ -20,6 +20,7 @@ import ProtectedRouteWishlist from './Utils/form/ProtectedRouteWishlist'
 import MyAccount from './Mainpages/MyAccount'
 import "../node_modules/slick-carousel/slick/slick.css";
 import "../node_modules/slick-carousel/slick/slick-theme.css";
+import 'react-modern-drawer/dist/index.css'
 
 
 function App() {
