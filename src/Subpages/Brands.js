@@ -56,8 +56,8 @@ const BrandsAll = () => {
     ...new Set(brands.map((element) => element.name.charAt(0).toUpperCase())),
   ];
   return (
-    <div>
-      <section className="container">
+    <>
+      <section className="container mt-5">
         {
           pathName == "/brands" ? <HeadingSection isInput title="Shop by Brand" value={filterLetter} onChange={handleInputChange} />
             : null
@@ -90,25 +90,26 @@ const BrandsAll = () => {
               <li className="brands-list__group">
                 <p className="brands-list__group__name">{letter}</p>
                 <ul className="brands-list__group__list">
-                  {groupedElements[letter]?.map((subData, index) => {
-                    console.log("subData", subData);
-                    return (
-                      <>
-                        <li className="brands-list__group__list__item">
-                          <a href="#">
-                            {subData?.name}({subData?.product_count})
-                          </a>
-                        </li>
-                      </>
-                    );
-                  })}
+                  {
+                    groupedElements[letter]?.map((subData, index) => {
+                      return (
+                        <>
+                          <li className="brands-list__group__list__item" key={index}>
+                            <a>
+                              {subData?.name}({subData?.product_count})
+                            </a>
+                          </li>
+                        </>
+                      );
+                    })
+                  }
                 </ul>
               </li>
             );
           })}
         </ul>
       </section>
-    </div>
+    </>
   );
 };
 

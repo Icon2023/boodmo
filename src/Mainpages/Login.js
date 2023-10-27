@@ -6,7 +6,7 @@ import ShippingAddress from "../Subpages/ShippingAddress";
 const Login = () => {
   return (
     <>
-      <main className="main__content_wrapper">
+      <main className="margin_top_all">
         {/* Start breadcrumb section */}
         <section className="breadcrumb__section breadcrumb__bg">
           <div className="container">

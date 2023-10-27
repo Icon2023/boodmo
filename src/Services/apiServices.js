@@ -149,7 +149,6 @@ export const CartLoginDelete = async (id) => {
 
 export const AddOrderList = async () => {
     const response = await axios.get(`${BASE_URL}/api/order`, { headers: authHeader() });
-    // console.log(response?.data?.data);
     if (response?.data?.success) {
         return response.data;
     } else {

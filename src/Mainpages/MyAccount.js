@@ -77,7 +77,7 @@ const MyAccount = () => {
     }
 
     return (
-        <>
+        <div className='margin_top_all'>
             <section className="breadcrumb__section breadcrumb__bg">
                 <div className="container">
                     <div className="row row-cols-1">
@@ -439,7 +439,7 @@ const MyAccount = () => {
             
             <ShippingAddress />
 
-        </>
+        </div>
     )
 }
 

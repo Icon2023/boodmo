@@ -10,7 +10,8 @@ export const productsSlice = createSlice({
     add_wish: [],
     addto_cart: [],
     login_cart: [],
-    order_list:[]
+    order_list:[],
+    filter_multi:""
   },
 
   reducers: {
@@ -72,6 +73,14 @@ export const productsSlice = createSlice({
       state.order_list = payload
     },
 
+    addFilterDetail: (state, { payload }) => {
+      state.filter_multi = payload
+    },
+
+    removeFilter: (state) => {
+      state.filter_multi = ""
+    },
+
 
   }
 })
@@ -89,7 +98,9 @@ export const {
   removeAllAddtocart,
   addLoginCart,
   removeLoginAddtocart,
-  addOrderDetails
+  addOrderDetails,
+  addFilterDetail,
+  removeFilter
 
 } = productsSlice.actions;
 

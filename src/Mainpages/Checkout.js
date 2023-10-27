@@ -42,7 +42,7 @@ const Checkout = () => {
 
     return (
         <>
-            <main className="main__content_wrapper">
+            <main className="margin_top_all">
                 {/* Start breadcrumb section */}
                 <section className="breadcrumb__section breadcrumb__bg">
                     <div className="container">
@@ -74,12 +74,12 @@ const Checkout = () => {
                                                 <h2 className="section__header--title h3">
                                                     Contact information
                                                 </h2>
-                                                <p className="layout__flex--item">
+                                                {/* <p className="layout__flex--item">
                                                     Already have an account?
-                                                    <a className="layout__flex--item__link" href="login.html">
+                                                    <a className="layout__flex--item__link" href="/login">
                                                         Log in
                                                     </a>
-                                                </p>
+                                                </p> */}
                                             </div>
                                             <div className="customer__information">
                                                 <div className="checkout__email--phone mb-12">
@@ -528,7 +528,7 @@ const Checkout = () => {
                                                                                 </div>
                                                                             </td>
                                                                             <td className="cart__table--body__list">
-                                                                                <span className="cart__price">${e?.qty * e?.price}/-</span>
+                                                                                <span className="cart__price">{e?.qty * e?.price}/-</span>
                                                                             </td>
                                                                         </tr>
                                                                     )
@@ -557,18 +557,15 @@ const Checkout = () => {
                                                                                     </div>
                                                                                     <div className="product__description">
                                                                                         <h4 className="product__description--name">
-                                                                                            <a href="product-details.html">
-                                                                                                {e?.name}
-                                                                                            </a>
+                                                                                            <p>
+                                                                                                {e?.product?.name}
+                                                                                            </p>
                                                                                         </h4>
-                                                                                        <span className="product__description--variant">
-                                                                                            COLOR: Blue
-                                                                                        </span>
                                                                                     </div>
                                                                                 </div>
                                                                             </td>
                                                                             <td className="cart__table--body__list">
-                                                                                <span className="cart__price">${e?.price * e?.qty}/-</span>
+                                                                                <span className="cart__price">{e?.price * e?.qty}/-</span>
                                                                             </td>
                                                                         </tr>
                                                                     )
@@ -576,7 +573,6 @@ const Checkout = () => {
                                                             }
                                                         </>
                                                 }
-
                                             </tbody>
                                         </table>
                                     </div>
@@ -608,11 +604,11 @@ const Checkout = () => {
                                                         {
                                                             user?.success !== true ?
                                                                 <>
-                                                                    <h4>${countTotal(addto_cart)}/-</h4>
+                                                                    <h4>{countTotal(addto_cart)}/-</h4>
                                                                 </>
                                                                 : <>
                                                                     {
-                                                                        <h4>${countTotal(checkOut)}/-</h4>
+                                                                        <h4>{countTotal(checkOut)}/-</h4>
                                                                     }
                                                                 </>
                                                         }
@@ -637,11 +633,11 @@ const Checkout = () => {
                                                         {
                                                             user?.success !== true ?
                                                                 <>
-                                                                    <h4>${countTotal(addto_cart)}/-</h4>
+                                                                    <h4>{countTotal(addto_cart)}/-</h4>
                                                                 </>
                                                                 : <>
                                                                     {
-                                                                        <h4>${countTotal(checkOut)}/-</h4>
+                                                                        <h4>{countTotal(checkOut)}/-</h4>
                                                                     }
                                                                 </>
                                                         }

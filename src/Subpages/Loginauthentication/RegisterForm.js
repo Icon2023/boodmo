@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import HideShow from "../../Utils/form/HideShow";
+import HideShow from "../../Utils/HideShow";
 import { Register } from "../../Services/apiServices";
 import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";

@@ -12,7 +12,7 @@ const PopularCarMakers = () => {
     CarCompanies()
       .then((res) => {
         setCarCompany(res?.data);
-        console.log("pop", res?.data);
+        // console.log("pop", res?.data);
       })
       .catch((err) => {
         console.log(err);

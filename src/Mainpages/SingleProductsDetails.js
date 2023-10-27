@@ -16,6 +16,7 @@ import { Carousel } from 'react-responsive-carousel';
 import { dateFormate } from "../Utils/utils";
 import Rating from '@mui/material/Rating';
 import "../../node_modules/react-responsive-carousel/lib/styles/carousel.min.css";
+import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 
 
 
@@ -146,7 +147,7 @@ const SingleProductsDetails = () => {
 
     return (
         <>
-            <main className="main__content_wrapper">
+            <main className="margin_top_all">
 
                 {/* Start breadcrumb section */}
                 <section className="breadcrumb__section breadcrumb__bg">
@@ -182,12 +183,12 @@ const SingleProductsDetails = () => {
                                     showArrows={false} // Disable the default arrows
                                     renderArrowPrev={(clickHandler) => (
                                         <button onClick={clickHandler} className="custom-arrow prev">
-                                            <AiOutlineCaretLeft />
+                                            <RxDoubleArrowLeft style={{fontSize:"36px"}}/>
                                         </button>
                                     )}
                                     renderArrowNext={(clickHandler) => (
                                         <button onClick={clickHandler} className="custom-arrow next">
-                                            <AiOutlineCaretRight />
+                                            <RxDoubleArrowRight style={{fontSize:"36px"}}/>
                                         </button>
                                     )}
                                 >
@@ -208,10 +209,10 @@ const SingleProductsDetails = () => {
                                     </h2>
                                     <div className="product__details--info__price mb-12">
                                         <span className="current__price">
-                                            ${add_Details?.original_price}/-
+                                            {add_Details?.selling_price}/-
                                         </span>
                                         <del className="old__price">
-                                            {add_Details?.selling_price}/-
+                                            {add_Details?.original_price}/-
                                         </del>
                                     </div>
                                     <ul className="rating product__card--rating mb-15 d-flex">

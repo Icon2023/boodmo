@@ -1733,47 +1733,62 @@ select {
     margin-top: 6px
 }
 
-.header__sticky.sticky {
+
+.header__sticky {
     position: fixed;
+    top: 4%;
     width: 100%;
-    top: 0;
     background: var(--body-background-color);
     left: 0;
     z-index: 99;
     padding: 1rem .5rem;
     -webkit-box-shadow: 0 0 7px rgba(0, 0, 0, .15);
     box-shadow: 0 0 7px rgba(0, 0, 0, .15);
-    -webkit-transition: .3s;
-    transition: .3s
+    transition: 0.2s;
 }
 
-.header__sticky.sticky .header__menu.header__sticky--block {
-    display: block !important;
-    padding-left: 0
+.header__stickyclose {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: var(--body-background-color);
+    left: 0;
+    z-index: 99;
+    padding: 1rem .5rem;
+    -webkit-box-shadow: 0 0 7px rgba(0, 0, 0, .15);
+    box-shadow: 0 0 7px rgba(0, 0, 0, .15);
+    transition: 0.2s;
 }
 
-@media only screen and (max-width:991px) {
-    .header__sticky.sticky .header__menu.header__sticky--block {
-        display: none !important
-    }
-}
-
-.header__sticky.sticky .header__account.header__sticky--block {
-    display: block
-}
-
-.header__sticky.sticky .header__account.header__sticky--none {
-    display: none
-}
-
-.header__sticky.sticky .header__search--widget.header__sticky--none {
-    display: none !important
+.margin_top_all {
+    margin-top: 75px;
 }
 
 .header__topbar {
     padding: 8px 0
 }
+/* ==================================================================================================================
+==================================================================================================================== */
+/* Home Serach Model Box */
+.css-1ehqt7t {
+    background-color: white !important;
+}
 
+.search_modal_box {
+    height: 80vh !important;
+    overflow-y: scroll !important;
+    width: 60vw !important;
+}
+
+@media (max-width: 770px) {
+    .search_modal_box {
+        height: 80vh !important;
+        overflow-y: scroll !important;
+        width: 90vw !important;
+    }
+}
+/* ====================================================================================================================
+========================================================================================================================== */
 @media only screen and (min-width:768px) {
     .header__topbar {
         padding: 10px 0
@@ -2185,9 +2200,7 @@ select {
     pointer-events: none
 }
 
-.header__account.header__sticky--block {
-    display: none
-}
+
 
 .header__account--items {
     margin-left: 12px
@@ -2628,9 +2641,6 @@ select {
     padding-left: 30px
 }
 
-.header__menu.header__sticky--block {
-    display: none !important
-}
 
 .header__menu--wrapper {
     gap: 1.3rem
@@ -4286,6 +4296,14 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 @media only screen and (min-width:992px) {
     .hero__content--style5 {
         top: 20%
+    }
+
+    .toggle_open {
+        display: none;
+    }
+
+    .toggle_icon {
+        display: none;
     }
 }
 
@@ -8808,7 +8826,7 @@ input.quickview__value--number {
     color: white;
     border: 0;
     border-radius: 5px;
-    padding: 5px 100px;
+    padding: 5px 90px;
 }
 
 
@@ -8905,14 +8923,16 @@ input.quickview__value--number {
         justify-content: center
     }
 }
-.filter_btn{
+
+.filter_btn {
     background-color: #e94235;
     border: 0;
     color: white;
-    padding:3px 20px;
+    padding: 3px 20px;
     margin-left: 10px;
     border-radius: 3px;
 }
+
 .product__list .product__card--price {
     opacity: 1;
     visibility: visible
@@ -8971,10 +8991,8 @@ input.quickview__value--number {
 }
 
 .product_name {
-    width: 250px;
     height: 50px;
     overflow: hidden;
-    /* text-overflow: ellipsis !important; */
 }
 
 .product__list--content .product__card--title {
@@ -9064,6 +9082,10 @@ input.quickview__value--number {
     .product__list--price .old__price {
         font-size: 1.8rem;
         line-height: 2.4rem
+    }
+
+    .filter_btn {
+        display: none;
     }
 }
 
@@ -11012,7 +11034,9 @@ span.info__list--item-content {
 
 .cart__content--title {
     margin-bottom: .5rem;
-    line-height: 2.5rem
+    line-height: 2.5rem;
+    text-overflow: ellipsis;
+    max-width: 300px;
 }
 
 .cart__remove--btn {
@@ -11584,7 +11608,8 @@ details>summary::-webkit-details-marker {
     font-size: 1.4rem;
     line-height: 2rem;
     font-weight: 600;
-    opacity: .9
+    opacity: .9;
+    max-width: 300px;
 }
 
 .product__description--variant {
@@ -13182,8 +13207,8 @@ details>summary::-webkit-details-marker {
     position: absolute !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
+    background-color: transparent;
+    color: black;
     padding: 5px 10px;
     border: none;
     cursor: pointer;
@@ -13209,13 +13234,31 @@ details>summary::-webkit-details-marker {
     max-width: 100%;
     max-height: 100%;
 }
+
 .thumbs-wrapper .thumb {
     height: 80px !important;
 }
+
 .control-dots {
     display: none !important;
 }
 
 .custom-carousel .slide, .selected {
     margin: auto 0% !important;
+}
+
+/* ============================================================================================================================
+============================================================================================================================= */
+/* Model box */
+.model_box {
+    background-color: white;
+    border-radius: 10px;
+    padding: 25px;
+}
+
+.model_maincontent {
+    gap: 1rem;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    justify-content: center;
 }

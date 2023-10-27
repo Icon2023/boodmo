@@ -1,18 +1,45 @@
-import React from 'react'
-import { AiOutlineHeart, AiOutlineHome, AiOutlineLogout, AiOutlineSearch, AiOutlineShoppingCart } from 'react-icons/ai'
-import { IoIosArrowDown, IoMdContact, IoMdContacts } from 'react-icons/io'
+import React, { useEffect, useState } from 'react'
+import { AiOutlineClose, AiOutlineHeart, AiOutlineHome, AiOutlineLogout, AiOutlineMenu, AiOutlineSearch, AiOutlineShoppingCart } from 'react-icons/ai'
+import { IoIosArrowDown, IoMdContact } from 'react-icons/io'
 import { BiLogoFacebook, BiLogoInstagramAlt, BiLogoPinterest, BiLogoTwitter, BiLogoYoutube } from 'react-icons/bi'
 import { BsShop } from 'react-icons/bs'
 import { useSelector } from 'react-redux'
+import Drawer from 'react-modern-drawer';
 
 const Header = () => {
 
     const { add_wish, addto_cart, login_cart } = useSelector((state) => ({ ...state.products }));
     const user = JSON.parse(localStorage.getItem('USER'));
+    const [isOpen, setIsOpen] = useState(false);
+    const [scroll, setScroll] = useState(false);
+
+    useEffect(() => {
+        const changeNavbarBg = () => {
+            if (window.scrollY > 0) {
+                setScroll(true);
+            } else {
+                setScroll(false);
+            }
+        };
+
+        window.addEventListener("scroll", changeNavbarBg);
+
+        return () => {
+            window.removeEventListener("scroll", changeNavbarBg);
+        };
+    }, [])
 
     const handleLogout = () => {
         localStorage.removeItem('USER')
         window.location.reload();
+    }
+
+    const toggleDrawer = () => {
+        setIsOpen((prevState) => !prevState)
+    }
+
+    const toggleClose = () => {
+        setIsOpen(false)
     }
 
     return (
@@ -122,32 +149,15 @@ const Header = () => {
                     </div>
                 </div>
 
-                <div className="main__header header__sticky">
+                <div className={`main__header ${scroll ? " header__stickyclose" : "header__sticky"}`}>
                     <div className="container-fluid">
                         <div className="main__header--inner position__relative d-flex justify-content-between align-items-center">
-                            <div className="offcanvas__header--menu__open ">
-                                <a
-                                    className="offcanvas__header--menu__open--btn"
-                                    href="javascript:void(0)"
-                                    data-offcanvas=""
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="ionicon offcanvas__header--menu__open--svg"
-                                        viewBox="0 0 512 512"
-                                    >
-                                        <path
-                                            fill="currentColor"
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeMiterlimit={10}
-                                            strokeWidth={32}
-                                            d="M80 160h352M80 256h352M80 352h352"
-                                        />
-                                    </svg>
-                                    <span className="visually-hidden">Offcanvas Menu Open</span>
+                            <div className='toggle_icon'>
+                                <a onClick={toggleDrawer}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ionicon offcanvas__header--menu__open--svg" viewBox="0 0 512 512"><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 160h352M80 256h352M80 352h352" /></svg>
                                 </a>
                             </div>
+
                             <div className="main__logo">
                                 <h1 className="main__logo--title">
                                     <a className="main__logo--link" href="/">
@@ -244,7 +254,6 @@ const Header = () => {
                                                     <AiOutlineLogout style={{ fontSize: "28px", color: "red" }} />
                                                 </a>
                                         }
-
                                     </li>
                                     <li className="header__account--items d-none d-lg-block">
                                         <a className="header__account--btn" href="/wishlist">
@@ -395,6 +404,88 @@ const Header = () => {
                             />
                         </svg>
                     </button>
+                </div>
+
+                {/* start toggle open */}
+                <div className="toggle_open">
+                    <Drawer
+                        open={isOpen}
+                        onClose={toggleDrawer}
+                        direction='left'
+                        className='bla bla bla'
+                    >
+                        <div className="offcanvas__inner">
+                            <div className="offcanvas__logo">
+                                <a className="offcanvas__logo_link" href="index.html">
+                                    <img
+                                        src="assets/img/logo/nav-log.webp"
+                                        alt="Grocee Logo"
+                                        width={158}
+                                        height={36}
+                                    />
+                                </a>
+                                <AiOutlineClose style={{ fontSize: "24px" }} onClick={toggleClose} />
+                            </div>
+                            <nav className="offcanvas__menu">
+                                <ul className="offcanvas__menu_ul">
+                                    <li className="offcanvas__menu_li">
+                                        <a className="offcanvas__menu_item" href="/">
+                                            Home
+                                        </a>
+                                    </li>
+                                    <li className="offcanvas__menu_li">
+                                        <a className="offcanvas__menu_item" href="shop.html">
+                                            Shop
+                                        </a>
+                                    </li>
+                                    <li className="offcanvas__menu_li">
+                                        <a className="offcanvas__menu_item" href="about.html">
+                                            About
+                                        </a>
+                                    </li>
+                                    <li className="offcanvas__menu_li">
+                                        <a className="offcanvas__menu_item" href="contact.html">
+                                            Contact
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div className="offcanvas__account--items">
+                                    <a
+                                        className="offcanvas__account--items__btn d-flex align-items-center"
+                                        href="login.html"
+                                    >
+                                        <span className="offcanvas__account--items__icon">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="20.51"
+                                                height="19.443"
+                                                viewBox="0 0 512 512"
+                                            >
+                                                <path
+                                                    d="M344 144c-3.92 52.87-44 96-88 96s-84.15-43.12-88-96c-4-55 35-96 88-96s92 42 88 96z"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={32}
+                                                />
+                                                <path
+                                                    d="M256 304c-87 0-175.3 48-191.64 138.6C62.39 453.52 68.57 464 80 464h352c11.44 0 17.62-10.48 15.65-21.4C431.3 352 343 304 256 304z"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeMiterlimit={10}
+                                                    strokeWidth={32}
+                                                />
+                                            </svg>
+                                        </span>
+                                        <span className="offcanvas__account--items__label">
+                                            Login / Register
+                                        </span>
+                                    </a>
+                                </div>
+                            </nav>
+                        </div>
+                    </Drawer>
                 </div>
             </header>
         </>

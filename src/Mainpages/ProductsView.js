@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Brands, Product } from '../Services/apiServices';
 import { useDispatch, useSelector } from 'react-redux';
-import { addProducts } from '../store/reducers/ProductSlice';
+import { addProducts, removeFilter } from '../store/reducers/ProductSlice';
 import { CgMenuGridR } from "react-icons/cg";
 import { TfiMenuAlt } from "react-icons/tfi";
 import { AiFillStar, AiOutlineFilter, AiOutlineStar } from "react-icons/ai";
@@ -18,7 +18,7 @@ import { Pagination, PaginationItem } from '@mui/material';
 
 const ProductsView = () => {
     const dispatch = useDispatch();
-    const { add_product, category_list } = useSelector((state) => ({ ...state.products }));
+    const { add_product, category_list, filter_multi } = useSelector((state) => ({ ...state.products }));
     const { cate_id, subcategory } = useParams();
 
     const [gridOpen, setGridOpen] = useState(true);
@@ -34,21 +34,40 @@ const ProductsView = () => {
     const [isMore, setIsMore] = useState(false);
     const [selectedValues, setSelectedValues] = useState([]);
 
+    useEffect(() => {
+        dispatch(removeFilter())
+    }, [])
 
     useEffect(() => {
-        const data = {
-            category: cate_id,
-            sub_category: subcategory
-        }
-        Product(data).then((res) => {
-            if (res.success) {
-                dispatch(addProducts(res?.data))
+        if (filter_multi.length < 1) {
+            const data = {
+                category: cate_id,
+                sub_category: subcategory
             }
-        })
+            Product(data).then((res) => {
+                if (res.success) {
+                    dispatch(addProducts(res?.data))
+                }
+            })
+
+        } else {
+            const filter = {
+                category: filter_multi?.category,
+                sub_category: filter_multi?.sub_category,
+                car_company_id: filter_multi?.car_company_id,
+                car_company_model_id: filter_multi?.car_company_model_id,
+                car_company_year_id: filter_multi?.car_company_year_id,
+                car_company_year_modi_id: filter_multi?.car_company_year_modi_id
+            }
+            Product(filter).then((res) => {
+                if (res.success) {
+                    dispatch(addProducts(res?.data))
+                }
+            })
+        }
         Brands()
             .then((res) => {
                 setBrands(res?.data);
-                // console.log(res?.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -85,7 +104,8 @@ const ProductsView = () => {
         isMore === true ? setIsMore(false) : setIsMore(true)
     }
     const handleReset = () => {
-        window.location.reload()
+        window.location.reload();
+        dispatch(removeFilter())
     }
 
     const sortClick = (val1) => {
@@ -124,6 +144,7 @@ const ProductsView = () => {
         Product(price).then((res) => {
             if (res.success) {
                 dispatch(addProducts(res?.data))
+                console.log(res?.data);
             }
         })
     }
@@ -131,7 +152,7 @@ const ProductsView = () => {
 
     return (
         <div>
-            <main className="main__content_wrapper">
+            <main className="margin_top_all">
                 {/* Start breadcrumb section */}
                 <section className="breadcrumb__section breadcrumb__bg">
                     <div className="container">
@@ -225,7 +246,6 @@ const ProductsView = () => {
                                                     <input type="number" placeholder='0' value={Stprice} onChange={(e) => setStPrice(e.target.value)} />
                                                 </label>
                                                 <label>To
-
                                                     <input type="number" placeholder='250' value={endPrice} onChange={(e) => setEndPrice(e.target.value)} />
                                                 </label>
                                             </div>
@@ -492,6 +512,7 @@ const ProductsView = () => {
                                                                                                     <span className="old__price">
                                                                                                         ₹{e?.original_price}/-
                                                                                                     </span>
+                                                                                                    {e?.discount && <span className="product-discount">({e?.discount}% OFF)</span>}
                                                                                                 </div>
                                                                                                 <div className="product__card--footer">
                                                                                                     {
@@ -660,8 +681,8 @@ const ProductsView = () => {
                                                                                                     </li>
                                                                                                 </ul>
                                                                                                 <div className="product__list--price">
-                                                                                                    {e?.selling_price && <span className="old__price" style={{ paddingRight: "5px" }}>${e?.selling_price}/-</span>}
-                                                                                                    <span className="current__price">${e?.original_price}/-</span>
+                                                                                                    {e?.selling_price && <span className="current__price" style={{ paddingRight: "5px" }}>{e?.selling_price}/-</span>}
+                                                                                                    <span className=" old__price">{e?.original_price}/-</span>
                                                                                                     {e?.discount && <span className="product-discount">({e?.discount}% OFF)</span>}
                                                                                                 </div>
                                                                                                 {
@@ -724,56 +745,82 @@ const ProductsView = () => {
                     direction='left'
                     className='bla bla bla'
                 >
-                    <ul className="widget__categories--menu" style={{ height: "100vh", overflowY: "scroll" }}>
-                        {
-                            category_list.map((e, index) => {
-                                return (
+                    <div className="single__widget price__filter widget__bg" style={{ height: "100vh", overflowY: "scroll" }}>
+                        <div className='d-flex'>
+                            <h2 className="">Filters</h2>
+                            <a onClick={handleReset} className="ms-5 mt-1" style={{ textDecoration: "underline", color: "red" }}>Reset</a>
+                        </div>
+                        <hr />
+                        <div>
+                            <h3>Brand</h3>
+                            {
+                                isMore ?
                                     <>
-                                        <Accordion expanded={expanded === e?.id} onChange={handleChange(e?.id)} key={index}>
-                                            <AccordionSummary
-                                                expandIcon={<ExpandMoreIcon style={{ fontSize: "28px" }} />}
-                                                aria-controls="panel1bh-content"
-                                                id="panel1bh-header"
-                                            >
-                                                <label className="widget__categories--menu__label d-flex align-items-center">
-                                                    <img
-                                                        className="widget__categories--menu__img"
-                                                        src={e?.image}
-                                                        alt="categories-img"
-                                                    />
-                                                    <span className="widget__categories--menu__text">
-                                                        {e?.name}
-                                                    </span>
-                                                </label>
-                                            </AccordionSummary>
-                                            <AccordionDetails>
-                                                {
-                                                    e?.sub_category?.map((i, index) => {
-                                                        return (
-                                                            <li className="widget__categories--menu__list" key={index}>
-                                                                <a href={`/shop/${e?.id}/${i?.id}`}>
-                                                                    <label label className="widget__categories--menu__label d-flex align-items-center" >
-                                                                        <img
-                                                                            className="widget__categories--menu__img"
-                                                                            src={i?.image}
-                                                                            alt="categories-img"
-                                                                        />
-                                                                        <span className="widget__categories--menu__text">
-                                                                            {i?.name}
-                                                                        </span>
-                                                                    </label>
-                                                                </a>
-                                                            </li>
-                                                        )
-                                                    })
-                                                }
-                                            </AccordionDetails>
-                                        </Accordion >
+                                        {
+                                            brands?.map((e, index) => {
+                                                return (
+                                                    <div className='d-flex' key={index}>
+                                                        <input
+                                                            type='checkbox'
+                                                            value={e?.id}
+                                                            onChange={handleChecked}
+                                                        />
+                                                        &nbsp;&nbsp;
+                                                        <p className='mt-1'>{e?.name}&nbsp;({e?.product_count})</p>
+                                                    </div>
+                                                )
+                                            })
+                                        }
                                     </>
-                                )
-                            })
-                        }
-                    </ul>
+                                    :
+                                    <>
+                                        <div className='d-flex'>
+                                            <input
+                                                type='checkbox'
+                                                value={brands[0]?.id}
+                                                onChange={handleChecked}
+                                            />&nbsp;&nbsp;
+                                            <p className='mt-1'>{brands[0]?.name}&nbsp;({brands[0]?.product_count})</p>
+                                        </div>
+                                        <div className='d-flex'>
+                                            <input
+                                                type='checkbox'
+                                                value={brands[1]?.id}
+                                                onChange={handleChecked}
+                                            />&nbsp;&nbsp;
+                                            <p className='mt-1'>{brands[1]?.name}&nbsp;({brands[1]?.product_count})</p>
+                                        </div>
+                                        <div className='d-flex'>
+                                            <input
+                                                type='checkbox'
+                                                value={brands[2]?.id}
+                                                onChange={handleChecked}
+                                            />&nbsp;&nbsp;
+                                            <p className='mt-1'>{brands[2]?.name}&nbsp;({brands[2]?.product_count})</p>
+                                        </div>
+                                    </>
+                            }
+                            {
+                                isMore == false ? <a onClick={handleLoad} style={{ fontWeight: "bold" }}>+{brands?.length} More</a> : <a onClick={handleLoad} style={{ fontWeight: "bold" }}>Less</a>
+                            }
+                        </div>
+                        <form onSubmit={handleSubmit}>
+                            <h3 className='mt-4'>Price</h3>
+                            <div className='form_filter'>
+                                <label>
+                                    From
+                                    <input type="number" placeholder='0' value={Stprice} onChange={(e) => setStPrice(e.target.value)} />
+                                </label>
+                                <label>To
+
+                                    <input type="number" placeholder='250' value={endPrice} onChange={(e) => setEndPrice(e.target.value)} />
+                                </label>
+                            </div>
+                            <div className='form_filter_btn'>
+                                <button>Filter</button>
+                            </div>
+                        </form>
+                    </div>
                 </Drawer>
             </main>
         </div>

@@ -16,7 +16,7 @@ import BrandsAll from './Subpages/Brands'
 import Checkout from './Mainpages/Checkout'
 import ScrollToTop from "react-scroll-to-top";
 import ProtectedRouteLogin from './Utils/ProtectedRouteLogin'
-import ProtectedRouteWishlist from './Utils/form/ProtectedRouteWishlist'
+import ProtectedRouteWishlist from './Utils/ProtectedRouteWishlist'
 import MyAccount from './Mainpages/MyAccount'
 import "../node_modules/slick-carousel/slick/slick.css";
 import "../node_modules/slick-carousel/slick/slick-theme.css";

@@ -60,7 +60,7 @@ const Cart = () => {
 
     return (
         <>
-            <main className="main__content_wrapper">
+            <main className="margin_top_all">
                 {/* Start breadcrumb section */}
                 <section className="breadcrumb__section breadcrumb__bg">
                     <div className="container">
@@ -143,7 +143,7 @@ const Cart = () => {
                                                                                             </div>
                                                                                         </td>
                                                                                         <td className="cart__table--body__list">
-                                                                                            <span className="cart__price">${e?.price}/-</span>
+                                                                                            <span className="cart__price">{e?.price}/-</span>
                                                                                         </td>
                                                                                         <td className="cart__table--body__list">
                                                                                             <div className="quantity__box">
@@ -165,7 +165,7 @@ const Cart = () => {
                                                                                             </div>
                                                                                         </td>
                                                                                         <td className="cart__table--body__list">
-                                                                                            <span className="cart__price end">${e?.price * e?.qty}/-</span>
+                                                                                            <span className="cart__price end">{e?.price * e?.qty}/-</span>
                                                                                         </td>
                                                                                     </tr>
                                                                                 )
@@ -187,7 +187,7 @@ const Cart = () => {
                                                                                                     <AiOutlineClose />
                                                                                                 </button>
                                                                                                 <div className="cart__thumbnail">
-                                                                                                    <a href="product-details.html">
+                                                                                                    <a href={`/productsdetail/${e?.product_id}`}>
                                                                                                         <img
                                                                                                             className="border-radius-5"
                                                                                                             src={e?.product?.images[0].image}
@@ -197,7 +197,7 @@ const Cart = () => {
                                                                                                 </div>
                                                                                                 <div className="cart__content">
                                                                                                     <h3 className="cart__content--title h4">
-                                                                                                        <a href="product-details.html">
+                                                                                                        <a href={`/productsdetail/${e?.product_id}`}>
                                                                                                             {e?.product?.name}
                                                                                                         </a>
                                                                                                     </h3>
@@ -205,7 +205,7 @@ const Cart = () => {
                                                                                             </div>
                                                                                         </td>
                                                                                         <td className="cart__table--body__list">
-                                                                                            <span className="cart__price">${e?.product?.original_price}/-</span>
+                                                                                            <span className="cart__price">{e?.product?.original_price}/-</span>
                                                                                         </td>
                                                                                         <td className="cart__table--body__list">
                                                                                             <div className="quantity__box">
@@ -227,7 +227,7 @@ const Cart = () => {
                                                                                             </div>
                                                                                         </td>
                                                                                         <td className="cart__table--body__list">
-                                                                                            <span className="cart__price end">${e?.product?.original_price * e?.qty}/-</span>
+                                                                                            <span className="cart__price end">{e?.product?.original_price * e?.qty}/-</span>
                                                                                         </td>
                                                                                     </tr>
                                                                                 )

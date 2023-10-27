@@ -7,14 +7,12 @@ const WishList = () => {
     const dispatch = useDispatch();
     const { add_wish } = useSelector((state) => ({ ...state.products }));
 
-    console.log(add_wish);
-
     const removeElement = (id) => {
         dispatch(removeProductWishlist(id))
     };
     return (
         <>
-            <main className="main__content_wrapper">
+            <main className="margin_top_all">
                 {/* Start breadcrumb section */}
                 <section className="breadcrumb__section breadcrumb__bg">
                     <div className="container">
@@ -39,90 +37,99 @@ const WishList = () => {
                 {/* cart section start */}
                 <section className="cart__section section--padding">
                     <div className="container">
-                        <div className="cart__section--inner">
-                            <form action="#">
-                                <h2 className="cart__title mb-30">Wishlist</h2>
-                                <div className="cart__table">
-                                    <table className="cart__table--inner">
-                                        <thead className="cart__table--header">
-                                            <tr className="cart__table--header__items">
-                                                <th className="cart__table--header__list">Product</th>
-                                                <th className="cart__table--header__list">Price</th>
-                                                <th className="cart__table--header__list text-center">
-                                                    STOCK STATUS
-                                                </th>
-                                                <th className="cart__table--header__list text-right">
-                                                    VIEW PRODUCT
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="cart__table--body">
-                                            {
-                                                add_wish.map((e, index) => {
-                                                    return (
-                                                        <tr className="cart__table--body__items" key={index}>
-                                                            <td className="cart__table--body__list">
-                                                                <div className="cart__product d-flex align-items-center">
-                                                                    <button
-                                                                        className="cart__remove--btn"
-                                                                        aria-label="search button"
-                                                                        type="button"
-                                                                        onClick={() => removeElement(e?.proId)}
-                                                                    >
-                                                                        <AiOutlineClose />
-                                                                    </button>
-                                                                    <div className="cart__thumbnail">
-                                                                        <a href={`/productsdetail/${e?.proId}`}>
-                                                                            <img
-                                                                                className="border-radius-5"
-                                                                                src={e?.image}
-                                                                                alt="cart-product"
-                                                                            />
-                                                                        </a>
-                                                                    </div>
-                                                                    <div className="cart__content">
-                                                                        <h3 className="cart__content--title h4">
-                                                                            <a href={`/productsdetail/${e?.proId}`}>
-                                                                                {e?.name}
-                                                                            </a>
-                                                                        </h3>
-                                                                        <span className="cart__content--variant">
-                                                                            COLOR: Blue
-                                                                        </span>
-                                                                        <span className="cart__content--variant">
-                                                                            WEIGHT: 2 Kg
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td className="cart__table--body__list">
-                                                                <span className="cart__price">${e?.price}/-</span>
-                                                            </td>
-                                                            <td className="cart__table--body__list text-center">
-                                                                <span className="in__stock text__secondary">
-                                                                    {
-                                                                        e?.stock === 0 ? " in stock" : "Out Of Stock"
-                                                                    }
+                        {
+                            add_wish?.length >= 1
+                                ?
+                                <>
+                                    <div className="cart__section--inner">
+                                        <h2 className="cart__title mb-30">Wishlist</h2>
+                                        <div className="cart__table">
+                                            <table className="cart__table--inner">
+                                                <thead className="cart__table--header">
+                                                    <tr className="cart__table--header__items">
+                                                        <th className="cart__table--header__list">Product</th>
+                                                        <th className="cart__table--header__list">Price</th>
+                                                        <th className="cart__table--header__list text-center">
+                                                            STOCK STATUS
+                                                        </th>
+                                                        <th className="cart__table--header__list text-center">
+                                                            VIEW PRODUCT
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="cart__table--body">
+                                                    {
+                                                        add_wish.map((e, index) => {
+                                                            return (
+                                                                <tr className="cart__table--body__items" key={index}>
+                                                                    <td className="cart__table--body__list">
+                                                                        <div className="cart__product d-flex align-items-center">
+                                                                            <button
+                                                                                className="cart__remove--btn"
+                                                                                aria-label="search button"
+                                                                                type="button"
+                                                                                onClick={() => removeElement(e?.proId)}
+                                                                            >
+                                                                                <AiOutlineClose />
+                                                                            </button>
+                                                                            <div className="cart__thumbnail">
+                                                                                <a href={`/productsdetail/${e?.proId}`}>
+                                                                                    <img
+                                                                                        className="border-radius-5"
+                                                                                        src={e?.image}
+                                                                                        alt="cart-product"
+                                                                                    />
+                                                                                </a>
+                                                                            </div>
+                                                                            <div className="cart__content">
+                                                                                <h3 className="cart__content--title h4">
+                                                                                    <a href={`/productsdetail/${e?.proId}`}>
+                                                                                        {e?.name}
+                                                                                    </a>
+                                                                                </h3>
+                                                                                <span className="cart__content--variant">
+                                                                                    COLOR: Blue
+                                                                                </span>
+                                                                                <span className="cart__content--variant">
+                                                                                    WEIGHT: 2 Kg
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="cart__table--body__list">
+                                                                        <span className="cart__price">{e?.price}/-</span>
+                                                                    </td>
+                                                                    <td className="cart__table--body__list text-center">
+                                                                        <span className="in__stock text__secondary">
+                                                                            {
+                                                                                e?.stock === 0 ? " in stock" : "Out Of Stock"
+                                                                            }
 
-                                                                </span>
-                                                            </td>
-                                                            <td className="cart__table--body__list text-right">
-                                                                <a
-                                                                    className="wishlist__cart--btn primary__btn"
-                                                                    href={`/productsdetail/${e?.proId}`}
-                                                                >
-                                                                    View Details
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                })
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </form>
-                        </div>
+                                                                        </span>
+                                                                    </td>
+                                                                    <td className="cart__table--body__list text-center">
+                                                                        <a
+                                                                            className="wishlist__cart--btn primary__btn"
+                                                                            href={`/productsdetail/${e?.proId}`}>
+                                                                            View Details
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            )
+                                                        })
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </>
+                                :
+                                <>
+                                    <img style={{ marginLeft: "auto", marginRight: "auto", display: "block" }} src="https://autoglos.com/public/frontend/images/empty-cart.png" alt="" />
+
+                                </>
+                        }
+
                     </div>
                 </section>
 
