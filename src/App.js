@@ -21,6 +21,8 @@ import MyAccount from './Mainpages/MyAccount'
 import "../node_modules/slick-carousel/slick/slick.css";
 import "../node_modules/slick-carousel/slick/slick-theme.css";
 import 'react-modern-drawer/dist/index.css'
+import About from './Mainpages/About'
+import Page404 from './Mainpages/Page404'
 
 
 function App() {
@@ -28,6 +30,7 @@ function App() {
     <>
       <ScrollToTop smooth color="#ED1D24" />
       <Header />
+      <main style={{minHeight:"70vh"}}>
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/shop/:id' element={<CategoryProducts />} />
@@ -41,7 +44,10 @@ function App() {
         <Route path='/vehicles' element={<CarMakers />} />
         <Route path='/brands' element={<BrandsAll />} />
         <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+        <Route path='/about-us' element={<About />} />
+        <Route path='*' element={<Page404 />} />
       </Routes>
+      </main>
       <Footer />
     </>
   )

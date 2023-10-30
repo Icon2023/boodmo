@@ -188,14 +188,14 @@ const Footer = () => {
                                             </a>
                                         </li>
                                         <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="cart.html">
+                                            <Link className="footer__widget--menu__text" to="/login">
                                                 Login
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="login.html">
+                                            <Link className="footer__widget--menu__text" to="/login">
                                                 Register
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li className="footer__widget--menu__list">
                                             <a className="footer__widget--menu__text" href="checkout.html">
@@ -234,22 +234,22 @@ const Footer = () => {
                                             </a>
                                         </li>
                                         <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="about.html">
+                                            <Link className="footer__widget--menu__text" to="/about-us">
                                                 About Us
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="wishlist.html">
+                                            <Link className="footer__widget--menu__text" to="/wishlist">
                                                 Wishlist
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li className="footer__widget--menu__list">
-                                            <a
+                                            <Link
                                                 className="footer__widget--menu__text"
-                                                href="privacy-policy.html"
+                                                to="/privacy-policy"
                                             >
                                                 Privacy Policy
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li className="footer__widget--menu__list">
                                             <a className="footer__widget--menu__text" href="faq.html">
