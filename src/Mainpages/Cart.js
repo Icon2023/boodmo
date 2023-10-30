@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
-import { qtyIncrementDecrement, removeLoginAddtocart, removeProductAddtocart } from '../store/reducers/ProductSlice';
+import { addLoginCart, login_qtyIncrement_Decrement, qtyIncrementDecrement, removeLoginAddtocart, removeProductAddtocart } from '../store/reducers/ProductSlice';
 import { useNavigate } from 'react-router-dom';
-import { CartList, CartLogin, CartLoginDelete } from '../Services/apiServices';
+import { Add_Tocart_Login, CartList, CartLoginDelete } from '../Services/apiServices';
+import ShippingAddress from '../Subpages/ShippingAddress';
 
 const Cart = () => {
+    const user = JSON.parse(localStorage.getItem('USER'));
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem('USER'));
-    const { addto_cart } = useSelector((state) => ({ ...state.products }));
-    const [loginCart, setLoginCart] = useState([]);
+    const { addto_cart, login_cart } = useSelector((state) => ({ ...state.products }));
+
+    const handleCheckout = () => {
+        navigate('/checkout')
+    }
 
     useEffect(() => {
-        Cart();
+        CartList().then((res) => {
+            if (res.success) {
+                dispatch(addLoginCart(res?.data))
+            }
+        })
     }, [])
 
-    const Cart = () => {
-        CartList().then((res) => {
-            console.log(res?.data);
-            setLoginCart(res?.data)
-        })
-    }
 
     const handleInc = (id) => {
         dispatch(qtyIncrementDecrement({ id, plusMinus: + 1 }))
@@ -35,28 +37,34 @@ const Cart = () => {
         dispatch(removeProductAddtocart(id))
     };
 
-    const handleCheckout = () => {
-        navigate('/checkout')
-    }
-
     const removeLoginElement = (id) => {
         CartLoginDelete(id).then((res) => {
-            Cart();
         })
         dispatch(removeLoginAddtocart(id))
     };
 
     const handleLoginInc = (id, qty, price) => {
-        console.log(id, qty);
+        dispatch(login_qtyIncrement_Decrement({ id, plusMinus: + 1 }))
         let data = {
             product_id: id,
             price,
             qty,
         }
-        CartLogin(data).then((res) => {
-            Cart();
+        Add_Tocart_Login(data).then((res) => {
         })
     }
+
+    const handleLoginDec = (id, qty, price) => {
+        dispatch(login_qtyIncrement_Decrement({ id, plusMinus: - 1 }))
+        let data = {
+            product_id: id,
+            price,
+            qty,
+        }
+        Add_Tocart_Login(data).then((res) => {
+        })
+    }
+
 
     return (
         <>
@@ -85,7 +93,7 @@ const Cart = () => {
                 <section className="cart__section section--padding">
                     <div className="container">
                         {
-                            addto_cart?.length >= 1 || loginCart?.length >= 1 ?
+                            addto_cart?.length >= 1 || login_cart?.length >= 1 ?
                                 <>
                                     <div className="cart__section--inner">
                                         <h2 className="cart__title mb-30">Shopping Cart</h2>
@@ -172,9 +180,10 @@ const Cart = () => {
                                                                             })
                                                                         }
                                                                     </>
-                                                                    : <>
+                                                                    :
+                                                                    <>
                                                                         {
-                                                                            loginCart?.map((e, index) => {
+                                                                            login_cart?.map((e, index) => {
                                                                                 return (
                                                                                     <tr className="cart__table--body__items" key={index}>
                                                                                         <td className="cart__table--body__list">
@@ -210,7 +219,7 @@ const Cart = () => {
                                                                                         <td className="cart__table--body__list">
                                                                                             <div className="quantity__box">
                                                                                                 <button
-                                                                                                    onClick={() => handleLoginInc(e?.product_id, e?.qty - 1, e?.product?.original_price)}
+                                                                                                    onClick={() => handleLoginDec(e?.product_id, e?.qty - 1, e?.product?.original_price)}
                                                                                                     disabled={e?.qty == 1 ? true : false}
                                                                                                     className="quantity__value quickview__value--quantity decrease"
                                                                                                 >
@@ -264,55 +273,10 @@ const Cart = () => {
                                     <img style={{ marginLeft: "auto", marginRight: "auto", display: "block" }} src="https://nmkonline.com/images/pages/tumbleweed.gif" alt="" />
                                 </>
                         }
-
                     </div>
                 </section>
                 {/* Start shipping section */}
-                <section className="shipping__section">
-                    <div className="container">
-                        <div className="shipping__inner style2 d-flex">
-                            <div className="shipping__items style2 d-flex align-items-center">
-                                <div className="shipping__icon">
-                                    <img src="assets/img/other/shipping1.webp" alt="icon-img" />
-                                </div>
-                                <div className="shipping__content">
-                                    <h2 className="shipping__content--title h3">Free Shipping</h2>
-                                    <p className="shipping__content--desc">Free shipping over $100</p>
-                                </div>
-                            </div>
-                            <div className="shipping__items style2 d-flex align-items-center">
-                                <div className="shipping__icon">
-                                    <img src="assets/img/other/shipping2.webp" alt="icon-img" />
-                                </div>
-                                <div className="shipping__content">
-                                    <h2 className="shipping__content--title h3">Support 24/7</h2>
-                                    <p className="shipping__content--desc">Contact us 24 hours a day</p>
-                                </div>
-                            </div>
-                            <div className="shipping__items style2 d-flex align-items-center">
-                                <div className="shipping__icon">
-                                    <img src="assets/img/other/shipping3.webp" alt="icon-img" />
-                                </div>
-                                <div className="shipping__content">
-                                    <h2 className="shipping__content--title h3">100% Money Back</h2>
-                                    <p className="shipping__content--desc">
-                                        You have 30 days to Return
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="shipping__items style2 d-flex align-items-center">
-                                <div className="shipping__icon">
-                                    <img src="assets/img/other/shipping4.webp" alt="icon-img" />
-                                </div>
-                                <div className="shipping__content">
-                                    <h2 className="shipping__content--title h3">Payment Secure</h2>
-                                    <p className="shipping__content--desc">We ensure secure payment</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
+                <ShippingAddress />
             </main>
         </>
     )

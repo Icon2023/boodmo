@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import HideShow from "../../Utils/HideShow";
 import { Alert } from "@mui/material";
-import { LogIn } from "../../Services/apiServices";
+import { Add_Tocart_Login, LogIn } from "../../Services/apiServices";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { removeAllAddtocart } from "../../store/reducers/ProductSlice";
@@ -14,6 +14,9 @@ const LoginForm = () => {
   const [password, setPassword] = useState('123456')
   const [passwordShown, setPasswordShown] = useState(false);
 
+  const { addto_cart } = useSelector((state) => ({ ...state.products }));
+
+
   const handleSubmit = (e) => {
     e.preventDefault()
     let data = {
@@ -21,14 +24,27 @@ const LoginForm = () => {
       password: password
     }
     LogIn(data).then((res) => {
-      if (!res.success) {
-        console.log("res----", res);
-        setError(res.message);
-      } else {
+      localStorage.setItem("USER", JSON.stringify(res));
+      if (res.success) {
+
+        if (addto_cart.length > 0) {
+          addto_cart.map((obj) => {
+            const cartPayload = {
+              product_id: obj.proId,
+              price: obj.price,
+              qty: obj.qty
+            }
+            Add_Tocart_Login(cartPayload).then((res) => {
+              console.log(res);
+            })
+          })
+          dispatch(removeAllAddtocart())
+        }
+
         localStorage.setItem("USER", JSON.stringify(res));
         navigate("/");
-        window.location.reload();
-        dispatch(removeAllAddtocart())
+      } else {
+        setError(res.message);
       }
     });
   }

@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { AddReviewList, CartLogin, SingleProductDetails } from "../Services/apiServices";
+import { AddReviewList, Add_Tocart_Login, SingleProductDetails } from "../Services/apiServices";
 import ShippingAddress from "../Subpages/ShippingAddress";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    addLoginCart,
     addProductDetails,
     addToCart,
     addToWishlist,
     removeProductWishlist,
 } from "../store/reducers/ProductSlice";
-import { AiFillStar, AiOutlineCaretLeft, AiOutlineCaretRight, AiOutlineStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { Carousel } from 'react-responsive-carousel';
 import { dateFormate } from "../Utils/utils";
-import Rating from '@mui/material/Rating';
-import "../../node_modules/react-responsive-carousel/lib/styles/carousel.min.css";
 import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
-
+import "../../node_modules/react-responsive-carousel/lib/styles/carousel.min.css";
+import Rating from '@mui/material/Rating';
 
 
 const SingleProductsDetails = () => {
@@ -35,7 +33,6 @@ const SingleProductsDetails = () => {
         SingleProductDetails(id).then((res) => {
             if (res.success) {
                 dispatch(addProductDetails(res?.data?.product))
-                console.log(res?.data?.product);
             }
         })
     }, [])
@@ -89,11 +86,10 @@ const SingleProductsDetails = () => {
             let data = {
                 product_id: add_Details?.id,
                 price: add_Details?.original_price,
-                qty: 1
+                qty: 1,
             }
-            CartLogin(data).then((res) => {
-                console.log(res);
-                dispatch(addLoginCart(res?.data))
+            Add_Tocart_Login(data).then((res) => {
+                navigate('/cart')
             })
         }
     }
@@ -108,16 +104,13 @@ const SingleProductsDetails = () => {
                 image: add_Details?.images[0].image,
             }
             dispatch(addToCart(data))
-            navigate('/checkout')
         } else {
             let data = {
                 product_id: add_Details?.id,
                 price: add_Details?.original_price,
                 qty: 1
             }
-            CartLogin(data).then((res) => {
-                console.log(res);
-                dispatch(addLoginCart(res?.data))
+            Add_Tocart_Login(data).then((res) => {
                 navigate('/checkout')
             })
         }
@@ -183,12 +176,12 @@ const SingleProductsDetails = () => {
                                     showArrows={false} // Disable the default arrows
                                     renderArrowPrev={(clickHandler) => (
                                         <button onClick={clickHandler} className="custom-arrow prev">
-                                            <RxDoubleArrowLeft style={{fontSize:"36px"}}/>
+                                            <RxDoubleArrowLeft style={{ fontSize: "36px" }} />
                                         </button>
                                     )}
                                     renderArrowNext={(clickHandler) => (
                                         <button onClick={clickHandler} className="custom-arrow next">
-                                            <RxDoubleArrowRight style={{fontSize:"36px"}}/>
+                                            <RxDoubleArrowRight style={{ fontSize: "36px" }} />
                                         </button>
                                     )}
                                 >
@@ -445,7 +438,7 @@ const SingleProductsDetails = () => {
                                                             <>
                                                                 {
                                                                     productLoginIdsArray.includes(parseInt(id)) ?
-                                                                        <Link to={'/cart'} >
+                                                                        <Link to={'/checkout'} >
                                                                             <button className="buy_btn">
                                                                                 Buy Now
                                                                             </button>

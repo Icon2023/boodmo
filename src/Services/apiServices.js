@@ -13,7 +13,7 @@ export const Product = async (data) => {
 }
 
 export const CheckOutProduct = async (data) => {
-    const response = await axios.post(`${BASE_URL}/api/checkout/`, data);
+    const response = await axios.post(`${BASE_URL}/api/checkout`, data);
     if (response?.status) {
         return response.data;
     } else {
@@ -119,7 +119,7 @@ export const Register = async (data) => {
     }
 };
 
-export const CartLogin = async (data) => {
+export const Add_Tocart_Login = async (data) => {
     const response = await axios.post(`${BASE_URL}/api/cart`, data, { headers: authHeader() });
     if (response?.data) {
         return response.data;
@@ -138,7 +138,6 @@ export const CartList = async () => {
 }
 
 export const CartLoginDelete = async (id) => {
-    console.log(id);
     const response = await axios.delete(`${BASE_URL}/api/cart/${id}`, { headers: authHeader() });
     if (response?.data) {
         return response.data;
@@ -175,10 +174,28 @@ export const GetAddressUser = async () => {
 }
 
 export const UpdateAddressUser = async (data) => {
-    const response = await axios.post(`${BASE_URL}/api/addresses`, data , { headers: authHeader() });
+    const response = await axios.post(`${BASE_URL}/api/addresses`, data, { headers: authHeader() });
     if (response?.data?.success) {
         return response.data;
     } else {
         console.log("error");
+    }
+}
+
+export const Coupon = async () => {
+    const response = await axios.get(`${BASE_URL}/api/coupon`);
+    if (response?.data?.success) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}
+
+export const GetCouponCode = async (data) => {
+    const response = await axios.get(`${BASE_URL}/api/coupon/${data}`, data);
+    if (response?.data?.success) {
+        return response.data;
+    } else {
+        return response.data;
     }
 }

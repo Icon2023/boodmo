@@ -9,9 +9,10 @@ export const productsSlice = createSlice({
     single_category: [],
     add_wish: [],
     addto_cart: [],
+    order_list: [],
+    filter_multi: "",
+    coupon_code: "",
     login_cart: [],
-    order_list:[],
-    filter_multi:""
   },
 
   reducers: {
@@ -45,7 +46,6 @@ export const productsSlice = createSlice({
 
     removeProductAddtocart: (state, { payload }) => {
       state.addto_cart = state.addto_cart.filter((e) => e.proId !== payload)
-      state.cart_total_price = state.addto_cart.length === 0 ? 0 : state.cart_total_price
     },
 
     removeAllAddtocart: (state) => {
@@ -61,14 +61,6 @@ export const productsSlice = createSlice({
       })
     },
 
-    addLoginCart: (state, { payload }) => {
-      state.login_cart = [...state.login_cart, payload];
-    },
-
-    removeLoginAddtocart: (state, { payload }) => {
-      state.login_cart = state.login_cart.filter((e) => e.id !== payload)
-    },
-   
     addOrderDetails: (state, { payload }) => {
       state.order_list = payload
     },
@@ -79,6 +71,31 @@ export const productsSlice = createSlice({
 
     removeFilter: (state) => {
       state.filter_multi = ""
+    },
+
+    add_coupon_code: (state, { payload }) => {
+      state.coupon_code = payload
+    },
+
+    remove_coupon_code: (state) => {
+      state.coupon_code = ""
+    },
+
+    addLoginCart: (state, { payload }) => {
+      state.login_cart = payload;
+    },
+
+    removeLoginAddtocart: (state, { payload }) => {
+      state.login_cart = state.login_cart.filter((e) => e.id !== payload)
+    },
+
+    login_qtyIncrement_Decrement: (state, { payload }) => {
+      state.login_cart = state.login_cart.map((obj) => {
+        if (obj.product_id === parseInt(payload.id)) {
+          return { ...obj, qty: (obj.qty + payload.plusMinus) }
+        }
+        return obj
+      })
     },
 
 
@@ -94,13 +111,16 @@ export const {
   removeProductWishlist,
   addToCart,
   removeProductAddtocart,
-  qtyIncrementDecrement,
   removeAllAddtocart,
-  addLoginCart,
-  removeLoginAddtocart,
+  qtyIncrementDecrement,
   addOrderDetails,
   addFilterDetail,
-  removeFilter
+  removeFilter,
+  add_coupon_code,
+  remove_coupon_code,
+  addLoginCart,
+  removeLoginAddtocart,
+  login_qtyIncrement_Decrement
 
 } = productsSlice.actions;
 

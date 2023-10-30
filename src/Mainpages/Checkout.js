@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import ShippingAddress from '../Subpages/ShippingAddress';
-import { useSelector } from 'react-redux';
-import { CartList, CheckOutProduct } from '../Services/apiServices';
+import { useDispatch, useSelector } from 'react-redux';
+import { CartList, CheckOutProduct, GetCouponCode } from '../Services/apiServices';
+import { addLoginCart, add_coupon_code, remove_coupon_code } from '../store/reducers/ProductSlice';
 
 const Checkout = () => {
-    const { addto_cart } = useSelector((state) => ({ ...state.products }));
+    const dispatch = useDispatch();
+    const { addto_cart, coupon_code, login_cart } = useSelector((state) => ({ ...state.products }));
+
     const user = JSON.parse(localStorage.getItem('USER'));
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
@@ -13,14 +16,40 @@ const Checkout = () => {
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
     const [pincode, setPincode] = useState('');
-    const [checkOut, setCheckOut] = useState([]);
+    const [coupon, setCoupon] = useState('');
+    const [invaildCoupon, setInvaildCoupon] = useState('');
+    const countTotal = (items) => items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
 
     useEffect(() => {
         CartList().then((res) => {
-            console.log(res?.data);
-            setCheckOut(res?.data)
+            if (res.success) {
+                dispatch(addLoginCart(res?.data))
+            }
         })
+        if (coupon_code) {
+            setCoupon(coupon_code?.coupon_code)
+        }
     }, [])
+
+    const handleChange = (e) => {
+        if (!e.target.value) {
+            dispatch(remove_coupon_code())
+            setInvaildCoupon('')
+        }
+        setCoupon(e.target.value)
+    }
+
+    const handleCouponApply = () => {
+        GetCouponCode(coupon).then((res) => {
+            if (res?.success) {
+                dispatch(add_coupon_code(res?.data))
+                setInvaildCoupon('')
+            } else {
+                dispatch(remove_coupon_code())
+                setInvaildCoupon(res?.message)
+            }
+        })
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -33,12 +62,11 @@ const Checkout = () => {
             city: city,
             zip: pincode
         }
-        CheckOutProduct(data).then((res) => {
-            console.log(res);
-        })
+        console.log(data);
+        // CheckOutProduct(data).then((res) => {
+        //     console.log(res);
+        // })
     }
-
-    const countTotal = (items) => items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
 
     return (
         <>
@@ -538,7 +566,7 @@ const Checkout = () => {
                                                         :
                                                         <>
                                                             {
-                                                                checkOut?.map((e, index) => {
+                                                                login_cart?.map((e, index) => {
                                                                     return (
                                                                         <tr className="cart__table--body__items" key={index}>
                                                                             <td className="cart__table--body__list">
@@ -577,21 +605,25 @@ const Checkout = () => {
                                         </table>
                                     </div>
                                     <div className="checkout__discount--code">
-                                        <form className="d-flex" action="#">
+                                        <div className="d-flex">
                                             <label>
                                                 <input
                                                     className="checkout__discount--code__input--field border-radius-5"
+                                                    style={{ textTransform: "uppercase" }}
                                                     placeholder="Gift card or discount code"
                                                     type="text"
+                                                    value={coupon} onChange={handleChange}
                                                 />
                                             </label>
                                             <button
                                                 className="checkout__discount--code__btn primary__btn border-radius-5"
                                                 type="submit"
+                                                onClick={handleCouponApply}
                                             >
                                                 Apply
                                             </button>
-                                        </form>
+                                        </div>
+                                        <p className='ml-4'>{invaildCoupon}</p>
                                     </div>
                                     <div className="checkout__total">
                                         <table className="checkout__total--table">
@@ -608,11 +640,10 @@ const Checkout = () => {
                                                                 </>
                                                                 : <>
                                                                     {
-                                                                        <h4>{countTotal(checkOut)}/-</h4>
+                                                                        <h4>{countTotal(login_cart)}/-</h4>
                                                                     }
                                                                 </>
                                                         }
-
                                                     </td>
                                                 </tr>
                                                 <tr className="checkout__total--items">
@@ -620,7 +651,16 @@ const Checkout = () => {
                                                         Shipping
                                                     </td>
                                                     <td className="checkout__total--calculated__text text-right">
-                                                        FREE
+                                                        {
+                                                            user?.success !== true ?
+                                                                <>
+                                                                    {(countTotal(addto_cart)) * (coupon_code?.coupon_discount / 100) ? ((countTotal(addto_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : 0}/-
+                                                                </>
+                                                                :
+                                                                <>
+                                                                    {(countTotal(login_cart)) * (coupon_code?.coupon_discount / 100) ? ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : 0}/-
+                                                                </>
+                                                        }
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -633,12 +673,12 @@ const Checkout = () => {
                                                         {
                                                             user?.success !== true ?
                                                                 <>
-                                                                    <h4>{countTotal(addto_cart)}/-</h4>
+                                                                    {countTotal(addto_cart) - ((countTotal(addto_cart)) * (coupon_code?.coupon_discount / 100)) ? countTotal(addto_cart) - ((countTotal(addto_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : countTotal(addto_cart)}/-
+
                                                                 </>
-                                                                : <>
-                                                                    {
-                                                                        <h4>{countTotal(checkOut)}/-</h4>
-                                                                    }
+                                                                :
+                                                                <>
+                                                                    {countTotal(login_cart) - ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)) ? countTotal(login_cart) - ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : countTotal(login_cart)}/-
                                                                 </>
                                                         }
                                                     </td>

@@ -36,7 +36,7 @@ function App() {
         <Route path='/wishlist' element={<ProtectedRouteWishlist><WishList /></ProtectedRouteWishlist>} />
         <Route path='/my-account' element={<ProtectedRouteWishlist><MyAccount /></ProtectedRouteWishlist>} />
         <Route path='/cart' element={<Cart />} />
-        <Route path='/checkout' element={<Checkout />} />
+        <Route path='/checkout' element={<ProtectedRouteWishlist><Checkout /></ProtectedRouteWishlist>} />
         <Route path='/login' element={<ProtectedRouteLogin><Login /></ProtectedRouteLogin>} />
         <Route path='/vehicles' element={<CarMakers />} />
         <Route path='/brands' element={<BrandsAll />} />
