@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { AddReviewList, Add_Tocart_Login, SingleProductDetails } from "../Services/apiServices";
+import { AddReviewList, Add_Tocart_Login, SingleProductDetails, WishListLogin, WishListLoginDelete } from "../Services/apiServices";
 import ShippingAddress from "../Subpages/ShippingAddress";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -39,7 +39,7 @@ const SingleProductsDetails = () => {
 
     var productwishIdsArray = [];
     add_wish.forEach(function (obj) {
-        productwishIdsArray.push(obj.proId);
+        productwishIdsArray.push(obj.product_id);
     })
 
     var productIdsArray = [];
@@ -60,16 +60,13 @@ const SingleProductsDetails = () => {
         reviewOpen ? setReviewOpen(false) : setAddOpen(true)
     }
 
-    const handleWish = () => {
-        let data = {
-            proId: add_Details?.id,
-            price: add_Details?.original_price,
-            qty: 1,
-            name: add_Details?.name,
-            image: add_Details?.images[0].image,
-            stock: add_Details?.out_of_stock
-        }
-        dispatch(addToWishlist(data))
+    const handleWish = (id) => {
+        dispatch(addToWishlist({ product_id: id }))
+        WishListLoginDelete({ product_id: id }).then((res) => {
+            if (res.success) {
+                // dispatch(addToWishlist(res.data))
+            }
+        })
     }
 
     const handleAddcart = () => {
@@ -119,6 +116,9 @@ const SingleProductsDetails = () => {
 
     const removeElement = (id) => {
         dispatch(removeProductWishlist(id));
+        WishListLoginDelete({ product_id: id }).then((res) => {
+            console.log(res);
+        })
     };
 
     const handleSubmitReview = (event) => {
@@ -185,13 +185,14 @@ const SingleProductsDetails = () => {
                                         </button>
                                     )}
                                 >
-                                    {add_Details?.images?.map((e) => {
-                                        return (
-                                            <div className="image-container">
-                                                <img src={e?.image} />
-                                            </div>
-                                        )
-                                    })
+                                    {
+                                        add_Details?.images?.map((e) => {
+                                            return (
+                                                <div className="image-container">
+                                                    <img src={e?.image} />
+                                                </div>
+                                            )
+                                        })
                                     }
                                 </Carousel>
                             </div>
@@ -471,7 +472,7 @@ const SingleProductsDetails = () => {
                                                                 <div className='mb-4'>
                                                                     <BsHeart
                                                                         style={{ cursor: "pointer", fontSize: "20px" }}
-                                                                        onClick={() => handleWish()}
+                                                                        onClick={() => handleWish(add_Details?.id)}
                                                                     />
                                                                     <span className='ms-2'>
                                                                         Add to Wishlist

@@ -1,26 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import ShippingAddress from '../Subpages/ShippingAddress';
 import { useDispatch, useSelector } from 'react-redux';
-import { CartList, CheckOutProduct, GetCouponCode } from '../Services/apiServices';
-import { addLoginCart, add_coupon_code, remove_coupon_code } from '../store/reducers/ProductSlice';
+import { CartList,GetCouponCode } from '../Services/apiServices';
+import { addLoginCart, add_coupon_code, add_ship_details, remove_coupon_code } from '../store/reducers/ProductSlice';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Checkout = () => {
     const dispatch = useDispatch();
-    const { addto_cart, coupon_code, login_cart } = useSelector((state) => ({ ...state.products }));
+    const navigate = useNavigate();
+    const { addto_cart, coupon_code, login_cart, add_ship } = useSelector((state) => ({ ...state.products }));
 
     const user = JSON.parse(localStorage.getItem('USER'));
+    const [email, setEmail] = useState('');
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
     const [companyName, setCompanyName] = useState('');
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
+    const [country, setCountry] = useState('');
     const [pincode, setPincode] = useState('');
     const [coupon, setCoupon] = useState('');
     const [invaildCoupon, setInvaildCoupon] = useState('');
     const countTotal = (items) => items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
 
     useEffect(() => {
+    
         CartList().then((res) => {
             if (res.success) {
                 dispatch(addLoginCart(res?.data))
@@ -28,6 +33,22 @@ const Checkout = () => {
         })
         if (coupon_code) {
             setCoupon(coupon_code?.coupon_code)
+        }
+        if (user?.data?.mobile) {
+            setEmail(user?.data?.mobile)
+        } else {
+            setEmail(user?.data?.email)
+        }
+
+        if (add_ship) {
+            setFname(add_ship?.first_name);
+            setLname(add_ship?.last_name);
+            setCompanyName(add_ship?.company_name);
+            setAddress(add_ship?.address);
+            setCity(add_ship?.city);
+            setState(add_ship?.state);
+            setCountry(add_ship?.country);
+            setPincode(add_ship?.zip)
         }
     }, [])
 
@@ -60,12 +81,12 @@ const Checkout = () => {
             address: address,
             state: state,
             city: city,
-            zip: pincode
+            zip: pincode,
+            country: country,
         }
         console.log(data);
-        // CheckOutProduct(data).then((res) => {
-        //     console.log(res);
-        // })
+        dispatch(add_ship_details(data))
+        navigate('/review')
     }
 
     return (
@@ -102,12 +123,6 @@ const Checkout = () => {
                                                 <h2 className="section__header--title h3">
                                                     Contact information
                                                 </h2>
-                                                {/* <p className="layout__flex--item">
-                                                    Already have an account?
-                                                    <a className="layout__flex--item__link" href="/login">
-                                                        Log in
-                                                    </a>
-                                                </p> */}
                                             </div>
                                             <div className="customer__information">
                                                 <div className="checkout__email--phone mb-12">
@@ -116,6 +131,8 @@ const Checkout = () => {
                                                             className="checkout__input--field border-radius-5"
                                                             placeholder="Email or mobile phone mumber"
                                                             type="text"
+                                                            value={email}
+                                                            disabled
                                                         />
                                                     </label>
                                                 </div>
@@ -123,14 +140,14 @@ const Checkout = () => {
                                         </div>
                                         <div className="checkout__content--step section__shipping--address">
                                             <div className="section__header mb-25">
-                                                <h2 className="section__header--title h3">Billing Details</h2>
+                                                <h2 className="section__header--title h3">Shipping Details</h2>
                                             </div>
                                             <div className="section__shipping--address__content">
                                                 <div className="row">
                                                     <div className="col-lg-6 col-md-6 col-sm-6 mb-20">
                                                         <div className="checkout__input--list ">
                                                             <label
-                                                                className="checkout__input--label mb-5"
+                                                                className="checkout__input--label"
                                                                 htmlFor="input1"
                                                             >
                                                                 First Name
@@ -150,7 +167,7 @@ const Checkout = () => {
                                                     <div className="col-lg-6 col-md-6 col-sm-6 mb-20">
                                                         <div className="checkout__input--list">
                                                             <label
-                                                                className="checkout__input--label mb-5"
+                                                                className="checkout__input--label"
                                                                 htmlFor="input2"
                                                             >
                                                                 Last Name
@@ -170,7 +187,7 @@ const Checkout = () => {
                                                     <div className="col-12 mb-20">
                                                         <div className="checkout__input--list">
                                                             <label
-                                                                className="checkout__input--label mb-5"
+                                                                className="checkout__input--label"
                                                                 htmlFor="input3"
                                                             >
                                                                 Company Name
@@ -190,7 +207,7 @@ const Checkout = () => {
                                                     <div className="col-12 mb-20">
                                                         <div className="checkout__input--list">
                                                             <label
-                                                                className="checkout__input--label mb-5"
+                                                                className="checkout__input--label"
                                                                 htmlFor="input4"
                                                             >
                                                                 Address
@@ -200,26 +217,17 @@ const Checkout = () => {
                                                             </label>
                                                             <input
                                                                 className="checkout__input--field border-radius-5"
-                                                                placeholder="Address1"
+                                                                placeholder="Address"
                                                                 type="text"
                                                                 value={address}
                                                                 onChange={(e) => setAddress(e.target.value)}
                                                             />
                                                         </div>
                                                     </div>
-                                                    <div className="col-12 mb-20">
-                                                        <div className="checkout__input--list">
-                                                            <input
-                                                                className="checkout__input--field border-radius-5"
-                                                                placeholder="Apartment, suite, etc. (optional)"
-                                                                type="text"
-                                                            />
-                                                        </div>
-                                                    </div>
                                                     <div className="col-lg-6 mb-20">
                                                         <div className="checkout__input--list">
                                                             <label
-                                                                className="checkout__input--label mb-5"
+                                                                className="checkout__input--label"
                                                                 htmlFor="input5"
                                                             >
                                                                 City
@@ -239,7 +247,7 @@ const Checkout = () => {
                                                     <div className="col-lg-6 mb-20">
                                                         <div className="checkout__input--list">
                                                             <label
-                                                                className="checkout__input--label mb-5"
+                                                                className="checkout__input--label"
                                                                 htmlFor="input5"
                                                             >
                                                                 State
@@ -259,34 +267,27 @@ const Checkout = () => {
                                                     <div className="col-lg-6 mb-20">
                                                         <div className="checkout__input--list">
                                                             <label
-                                                                className="checkout__input--label mb-5"
-                                                                htmlFor="country"
+                                                                className="checkout__input--label"
+                                                                htmlFor="input6"
                                                             >
                                                                 Country/region
                                                                 <span className="checkout__input--label__star">
                                                                     *
                                                                 </span>
                                                             </label>
-                                                            <div className="checkout__input--select select">
-                                                                <select
-                                                                    className="checkout__input--select__field border-radius-5"
-                                                                    id="country"
-                                                                >
-                                                                    <option value={1}>India</option>
-                                                                    <option value={2}>United States</option>
-                                                                    <option value={3}>Netherlands</option>
-                                                                    <option value={4}>Afghanistan</option>
-                                                                    <option value={5}>Islands</option>
-                                                                    <option value={6}>Albania</option>
-                                                                    <option value={7}>Antigua Barbuda</option>
-                                                                </select>
-                                                            </div>
+                                                            <input
+                                                                className="checkout__input--field border-radius-5"
+                                                                placeholder="country"
+                                                                type="text"
+                                                                value={country}
+                                                                onChange={(e) => setCountry(e.target.value)}
+                                                            />
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6 mb-20">
                                                         <div className="checkout__input--list">
                                                             <label
-                                                                className="checkout__input--label mb-5"
+                                                                className="checkout__input--label"
                                                                 htmlFor="input6"
                                                             >
                                                                 Pin Code
@@ -297,7 +298,7 @@ const Checkout = () => {
                                                             <input
                                                                 className="checkout__input--field border-radius-5"
                                                                 placeholder="Pin code"
-                                                                type="text"
+                                                                type="number"
                                                                 value={pincode}
                                                                 onChange={(e) => setPincode(e.target.value)}
                                                             />
@@ -305,199 +306,6 @@ const Checkout = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <details>
-                                                <summary className="checkout__checkbox mb-20">
-                                                    <input
-                                                        className="checkout__checkbox--input"
-                                                        type="checkbox"
-                                                    />
-                                                    <span className="checkout__checkbox--checkmark" />
-                                                    <span className="checkout__checkbox--label">
-                                                        Ship to a different address?
-                                                    </span>
-                                                </summary>
-                                                {/* <div className="section__shipping--address__content">
-                                                    <div className="row">
-                                                        <div className="col-lg-6 col-md-6 col-sm-6 mb-20">
-                                                            <div className="checkout__input--list ">
-                                                                <label
-                                                                    className="checkout__input--label mb-5"
-                                                                    htmlFor="input7"
-                                                                >
-                                                                    Fist Name
-                                                                    <span className="checkout__input--label__star">
-                                                                        *
-                                                                    </span>
-                                                                </label>
-                                                                <input
-                                                                    className="checkout__input--field border-radius-5"
-                                                                    placeholder="First name (optional)"
-                                                                    id="input7"
-                                                                    type="text"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-lg-6 col-md-6 col-sm-6 mb-20">
-                                                            <div className="checkout__input--list">
-                                                                <label
-                                                                    className="checkout__input--label mb-5"
-                                                                    htmlFor="input8"
-                                                                >
-                                                                    Last Name
-                                                                    <span className="checkout__input--label__star">
-                                                                        *
-                                                                    </span>
-                                                                </label>
-                                                                <input
-                                                                    className="checkout__input--field border-radius-5"
-                                                                    placeholder="Last name"
-                                                                    id="input8"
-                                                                    type="text"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-12 mb-20">
-                                                            <div className="checkout__input--list">
-                                                                <label
-                                                                    className="checkout__input--label mb-5"
-                                                                    htmlFor="input9"
-                                                                >
-                                                                    Company Name
-                                                                    <span className="checkout__input--label__star">
-                                                                        *
-                                                                    </span>
-                                                                </label>
-                                                                <input
-                                                                    className="checkout__input--field border-radius-5"
-                                                                    placeholder="Company (optional)"
-                                                                    id="input9"
-                                                                    type="text"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-12 mb-20">
-                                                            <div className="checkout__input--list">
-                                                                <label
-                                                                    className="checkout__input--label mb-5"
-                                                                    htmlFor="input10"
-                                                                >
-                                                                    Address
-                                                                    <span className="checkout__input--label__star">
-                                                                        *
-                                                                    </span>
-                                                                </label>
-                                                                <input
-                                                                    className="checkout__input--field border-radius-5"
-                                                                    placeholder="Address1"
-                                                                    id="input10"
-                                                                    type="text"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-12 mb-20">
-                                                            <div className="checkout__input--list">
-                                                                <input
-                                                                    className="checkout__input--field border-radius-5"
-                                                                    placeholder="Apartment, suite, etc. (optional)"
-                                                                    type="text"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-12 mb-20">
-                                                            <div className="checkout__input--list">
-                                                                <label
-                                                                    className="checkout__input--label mb-5"
-                                                                    htmlFor="input11"
-                                                                >
-                                                                    Town/City
-                                                                    <span className="checkout__input--label__star">
-                                                                        *
-                                                                    </span>
-                                                                </label>
-                                                                <input
-                                                                    className="checkout__input--field border-radius-5"
-                                                                    placeholder="City"
-                                                                    id="input11"
-                                                                    type="text"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-lg-6 mb-20">
-                                                            <div className="checkout__input--list">
-                                                                <label
-                                                                    className="checkout__input--label mb-5"
-                                                                    htmlFor="country2"
-                                                                >
-                                                                    Country/region
-                                                                    <span className="checkout__input--label__star">
-                                                                        *
-                                                                    </span>
-                                                                </label>
-                                                                <div className="checkout__input--select select">
-                                                                    <select
-                                                                        className="checkout__input--select__field border-radius-5"
-                                                                        id="country2"
-                                                                    >
-                                                                        <option value={1}>India</option>
-                                                                        <option value={2}>United States</option>
-                                                                        <option value={3}>Netherlands</option>
-                                                                        <option value={4}>Afghanistan</option>
-                                                                        <option value={5}>Islands</option>
-                                                                        <option value={6}>Albania</option>
-                                                                        <option value={7}>Antigua Barbuda</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-lg-6 mb-20">
-                                                            <div className="checkout__input--list">
-                                                                <label
-                                                                    className="checkout__input--label mb-5"
-                                                                    htmlFor="input12"
-                                                                >
-                                                                    Postal Code
-                                                                    <span className="checkout__input--label__star">
-                                                                        *
-                                                                    </span>
-                                                                </label>
-                                                                <input
-                                                                    className="checkout__input--field border-radius-5"
-                                                                    placeholder="Postal code"
-                                                                    id="input12"
-                                                                    type="text"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div> */}
-                                            </details>
-                                            <div className="checkout__checkbox">
-                                                <input
-                                                    className="checkout__checkbox--input"
-                                                    id="checkbox2"
-                                                    type="checkbox"
-                                                />
-                                                <span className="checkout__checkbox--checkmark" />
-                                                <label
-                                                    className="checkout__checkbox--label"
-                                                    htmlFor="checkbox2"
-                                                >
-                                                    Save this information for next time
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div className="order-notes mb-20">
-                                            <label className="checkout__input--label mb-5" htmlFor="order">
-                                                Order Notes
-                                                <span className="checkout__input--label__star">*</span>
-                                            </label>
-                                            <textarea
-                                                className="checkout__notes--textarea__field border-radius-5"
-                                                id="order"
-                                                placeholder="Notes about your order, e.g. special notes for delivery."
-                                                spellCheck="false"
-                                                defaultValue={""}
-                                            />
                                         </div>
                                         <div className="checkout__content--step__footer d-flex align-items-center">
                                             <button
@@ -505,9 +313,9 @@ const Checkout = () => {
                                             >
                                                 Continue To Shipping
                                             </button>
-                                            <a className="previous__link--content" href="/cart">
+                                            <Link className="previous__link--content" to="/cart">
                                                 Return to cart
-                                            </a>
+                                            </Link>
                                         </div>
                                     </form>
                                 </div>
@@ -715,9 +523,6 @@ const Checkout = () => {
                                             </li>
                                         </ul>
                                     </div>
-                                    <button className="checkout__now--btn primary__btn" type="submit">
-                                        Checkout Now
-                                    </button>
                                 </aside>
                             </div>
                         </div>
@@ -725,7 +530,6 @@ const Checkout = () => {
                 </div>
                 <ShippingAddress />
             </main>
-
         </>
     )
 }

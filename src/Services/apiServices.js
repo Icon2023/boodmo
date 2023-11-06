@@ -166,6 +166,16 @@ export const AddReviewList = async (data) => {
 
 export const GetAddressUser = async () => {
     const response = await axios.get(`${BASE_URL}/api/address`, { headers: authHeader() });
+    if (response?.data) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}
+
+
+export const UpdateAddressUser = async (data) => {
+    const response = await axios.post(`${BASE_URL}/api/addresses`, data, { headers: authHeader() });
     if (response?.data?.success) {
         return response.data;
     } else {
@@ -173,8 +183,8 @@ export const GetAddressUser = async () => {
     }
 }
 
-export const UpdateAddressUser = async (data) => {
-    const response = await axios.post(`${BASE_URL}/api/addresses`, data, { headers: authHeader() });
+export const DeleteAddress = async (id) => {
+    const response = await axios.post(`${BASE_URL}/api/delete-address/${id}`, { headers: authHeader() });
     if (response?.data?.success) {
         return response.data;
     } else {
@@ -193,9 +203,50 @@ export const Coupon = async () => {
 
 export const GetCouponCode = async (data) => {
     const response = await axios.get(`${BASE_URL}/api/coupon/${data}`, data);
+    if (response?.data) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}
+
+export const WishListLogin = async () => {
+    const response = await axios.get(`${BASE_URL}/api/get-product-from-watchlist`, { headers: authHeader() });
     if (response?.data?.success) {
         return response.data;
     } else {
+        console.log("error");
+    }
+}
+
+
+export const WishListLoginDelete = async (data) => {
+    const response = await axios.post(`${BASE_URL}/api/add-remove-watchlist`, data, { headers: authHeader() });
+    console.log(response);
+    if (response?.data?.success) {
         return response.data;
+    } else {
+        console.log("error");
+    }
+}
+
+
+//  Order List ========================================================================================================================
+
+export const OrderList = async (data) => {
+    const response = await axios.post(`${BASE_URL}/api/make-orderid`, data);
+    if (response?.data?.success) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}
+
+export const OrderComplete = async (data) => {
+    const response = await axios.post(`${BASE_URL}/api/complete-order`, data , { headers: authHeader() });
+    if (response?.data?.success) {
+        return response.data;
+    } else {
+        console.log("error");
     }
 }

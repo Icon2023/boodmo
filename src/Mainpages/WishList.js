@@ -1,14 +1,28 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AiOutlineClose } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeProductWishlist } from '../store/reducers/ProductSlice';
+import { addToWishlist, removeAllItemWishlist, removeProductWishlist } from '../store/reducers/ProductSlice';
+import ShippingAddress from '../Subpages/ShippingAddress';
+import { WishListLogin, WishListLoginDelete } from '../Services/apiServices';
 
 const WishList = () => {
     const dispatch = useDispatch();
     const { add_wish } = useSelector((state) => ({ ...state.products }));
 
+    useEffect(() => {
+        WishListLogin().then((res) => {
+            if (res.success) {
+                dispatch(removeAllItemWishlist())
+                dispatch(addToWishlist(res?.data))
+            }
+        })
+    }, [])
+
     const removeElement = (id) => {
         dispatch(removeProductWishlist(id))
+        WishListLoginDelete({ product_id: id }).then((res) => {
+        })
+
     };
     return (
         <>
@@ -68,41 +82,35 @@ const WishList = () => {
                                                                                 className="cart__remove--btn"
                                                                                 aria-label="search button"
                                                                                 type="button"
-                                                                                onClick={() => removeElement(e?.proId)}
+                                                                                onClick={() => removeElement(e?.product_id)}
                                                                             >
                                                                                 <AiOutlineClose />
                                                                             </button>
                                                                             <div className="cart__thumbnail">
-                                                                                <a href={`/productsdetail/${e?.proId}`}>
-                                                                                    <img
-                                                                                        className="border-radius-5"
-                                                                                        src={e?.image}
-                                                                                        alt="cart-product"
-                                                                                    />
-                                                                                </a>
+                                                                                {/* <a href={`/productsdetail/${e?.product_id}`}> */}
+                                                                                <img
+                                                                                    className="border-radius-5"
+                                                                                    src={e?.product?.images[0]?.image}
+                                                                                    alt="cart-product"
+                                                                                />
+                                                                                {/* </a> */}
                                                                             </div>
                                                                             <div className="cart__content">
                                                                                 <h3 className="cart__content--title h4">
-                                                                                    <a href={`/productsdetail/${e?.proId}`}>
-                                                                                        {e?.name}
+                                                                                    <a href={`/productsdetail/${e?.product_id}`}>
+                                                                                        {e?.product?.name}
                                                                                     </a>
                                                                                 </h3>
-                                                                                <span className="cart__content--variant">
-                                                                                    COLOR: Blue
-                                                                                </span>
-                                                                                <span className="cart__content--variant">
-                                                                                    WEIGHT: 2 Kg
-                                                                                </span>
                                                                             </div>
                                                                         </div>
                                                                     </td>
                                                                     <td className="cart__table--body__list">
-                                                                        <span className="cart__price">{e?.price}/-</span>
+                                                                        <span className="cart__price">{e?.product?.selling_price}/-</span>
                                                                     </td>
                                                                     <td className="cart__table--body__list text-center">
                                                                         <span className="in__stock text__secondary">
                                                                             {
-                                                                                e?.stock === 0 ? " in stock" : "Out Of Stock"
+                                                                                e?.product?.out_of_stock === 0 ? " in stock" : "Out Of Stock"
                                                                             }
 
                                                                         </span>
@@ -110,7 +118,7 @@ const WishList = () => {
                                                                     <td className="cart__table--body__list text-center">
                                                                         <a
                                                                             className="wishlist__cart--btn primary__btn"
-                                                                            href={`/productsdetail/${e?.proId}`}>
+                                                                            href={`/productsdetail/${e?.product_id}`}>
                                                                             View Details
                                                                         </a>
                                                                     </td>
@@ -134,50 +142,7 @@ const WishList = () => {
                 </section>
 
                 {/* Start shipping section */}
-                <section className="shipping__section">
-                    <div className="container">
-                        <div className="shipping__inner style2 d-flex">
-                            <div className="shipping__items style2 d-flex align-items-center">
-                                <div className="shipping__icon">
-                                    <img src="assets/img/other/shipping1.webp" alt="icon-img" />
-                                </div>
-                                <div className="shipping__content">
-                                    <h2 className="shipping__content--title h3">Free Shipping</h2>
-                                    <p className="shipping__content--desc">Free shipping over $100</p>
-                                </div>
-                            </div>
-                            <div className="shipping__items style2 d-flex align-items-center">
-                                <div className="shipping__icon">
-                                    <img src="assets/img/other/shipping2.webp" alt="icon-img" />
-                                </div>
-                                <div className="shipping__content">
-                                    <h2 className="shipping__content--title h3">Support 24/7</h2>
-                                    <p className="shipping__content--desc">Contact us 24 hours a day</p>
-                                </div>
-                            </div>
-                            <div className="shipping__items style2 d-flex align-items-center">
-                                <div className="shipping__icon">
-                                    <img src="assets/img/other/shipping3.webp" alt="icon-img" />
-                                </div>
-                                <div className="shipping__content">
-                                    <h2 className="shipping__content--title h3">100% Money Back</h2>
-                                    <p className="shipping__content--desc">
-                                        You have 30 days to Return
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="shipping__items style2 d-flex align-items-center">
-                                <div className="shipping__icon">
-                                    <img src="assets/img/other/shipping4.webp" alt="icon-img" />
-                                </div>
-                                <div className="shipping__content">
-                                    <h2 className="shipping__content--title h3">Payment Secure</h2>
-                                    <p className="shipping__content--desc">We ensure secure payment</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <ShippingAddress />
 
             </main>
 

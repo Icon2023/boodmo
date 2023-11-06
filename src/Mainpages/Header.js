@@ -3,11 +3,13 @@ import { AiOutlineClose, AiOutlineHeart, AiOutlineHome, AiOutlineLogout, AiOutli
 import { IoIosArrowDown, IoMdContact } from 'react-icons/io'
 import { BiLogoFacebook, BiLogoInstagramAlt, BiLogoPinterest, BiLogoTwitter, BiLogoYoutube } from 'react-icons/bi'
 import { BsShop } from 'react-icons/bs'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Drawer from 'react-modern-drawer';
+import { Link } from 'react-router-dom'
+import { removeAllItemWishlist, removeAllLoginCart } from '../store/reducers/ProductSlice'
 
 const Header = () => {
-
+    const dispatch = useDispatch();
     const { add_wish, addto_cart, login_cart } = useSelector((state) => ({ ...state.products }));
     const user = JSON.parse(localStorage.getItem('USER'));
     const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +33,8 @@ const Header = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('USER')
-        window.location.reload();
+        dispatch(removeAllItemWishlist())
+        dispatch(removeAllLoginCart())
     }
 
     const toggleDrawer = () => {
@@ -88,13 +91,13 @@ const Header = () => {
                             <div className="header__top--right d-flex align-items-center">
                                 <ul className="header__top--link d-flex align-items-center">
                                     <li className="header__link--menu">
-                                        <a
+                                        <Link
                                             className="header__link--menu__text text-white"
-                                            href="/wishlist"
+                                            to="/wishlist"
                                         >
                                             <AiOutlineHeart style={{ fontSize: "20px" }} />
                                             Wishlist
-                                        </a>
+                                        </Link>
                                     </li>
                                 </ul>
                                 <ul className="social__share style5 d-flex">
@@ -189,19 +192,30 @@ const Header = () => {
                                             </a>
                                             <ul className="header__sub--menu">
                                                 <li className="header__sub--menu__items">
-                                                    <a href="/cart" className="header__sub--menu__link">
-                                                        Cart
-                                                    </a>
+                                                    {
+                                                        user?.success === true ?
+                                                            <Link to="/my-orders" className="header__sub--menu__link">
+                                                                My Orders
+                                                            </Link> : ""
+                                                    }
                                                 </li>
                                                 <li className="header__sub--menu__items">
                                                     {
-                                                        user?.success === true ? <li className="header__sub--menu__items">
-                                                            <a href="/wishlist" className="header__sub--menu__link">
-                                                                Wishlist
-                                                            </a>
-                                                        </li> : ""
+                                                        user?.success === true ?
+                                                            <Link to="/my-address" className="header__sub--menu__link">
+                                                                My Address
+                                                            </Link>
+                                                            : ""
                                                     }
                                                 </li>
+
+                                                {
+                                                    user?.success !== true ? <li className="header__sub--menu__items">
+                                                        <a href="/login" className="header__sub--menu__link">
+                                                            Login
+                                                        </a>
+                                                    </li> : ""
+                                                }
                                                 <li className="header__sub--menu__items">
                                                     <a
                                                         href="/privacy-policy"
@@ -210,17 +224,6 @@ const Header = () => {
                                                         Privacy Policy
                                                     </a>
                                                 </li>
-                                                {
-                                                    user?.success !== true ? <li className="header__sub--menu__items">
-                                                        <a href="/login" className="header__sub--menu__link">
-                                                            Login
-                                                        </a>
-                                                    </li> : <li className="header__sub--menu__items">
-                                                        <a href="/my-account" className="header__sub--menu__link">
-                                                            My Account
-                                                        </a>
-                                                    </li>
-                                                }
 
                                             </ul>
                                         </li>
@@ -256,12 +259,12 @@ const Header = () => {
                                         }
                                     </li>
                                     <li className="header__account--items d-none d-lg-block">
-                                        <a className="header__account--btn" href="/wishlist">
+                                        <Link className="header__account--btn" to="/wishlist">
                                             <AiOutlineHeart style={{ fontSize: "28px" }} />
                                             {
                                                 add_wish?.length !== 0 ? <span className="items__count">{add_wish.length}</span> : ""
                                             }
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li className="header__account--items header__minicart--items m-3">
                                         <a
@@ -317,26 +320,13 @@ const Header = () => {
                             </a>
                         </li>
                         <li className="offcanvas__stikcy--toolbar__list">
-                            <a
-                                className="offcanvas__stikcy--toolbar__btn minicart__open--btn"
-                                href="/cart"
-                                data-offcanvas=""
-                            >
-                                <AiOutlineShoppingCart style={{ fontSize: "20px" }} />
-                                <span className="offcanvas__stikcy--toolbar__label">Cart</span>
-                                {
-                                    addto_cart?.length !== 0 ? <span className="items__count">{addto_cart?.length}</span> : ""
-                                }
-                            </a>
-                        </li>
-                        <li className="offcanvas__stikcy--toolbar__list">
-                            <a className="offcanvas__stikcy--toolbar__btn" href="/wishlist">
+                            <Link className="offcanvas__stikcy--toolbar__btn" to="/wishlist">
                                 <AiOutlineHeart style={{ fontSize: "24px" }} />
                                 <span className="offcanvas__stikcy--toolbar__label">Wishlist</span>
                                 {
                                     add_wish?.length !== 0 ? <span className="items__count">{add_wish?.length}</span> : ""
                                 }
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
@@ -416,7 +406,7 @@ const Header = () => {
                     >
                         <div className="offcanvas__inner">
                             <div className="offcanvas__logo">
-                                <a className="offcanvas__logo_link" href="index.html">
+                                <a className="offcanvas__logo_link" href="/">
                                     <img
                                         src="assets/img/logo/nav-log.webp"
                                         alt="Grocee Logo"
@@ -429,59 +419,72 @@ const Header = () => {
                             <nav className="offcanvas__menu">
                                 <ul className="offcanvas__menu_ul">
                                     <li className="offcanvas__menu_li">
-                                        <a className="offcanvas__menu_item" href="/">
+                                        <Link className="offcanvas__menu_item" to="/">
                                             Home
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li className="offcanvas__menu_li">
-                                        <a className="offcanvas__menu_item" href="shop.html">
+                                        <Link className="offcanvas__menu_item" to="/shop">
                                             Shop
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li className="offcanvas__menu_li">
-                                        <a className="offcanvas__menu_item" href="about.html">
-                                            About
-                                        </a>
+                                        <Link className="offcanvas__menu_item" to="/my-account">
+                                            My Account
+                                        </Link>
                                     </li>
                                     <li className="offcanvas__menu_li">
-                                        <a className="offcanvas__menu_item" href="contact.html">
-                                            Contact
-                                        </a>
+                                        <Link className="offcanvas__menu_item" to="/privacy-policy">
+                                            Privacy Policy
+                                        </Link>
                                     </li>
                                 </ul>
                                 <div className="offcanvas__account--items">
-                                    <a
-                                        className="offcanvas__account--items__btn d-flex align-items-center"
-                                        href="login.html"
-                                    >
-                                        <span className="offcanvas__account--items__icon">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="20.51"
-                                                height="19.443"
-                                                viewBox="0 0 512 512"
-                                            >
-                                                <path
-                                                    d="M344 144c-3.92 52.87-44 96-88 96s-84.15-43.12-88-96c-4-55 35-96 88-96s92 42 88 96z"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth={32}
-                                                />
-                                                <path
-                                                    d="M256 304c-87 0-175.3 48-191.64 138.6C62.39 453.52 68.57 464 80 464h352c11.44 0 17.62-10.48 15.65-21.4C431.3 352 343 304 256 304z"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeMiterlimit={10}
-                                                    strokeWidth={32}
-                                                />
-                                            </svg>
-                                        </span>
-                                        <span className="offcanvas__account--items__label">
-                                            Login / Register
-                                        </span>
-                                    </a>
+                                    {
+                                        user?.success !== true ?
+                                            <>
+                                                <Link
+                                                    to="/login"
+                                                    className="offcanvas__account--items__btn d-flex align-items-center"
+                                                >
+                                                    <span className="offcanvas__account--items__icon">
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="20.51"
+                                                            height="19.443"
+                                                            viewBox="0 0 512 512"
+                                                        >
+                                                            <path
+                                                                d="M344 144c-3.92 52.87-44 96-88 96s-84.15-43.12-88-96c-4-55 35-96 88-96s92 42 88 96z"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth={32}
+                                                            />
+                                                            <path
+                                                                d="M256 304c-87 0-175.3 48-191.64 138.6C62.39 453.52 68.57 464 80 464h352c11.44 0 17.62-10.48 15.65-21.4C431.3 352 343 304 256 304z"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                strokeMiterlimit={10}
+                                                                strokeWidth={32}
+                                                            />
+                                                        </svg>
+                                                    </span>
+                                                    <span className="offcanvas__account--items__label">
+                                                        Login / Register
+                                                    </span>
+                                                </Link>
+                                            </>
+                                            :
+                                            <>
+                                                <Link onClick={handleLogout}>
+                                                    <span className="offcanvas__account--items__label">
+                                                        Logout
+                                                    </span>
+                                                </Link>
+                                            </>
+                                    }
                                 </div>
                             </nav>
                         </div>

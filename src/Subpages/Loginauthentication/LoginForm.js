@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import HideShow from "../../Utils/HideShow";
 import { Alert } from "@mui/material";
-import { Add_Tocart_Login, LogIn } from "../../Services/apiServices";
+import { Add_Tocart_Login, CartList, LogIn, WishListLogin } from "../../Services/apiServices";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { removeAllAddtocart } from "../../store/reducers/ProductSlice";
+import { addLoginCart, addToWishlist, removeAllAddtocart, removeAllItemWishlist } from "../../store/reducers/ProductSlice";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -24,9 +24,10 @@ const LoginForm = () => {
       password: password
     }
     LogIn(data).then((res) => {
-      localStorage.setItem("USER", JSON.stringify(res));
       if (res.success) {
+        localStorage.setItem("USER", JSON.stringify(res));
 
+        // add to cart if any item availble in cartlist
         if (addto_cart.length > 0) {
           addto_cart.map((obj) => {
             const cartPayload = {
@@ -41,7 +42,15 @@ const LoginForm = () => {
           dispatch(removeAllAddtocart())
         }
 
-        localStorage.setItem("USER", JSON.stringify(res));
+        // get wishlist when user login
+        WishListLogin().then((res)=>{
+          dispatch(addToWishlist(res?.data))
+        })
+
+        CartList().then((res)=>{
+          dispatch(addLoginCart(res?.data))
+        })
+        
         navigate("/");
       } else {
         setError(res.message);
