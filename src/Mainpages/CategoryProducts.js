@@ -11,6 +11,9 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ShippingAddress from '../Subpages/ShippingAddress'
+// import categoryPlaceholder from "../images/categoryPlaceholder.svg";
+// import Placeholder from "../images/Placeholder.svg";
+import Placeholder_view from "../images/Placeholder_view_vector.svg";
 
 const CategoryProducts = () => {
     const dispatch = useDispatch();
@@ -18,14 +21,18 @@ const CategoryProducts = () => {
     const [expanded, setExpanded] = useState(false);
     const { single_category, category_list } = useSelector((state) => ({ ...state.products }));
     const [isOpen, setIsOpen] = useState(false)
+    const [isLoadingImage, setIsLoadingImage] = useState(true);
 
     useEffect(() => {
         CategoryProduct(id).then((res) => {
             if (res.success) {
+                setIsLoadingImage(false);
                 dispatch(addSingleCategory(res?.data));
             }
         }).catch((e) => {
             console.log(e);
+            setIsLoadingImage(true);
+            
         })
     }, [])
 
@@ -52,7 +59,7 @@ const CategoryProducts = () => {
                                             <a href="/">Home</a>
                                         </li>
                                         <li className="breadcrumb__content--menu__items">
-                                            <span>Product</span>
+                                            <span>ategory</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -143,11 +150,27 @@ const CategoryProducts = () => {
                                                                 href={`/shop/${id}/${e?.id}`}
                                                             >
                                                                 <div className="categories__thumbnail mb-15">
+                                                                    {
+                                                                        isLoadingImage ? 
+                                                                    <>
                                                                     <img
-                                                                        className="categories__thumbnail--img"
-                                                                        src={e?.image}
-                                                                        alt="categories-img"
+                                                                    // src={"https://via.placeholder.com/300x200/f0f0f0"}
+                                                                    src={Placeholder_view}
+                                                                    width={300}
+                                                                    height={200}
+                                                                    alt="categories-img-placeholder"
                                                                     />
+                                                                    </>:
+                                                                    <>
+                                                                    <img
+                                                                    className="categories__thumbnail--img"
+                                                                    src={e?.image}
+                                                                    alt="categories-img"
+                                                                />
+                                                                </>
+                                                                    }
+                                                                    
+                                                                    
                                                                 </div>
                                                                 <div className="categories__content">
                                                                     <h2 className="categories__content--title">{e?.name}</h2>

@@ -25,6 +25,8 @@ import MyAddress from './Mainpages/MyAddress';
 import 'react-modern-drawer/dist/index.css';
 import "../node_modules/slick-carousel/slick/slick.css";
 import "../node_modules/slick-carousel/slick/slick-theme.css";
+import Contact from './Mainpages/contact'
+import ThankYou from './Subpages/ThankYou'
 
 
 function App() {
@@ -40,7 +42,6 @@ function App() {
           <Route path='/productsdetail/:id' element={<SingleProductsDetails />} />
 
           <Route path='/wishlist' element={<ProtectedRouteWishlist><WishList /></ProtectedRouteWishlist>} />
-          {/* <Route path='/my-account' element={<ProtectedRouteWishlist><MyAccount /></ProtectedRouteWishlist>} /> */}
           <Route path='/checkout' element={<ProtectedRouteWishlist><Checkout /></ProtectedRouteWishlist>} />
           <Route path='/review' element={<ProtectedRouteWishlist><Review /></ProtectedRouteWishlist>} />
           <Route path='/my-orders' element={<ProtectedRouteWishlist><MyOrders /></ProtectedRouteWishlist>} />
@@ -52,6 +53,8 @@ function App() {
           <Route path='/brands' element={<BrandsAll />} />
           <Route path='/privacy-policy' element={<PrivacyPolicy />} />
           <Route path='/about-us' element={<About />} />
+          <Route path='/contact-us' element={<Contact />} />
+          <Route path='/thank-you' element={<ThankYou />} />
           <Route path='*' element={<Page404 />} />
         </Routes>
       </main>

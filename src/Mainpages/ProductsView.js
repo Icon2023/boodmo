@@ -7,6 +7,7 @@ import { CgMenuGridR } from "react-icons/cg";
 import { TfiMenuAlt } from "react-icons/tfi";
 import { AiFillStar, AiOutlineFilter, AiOutlineStar } from "react-icons/ai";
 import Drawer from 'react-modern-drawer';
+import Placeholder_view from "../images/Placeholder_view_vector.svg";
 
 
 //matrial ui 
@@ -33,12 +34,32 @@ const ProductsView = () => {
     const [brands, setBrands] = useState([]);
     const [isMore, setIsMore] = useState(false);
     const [selectedValues, setSelectedValues] = useState([]);
+    const [isLoadingImage, setIsLoadingImage] = useState(true);
+    const [selectedBrands, setSelectedBrands] = useState([]);
 
     useEffect(() => {
         dispatch(removeFilter())
     }, [])
 
     useEffect(() => {
+        const lists = localStorage.getItem('list');
+        const grids = localStorage.getItem('grid');
+
+        const storedSelectedValues = JSON.parse(localStorage.getItem('selectedValues'));
+        if (storedSelectedValues) {
+            setSelectedValues(storedSelectedValues);
+        }
+        console.log('Selected Values:', storedSelectedValues); // Add this line for debugging
+        console.log("ss",selectedValues );
+
+        if (lists) {
+            setGridOpen(false)
+            setTrifOpen(true)
+        }
+        if (grids) {
+            setGridOpen(true)
+            setTrifOpen(false)
+        }
         if (filter_multi.length < 1) {
             const data = {
                 category: cate_id,
@@ -46,8 +67,11 @@ const ProductsView = () => {
             }
             Product(data).then((res) => {
                 if (res.success) {
+                    setIsLoadingImage(false)
                     dispatch(addProducts(res?.data))
                 }
+            }).catch(()=>{
+                setIsLoadingImage(true)
             })
 
         } else {
@@ -90,9 +114,13 @@ const ProductsView = () => {
     };
     const handleGridClick = () => {
         gridOpen ? setTrifOpen(false) : setGridOpen(true)
+        localStorage.setItem('grid', gridOpen);
+        localStorage.removeItem('list', trifOpen);
     }
     const handleTfiClick = () => {
         gridOpen ? setGridOpen(false) : setTrifOpen(true)
+        localStorage.setItem('list', trifOpen);
+        localStorage.removeItem('grid', gridOpen);
     }
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -185,6 +213,7 @@ const ProductsView = () => {
                                             <a onClick={handleReset} className="ms-5 mt-1" style={{ textDecoration: "underline", color: "red" }}>Reset</a>
                                         </div>
                                         <hr />
+                                        <form onSubmit={handleSubmit}>
                                         <div>
                                             <h3>Brand</h3>
                                             {
@@ -238,7 +267,6 @@ const ProductsView = () => {
                                                 isMore == false ? <a onClick={handleLoad} style={{ fontWeight: "bold" }}>+{brands?.length} More</a> : <a onClick={handleLoad} style={{ fontWeight: "bold" }}>Less</a>
                                             }
                                         </div>
-                                        <form onSubmit={handleSubmit}>
                                             <h3 className='mt-4'>Price</h3>
                                             <div className='form_filter'>
                                                 <label>
@@ -252,6 +280,7 @@ const ProductsView = () => {
                                             <div className='form_filter_btn'>
                                                 <button>Filter</button>
                                             </div>
+                                        
                                         </form>
                                     </div>
                                     <div className="single__widget widget__bg">
@@ -387,7 +416,19 @@ const ProductsView = () => {
                                                                                                     className="product__card--thumbnail__link display-block"
                                                                                                     href={`/productsdetail/${e?.id}`}
                                                                                                 >
-                                                                                                    <img
+                                                                                                    {
+                                                                                                        isLoadingImage ? <>
+                                                                                                        <img
+                                                                                                                // src={"https://via.placeholder.com/300x200/f0f0f0"}
+                                                                                                                src={Placeholder_view}
+                                                                                                                width={300}
+                                                                                                                height={200}
+                                                                                                                alt="categories-img-placeholder"
+                                                                                                                />
+                                                                                                        </>
+                                                                                                        :
+                                                                                                        <>
+                                                                                                        <img
                                                                                                         className="product__card--thumbnail__img product__primary--img"
                                                                                                         src={e?.images[0]?.image}
                                                                                                         alt="product-img"
@@ -397,6 +438,9 @@ const ProductsView = () => {
                                                                                                         src={e?.images[1]?.image}
                                                                                                         alt="product-img"
                                                                                                     />
+                                                                                                        </>
+                                                                                                    }
+                                                                                                    
                                                                                                 </a>
                                                                                                 {e?.discount &&
                                                                                                     <span className="product__badge">{e?.discount}%</span>
@@ -558,11 +602,27 @@ const ProductsView = () => {
                                                                                                     className="product__card--thumbnail__link display-block"
                                                                                                     href={`/productsdetail/${e?.id}`}
                                                                                                 >
-                                                                                                    <img
+                                                                                                    {
+                                                                                                        isLoadingImage ?
+                                                                                                        <>
+                                                                                                        <img
+                                                                    // src={"https://via.placeholder.com/300x200/f0f0f0"}
+                                                                    src={Placeholder_view}
+                                                                    width={300}
+                                                                    height={200}
+                                                                    alt="categories-img-placeholder"
+                                                                    />
+                                                                                                        </>
+                                                                                                        :
+                                                                                                        <>
+                                                                                                        <img
                                                                                                         className="product__card--thumbnail__img product__primary--img"
                                                                                                         src={e?.images[0]?.image}
                                                                                                         alt="product-img"
                                                                                                     />
+                                                                                                    
+                                                                                                        </>
+                                                                                                    }
                                                                                                     <img
                                                                                                         className="product__card--thumbnail__img product__secondary--img"
                                                                                                         src={e?.images[1]?.image}

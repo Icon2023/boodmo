@@ -13370,3 +13370,73 @@ details>summary::-webkit-details-marker {
         padding: 18px 15px !important;
     }
 }
+
+
+  /* ******************* Ex-1 Thank You Page ************ */
+
+
+.thank-you-main {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .image-container-thank-you {
+    position: relative;
+    text-align: center;
+  }
+  
+  .image-container-thank-you img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .centered-text-thank-you {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* background-color: rgba(255, 255, 255, 0.7); */
+    color:rgba(255, 255, 255, 0.7) ;
+    padding: 20px; /* Optional: Add padding to the text */
+  }
+
+  /* ******************* Ex-2 Thank You Page ************ */
+  .thank_you {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 60px;
+    text-align: center;
+    width: 500px;
+    border-radius: 10px;
+  }
+  
+  .thank_btn button {
+    padding: 10px 30px;
+    background-color: lightcoral;
+    color: #fff;
+    margin-bottom: 50px;
+    background-color: 5px;
+    border-radius: 5px;
+    border:none;
+  }
+  
+  .thank_btn button:hover {
+    background-color: white;
+    color: lightcoral;
+    border: 1px solid lightcoral;
+    transition: 0.3s;
+  }
+
+  .txt--gradient-green {
+    background-image: linear-gradient(to right, #16d6d9, #96cc29);
+    color: rgba(0, 0, 0, 0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    position: relative;
+    font-weight: 800;
+  }

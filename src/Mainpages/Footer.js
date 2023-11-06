@@ -229,9 +229,9 @@ const Footer = () => {
                                     </h2>
                                     <ul className="footer__widget--menu footer__widget--inner">
                                         <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="contact.html">
+                                            <Link className="footer__widget--menu__text" to="contact-us">
                                                 Contact Us
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li className="footer__widget--menu__list">
                                             <Link className="footer__widget--menu__text" to="/about-us">
