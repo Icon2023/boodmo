@@ -60,17 +60,19 @@ const RegisterForm = () => {
     let data = {
       type: type,
       ...type === "email" ? { email: email } : { mobile: number },
-      password: password
+      password: password,
+      device_type:'web',
+      device_token:'fdgdfsgdfg'
     }
     if (password === conpassword) {
       Register(data).then((res) => {
         console.log("res----", res);
-        if (!res.success) {
-          setError(res.message);
-        } else {
+        if (res.success) {
           localStorage.setItem("USER", JSON.stringify(res));
           navigate("/");
           window.location.reload();
+        } else {
+          setError(res.message);
         }
       });
     }else{

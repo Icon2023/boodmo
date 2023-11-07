@@ -228,7 +228,7 @@ const Header = () => {
                                             </ul>
                                         </li>
                                         <li className="header__menu--items">
-                                            <a className="header__menu--link" href="contact.html">
+                                            <a className="header__menu--link" href="/contact-us">
                                                 Contact
                                             </a>
                                         </li>

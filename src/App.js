@@ -22,11 +22,11 @@ import Page404 from './Mainpages/Page404';
 import Review from './Mainpages/Review';
 import MyOrders from './Mainpages/MyOrders';
 import MyAddress from './Mainpages/MyAddress';
+import ThankYou from './Subpages/ThankYou'
+import Contact from './Mainpages/contact'
 import 'react-modern-drawer/dist/index.css';
 import "../node_modules/slick-carousel/slick/slick.css";
 import "../node_modules/slick-carousel/slick/slick-theme.css";
-import Contact from './Mainpages/contact'
-import ThankYou from './Subpages/ThankYou'
 
 
 function App() {

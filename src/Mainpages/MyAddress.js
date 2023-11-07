@@ -1,24 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import ShippingAddress from '../Subpages/ShippingAddress'
-import { GetAddressUser, UpdateAddressUser } from '../Services/apiServices'
+import { AddAddressUser, DeleteAddress, GetAddressUser } from '../Services/apiServices'
 import { useDispatch, useSelector } from 'react-redux';
-import { add_ship_details } from '../store/reducers/ProductSlice';
+import { add_ship_details, removeAddress } from '../store/reducers/ProductSlice';
+import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 
 const MyAddress = () => {
     const dispatch = useDispatch();
     const { add_ship } = useSelector((state) => ({ ...state.products }));
     const [isOpen, setIsOpen] = useState(false);
-    const [trifOpen, setTrifOpen] = useState(true);
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
     const [mobile, setMobile] = useState('');
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
+    const [country, setCountry] = useState('');
     const [pincode, setPincode] = useState('');
     const [add_title, setAdd_title] = useState('');
 
     useEffect(() => {
+        GetAddress();
+    }, [])
+
+
+    const GetAddress = () => {
         GetAddressUser().then((res) => {
             if (res?.success) {
                 dispatch(add_ship_details(res?.data))
@@ -26,19 +32,7 @@ const MyAddress = () => {
                 console.log("hello");
             }
         })
-        // if (add_ship) {
-        //     setFname(add_ship[0]?.first_name);
-        //     setLname(add_ship[0]?.last_name)
-        //     setAddress(add_ship[0]?.address)
-        //     setCity(add_ship[0]?.city)
-        //     setPincode(add_ship[0]?.pincode)
-        //     setMobile(add_ship[0]?.mobile)
-        //     setState(add_ship[0]?.state)
-        //     setAdd_title(add_ship[0]?.address_title)
-        // }
-    }, [])
-
-
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -51,11 +45,32 @@ const MyAddress = () => {
             state: state,
             city: city,
             country: city,
-            address_title: add_title
+            address_title: add_title,
+            country:country
         }
-        UpdateAddressUser(data).then((res) => {
+        AddAddressUser(data).then((res) => {
+            GetAddress();
+            setIsOpen(false)
+            setFname('')
+            setLname('')
+            setMobile('')
+            setAddress('')
+            setCity('')
+            setState('')
+            setCountry('')
+            setPincode('')
+            setAdd_title('')
+        })
+    }
+
+    const handleOpenNewAddress = () => {
+        isOpen === false ? setIsOpen(true) : setIsOpen(false)
+    }
+
+    const handleAddressRemove = (id) => {
+        dispatch(removeAddress(id))
+        DeleteAddress(id).then((res) => {
             console.log(res);
-            dispatch(add_ship_details(res?.data))
         })
     }
 
@@ -85,16 +100,28 @@ const MyAddress = () => {
                 <div className="container">
                     <div className="my__account--section__inner border-radius-10 d-flex">
                         <div className="account__wrapper">
-                            <h2 className="section__header--title h3">Shipping Details</h2>
-                            {/* {
-                                add_ship?.map((e, index) => {
-                                    return (
-                                        <div className='ship_multiple_box'>
-                                            <h3>{e?.first_name}</h3>
-                                        </div>
-                                    )
-                                })
-                            } */}
+                            <h2 className="section__header--title h3">My Shipping Details</h2>
+                            <div className='d-flex' style={{ gap: "20px", flexWrap: "wrap" }}>
+                                {
+                                    add_ship?.map((e, index) => {
+                                        return (
+                                            <>
+                                                <div className='ship_multiple_box mt-5' key={index}>
+                                                    <div className='d-flex justify-content-between'>
+                                                        <h3>{e?.name}</h3>
+                                                        <AiOutlineClose style={{ cursor: "pointer" }} onClick={() => handleAddressRemove(e?.id)} />
+                                                    </div>
+                                                    <p>{e?.address}  - {e?.mobile}</p>
+                                                    <p>{e?.city},{e?.state},{e?.country}</p>
+                                                </div>
+                                            </>
+                                        )
+                                    })
+                                }
+                                <div className='Add_ship'>
+                                    <h3 className='text-center'  onClick={handleOpenNewAddress}><AiOutlinePlus className='mb-1' style={{ fontSize: "24px" }} /> Add New Address</h3>
+                                </div>
+                            </div>
                             {
                                 isOpen ?
                                     <div className='row'>
@@ -258,20 +285,13 @@ const MyAddress = () => {
                                                                                 *
                                                                             </span>
                                                                         </label>
-                                                                        <div className="checkout__input--select select">
-                                                                            <select
-                                                                                className="checkout__input--select__field border-radius-5"
-                                                                                id="country"
-                                                                            >
-                                                                                <option value={1}>India</option>
-                                                                                <option value={2}>United States</option>
-                                                                                <option value={3}>Netherlands</option>
-                                                                                <option value={4}>Afghanistan</option>
-                                                                                <option value={5}>Islands</option>
-                                                                                <option value={6}>Albania</option>
-                                                                                <option value={7}>Antigua Barbuda</option>
-                                                                            </select>
-                                                                        </div>
+                                                                        <input
+                                                                            className="checkout__input--field border-radius-5"
+                                                                            placeholder="State"
+                                                                            type="text"
+                                                                            value={country}
+                                                                            onChange={(e) => setCountry(e.target.value)}
+                                                                        />
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-6 mb-10">

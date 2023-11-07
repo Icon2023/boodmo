@@ -166,7 +166,7 @@ export const AddReviewList = async (data) => {
 
 export const GetAddressUser = async () => {
     const response = await axios.get(`${BASE_URL}/api/address`, { headers: authHeader() });
-    if (response?.data) {
+    if (response?.data?.success) {
         return response.data;
     } else {
         console.log("error");
@@ -174,7 +174,7 @@ export const GetAddressUser = async () => {
 }
 
 
-export const UpdateAddressUser = async (data) => {
+export const AddAddressUser = async (data) => {
     const response = await axios.post(`${BASE_URL}/api/addresses`, data, { headers: authHeader() });
     if (response?.data?.success) {
         return response.data;
@@ -184,8 +184,9 @@ export const UpdateAddressUser = async (data) => {
 }
 
 export const DeleteAddress = async (id) => {
-    const response = await axios.post(`${BASE_URL}/api/delete-address/${id}`, { headers: authHeader() });
-    if (response?.data?.success) {
+    const response = await axios.get(`${BASE_URL}/api/delete-address/${id}`, { headers: authHeader() });
+    console.log(response);
+    if (response?.data) {
         return response.data;
     } else {
         console.log("error");

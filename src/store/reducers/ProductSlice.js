@@ -13,7 +13,7 @@ export const productsSlice = createSlice({
     filter_multi: "",
     coupon_code: "",
     login_cart: [],
-    add_ship:[]
+    add_ship: []
   },
 
   reducers: {
@@ -99,8 +99,8 @@ export const productsSlice = createSlice({
       })
     },
 
-// ============================================= ORDER_DETAILS ======================================================================
-// ===================================================================================================================================
+    // ============================================= ORDER_DETAILS ======================================================================
+    // ===================================================================================================================================
     addOrderDetails: (state, { payload }) => {
       state.order_list = payload
     },
@@ -123,9 +123,13 @@ export const productsSlice = createSlice({
 
     // ========================================= Ship Details =======================================================================
     // ==============================================================================================================================
-    add_ship_details:(state , {payload})=>{
+    add_ship_details: (state, { payload }) => {
       state.add_ship = payload
-    }
+    },
+
+    removeAddress: (state, { payload }) => {
+      state.add_ship = state.add_ship.filter((e) => e.id !== payload)
+    },
 
   }
 })
@@ -151,7 +155,8 @@ export const {
   removeLoginAddtocart,
   login_qtyIncrement_Decrement,
   removeAllLoginCart,
-  add_ship_details
+  add_ship_details,
+  removeAddress
 
 } = productsSlice.actions;
 

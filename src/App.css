@@ -11842,16 +11842,26 @@ details>summary::-webkit-details-marker {
     box-shadow: 0 2px 22px rgba(0, 0, 0, .16);
     padding: 3rem 2rem;
 }
+
 .ship_multiple_box{
     background: var(--body-background-color);
     -webkit-box-shadow: 0 2px 22px rgba(0, 0, 0, .16);
     box-shadow: 0 2px 22px rgba(0, 0, 0, .16);
     padding: 3rem 2rem;
+    width: 350px;
+}
+.Add_ship h3{
+    background-color: red;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 8px 10px;
+    margin-top: 30px;
 }
 
 @media only screen and (min-width:1199px) {
     .my__account--section__inner {
-        padding: 5rem 4rem
+        padding: 3rem 2rem;
     }
 }
 
