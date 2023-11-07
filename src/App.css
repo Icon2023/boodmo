@@ -13450,3 +13450,31 @@ details>summary::-webkit-details-marker {
     position: relative;
     font-weight: 800;
   }
+
+  /* ******************** Check Out Address ************************* */
+.ship_multiple_box2 {
+    background: var(--body-background-color);
+    box-shadow: 0 2px 22px rgba(0, 0, 0, .16);
+    padding: 3rem 2rem;
+    width: 300px;
+    margin: 7px;
+}
+
+@media (max-width: 1200px){
+.flex_address {
+   justify-content: center;
+}
+.ship_multiple_box2{
+    min-width:100%;
+}
+}
+
+@media (max-width: 991px){
+    .btn_address{
+        width:100% !important;
+    }
+}
+
+.btn_address{
+    width:fit-content;
+}

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import ShippingAddress from '../Subpages/ShippingAddress';
 import { useDispatch, useSelector } from 'react-redux';
-import { CartList,GetCouponCode } from '../Services/apiServices';
-import { addLoginCart, add_coupon_code, add_ship_details, remove_coupon_code } from '../store/reducers/ProductSlice';
+import { AddAddressUser, CartList,DeleteAddress,GetAddressUser,GetCouponCode } from '../Services/apiServices';
+import { addLoginCart, add_coupon_code, add_ship_details, removeAddress, remove_coupon_code } from '../store/reducers/ProductSlice';
 import { Link, useNavigate } from 'react-router-dom';
+import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 
 const Checkout = () => {
     const dispatch = useDispatch();
@@ -22,6 +23,9 @@ const Checkout = () => {
     const [pincode, setPincode] = useState('');
     const [coupon, setCoupon] = useState('');
     const [invaildCoupon, setInvaildCoupon] = useState('');
+    const [isOpen, setIsOpen] = useState(false);
+    const [mobile, setMobile] = useState('');
+    const [add_title, setAdd_title] = useState('');
     const countTotal = (items) => items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
 
     useEffect(() => {
@@ -72,21 +76,76 @@ const Checkout = () => {
         })
     }
 
+    // const handleSubmit = (e) => {
+    //     e.preventDefault()
+    //     let data = {
+    //         first_name: fname,
+    //         last_name: lname,
+    //         company_name: companyName,
+    //         address: address,
+    //         state: state,
+    //         city: city,
+    //         zip: pincode,
+    //         country: country,
+    //     }
+    //     console.log(data);
+    //     dispatch(add_ship_details(data))
+    //     navigate('/review')
+    // }
+
+    useEffect(() => {
+        GetAddress();
+    }, [])
+
+
+    const GetAddress = () => {
+        GetAddressUser().then((res) => {
+            if (res?.success) {
+                dispatch(add_ship_details(res?.data))
+            } else {
+                console.log("hello");
+            }
+        })
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault()
         let data = {
             first_name: fname,
             last_name: lname,
-            company_name: companyName,
+            mobile: mobile,
             address: address,
+            pincode: pincode,
             state: state,
             city: city,
-            zip: pincode,
-            country: country,
+            country: city,
+            address_title: add_title,
+            country:country
         }
-        console.log(data);
-        dispatch(add_ship_details(data))
-        navigate('/review')
+        AddAddressUser(data).then((res) => {
+            GetAddress();
+            setIsOpen(false)
+            setFname('')
+            setLname('')
+            setMobile('')
+            setAddress('')
+            setCity('')
+            setState('')
+            setCountry('')
+            setPincode('')
+            setAdd_title('')
+        })
+    }
+
+    const handleOpenNewAddress = () => {
+        isOpen === false ? setIsOpen(true) : setIsOpen(false)
+    }
+
+    const handleAddressRemove = (id) => {
+        dispatch(removeAddress(id))
+        DeleteAddress(id).then((res) => {
+            console.log(res);
+        })
     }
 
     return (
@@ -117,7 +176,6 @@ const Checkout = () => {
                         <div className="row">
                             <div className="col-lg-7 col-md-6">
                                 <div className="main checkout__mian">
-                                    <form onSubmit={handleSubmit}>
                                         <div className="checkout__content--step section__contact--information">
                                             <div className="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
                                                 <h2 className="section__header--title h3">
@@ -138,186 +196,231 @@ const Checkout = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="checkout__content--step section__shipping--address">
-                                            <div className="section__header mb-25">
-                                                <h2 className="section__header--title h3">Shipping Details</h2>
-                                            </div>
-                                            <div className="section__shipping--address__content">
-                                                <div className="row">
-                                                    <div className="col-lg-6 col-md-6 col-sm-6 mb-20">
-                                                        <div className="checkout__input--list ">
-                                                            <label
-                                                                className="checkout__input--label"
-                                                                htmlFor="input1"
-                                                            >
-                                                                First Name
-                                                                <span className="checkout__input--label__star">
-                                                                    *
-                                                                </span>
-                                                            </label>
-                                                            <input
-                                                                className="checkout__input--field border-radius-5"
-                                                                placeholder="First name"
-                                                                type="text"
-                                                                value={fname}
-                                                                onChange={(e) => setFname(e.target.value)}
-                                                            />
-                                                        </div>
+                                        <div className='Add_ship'>
+                                    <h3 className='text-center mx-auto btn_address'  onClick={handleOpenNewAddress}><AiOutlinePlus className='mb-1' style={{ fontSize: "24px" }} /> Add New Address</h3>
+                                </div>
+                                    <div className='flex_address d-flex flex-wrap'>
+                                {
+                                    add_ship?.map((e, index) => {
+                                        return (
+                                            <>
+                                                <div className='ship_multiple_box2 mt-5 ' key={index}>
+                                                    <div className='d-flex justify-content-between'>
+                                                        <h3>{e?.name}</h3>
+                                                        <AiOutlineClose style={{ cursor: "pointer" }} onClick={() => handleAddressRemove(e?.id)} />
                                                     </div>
-                                                    <div className="col-lg-6 col-md-6 col-sm-6 mb-20">
-                                                        <div className="checkout__input--list">
-                                                            <label
-                                                                className="checkout__input--label"
-                                                                htmlFor="input2"
-                                                            >
-                                                                Last Name
-                                                                <span className="checkout__input--label__star">
-                                                                    *
-                                                                </span>
-                                                            </label>
-                                                            <input
-                                                                className="checkout__input--field border-radius-5"
-                                                                placeholder="Last name"
-                                                                type="text"
-                                                                value={lname}
-                                                                onChange={(e) => setLname(e.target.value)}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-12 mb-20">
-                                                        <div className="checkout__input--list">
-                                                            <label
-                                                                className="checkout__input--label"
-                                                                htmlFor="input3"
-                                                            >
-                                                                Company Name
-                                                                <span className="checkout__input--label__star">
-                                                                    *
-                                                                </span>
-                                                            </label>
-                                                            <input
-                                                                className="checkout__input--field border-radius-5"
-                                                                placeholder="Company (optional)"
-                                                                type="text"
-                                                                value={companyName}
-                                                                onChange={(e) => setCompanyName(e.target.value)}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-12 mb-20">
-                                                        <div className="checkout__input--list">
-                                                            <label
-                                                                className="checkout__input--label"
-                                                                htmlFor="input4"
-                                                            >
-                                                                Address
-                                                                <span className="checkout__input--label__star">
-                                                                    *
-                                                                </span>
-                                                            </label>
-                                                            <input
-                                                                className="checkout__input--field border-radius-5"
-                                                                placeholder="Address"
-                                                                type="text"
-                                                                value={address}
-                                                                onChange={(e) => setAddress(e.target.value)}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6 mb-20">
-                                                        <div className="checkout__input--list">
-                                                            <label
-                                                                className="checkout__input--label"
-                                                                htmlFor="input5"
-                                                            >
-                                                                City
-                                                                <span className="checkout__input--label__star">
-                                                                    *
-                                                                </span>
-                                                            </label>
-                                                            <input
-                                                                className="checkout__input--field border-radius-5"
-                                                                placeholder="City"
-                                                                type="text"
-                                                                value={city}
-                                                                onChange={(e) => setCity(e.target.value)}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6 mb-20">
-                                                        <div className="checkout__input--list">
-                                                            <label
-                                                                className="checkout__input--label"
-                                                                htmlFor="input5"
-                                                            >
-                                                                State
-                                                                <span className="checkout__input--label__star">
-                                                                    *
-                                                                </span>
-                                                            </label>
-                                                            <input
-                                                                className="checkout__input--field border-radius-5"
-                                                                placeholder="State"
-                                                                type="text"
-                                                                value={state}
-                                                                onChange={(e) => setState(e.target.value)}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6 mb-20">
-                                                        <div className="checkout__input--list">
-                                                            <label
-                                                                className="checkout__input--label"
-                                                                htmlFor="input6"
-                                                            >
-                                                                Country/region
-                                                                <span className="checkout__input--label__star">
-                                                                    *
-                                                                </span>
-                                                            </label>
-                                                            <input
-                                                                className="checkout__input--field border-radius-5"
-                                                                placeholder="country"
-                                                                type="text"
-                                                                value={country}
-                                                                onChange={(e) => setCountry(e.target.value)}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6 mb-20">
-                                                        <div className="checkout__input--list">
-                                                            <label
-                                                                className="checkout__input--label"
-                                                                htmlFor="input6"
-                                                            >
-                                                                Pin Code
-                                                                <span className="checkout__input--label__star">
-                                                                    *
-                                                                </span>
-                                                            </label>
-                                                            <input
-                                                                className="checkout__input--field border-radius-5"
-                                                                placeholder="Pin code"
-                                                                type="number"
-                                                                value={pincode}
-                                                                onChange={(e) => setPincode(e.target.value)}
-                                                            />
-                                                        </div>
-                                                    </div>
+                                                    <p>{e?.address}  - {e?.mobile}</p>
+                                                    <p>{e?.city},{e?.state},{e?.country}</p>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div className="checkout__content--step__footer d-flex align-items-center">
-                                            <button
-                                                className="continue__shipping--btn primary__btn border-radius-5"
-                                            >
-                                                Continue To Shipping
-                                            </button>
-                                            <Link className="previous__link--content" to="/cart">
-                                                Return to cart
-                                            </Link>
-                                        </div>
-                                    </form>
+                                            </>
+                                        )
+                                    })
+                                }
+                                </div>
+                                {
+                                isOpen  ? 
+                                <>
+                                <form onSubmit={handleSubmit}>
+                                <div className="checkout__content--step section__shipping--address">
+                                                        <div className="section__header mb-25">
+                                                        </div>
+                                                        <div className="section__shipping--address__content">
+                                                            <div className="row">
+                                                                <div className="col-lg-6 col-md-6 col-sm-6 mb-20">
+                                                                    <div className="checkout__input--list">
+                                                                        <label
+                                                                            className="checkout__input--label mb-3"
+                                                                            htmlFor="input1"
+                                                                        >
+                                                                            First Name
+                                                                            <span className="checkout__input--label__star">
+                                                                                *
+                                                                            </span>
+                                                                        </label>
+                                                                        <input
+                                                                            className="checkout__input--field border-radius-5"
+                                                                            placeholder="First name"
+                                                                            type="text"
+                                                                            value={fname}
+                                                                            onChange={(e) => setFname(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-lg-6 col-md-6 col-sm-6 mb-10">
+                                                                    <div className="checkout__input--list">
+                                                                        <label
+                                                                            className="checkout__input--label mb-3"
+                                                                            htmlFor="input2"
+                                                                        >
+                                                                            Last Name
+                                                                            <span className="checkout__input--label__star">
+                                                                                *
+                                                                            </span>
+                                                                        </label>
+                                                                        <input
+                                                                            className="checkout__input--field border-radius-5"
+                                                                            placeholder="Last name"
+                                                                            type="text"
+                                                                            value={lname}
+                                                                            onChange={(e) => setLname(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-lg-6 col-md-6 col-sm-6 mb-10">
+                                                                    <div className="checkout__input--list">
+                                                                        <label
+                                                                            className="checkout__input--label mb-3"
+                                                                            htmlFor="input3"
+                                                                        >
+                                                                            Mobile Number
+                                                                            <span className="checkout__input--label__star">
+                                                                                *
+                                                                            </span>
+                                                                        </label>
+                                                                        <input
+                                                                            className="checkout__input--field border-radius-5"
+                                                                            placeholder="Mobile Number"
+                                                                            type="text"
+                                                                            value={mobile}
+                                                                            onChange={(e) => setMobile(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-lg-6 col-md-6 col-sm-6 mb-10">
+                                                                    <div className="checkout__input--list">
+                                                                        <label
+                                                                            className="checkout__input--label mb-3"
+                                                                            htmlFor="input3"
+                                                                        >
+                                                                            Address Title
+                                                                            <span className="checkout__input--label__star">
+                                                                                *
+                                                                            </span>
+                                                                        </label>
+                                                                        <input
+                                                                            className="checkout__input--field border-radius-5"
+                                                                            placeholder="Address Title (optional)"
+                                                                            type="text"
+                                                                            value={add_title}
+                                                                            onChange={(e) => setAdd_title(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-12 mb-10">
+                                                                    <div className="checkout__input--list">
+                                                                        <label
+                                                                            className="checkout__input--label mb-3"
+                                                                            htmlFor="input4"
+                                                                        >
+                                                                            Address
+                                                                            <span className="checkout__input--label__star">
+                                                                                *
+                                                                            </span>
+                                                                        </label>
+                                                                        <input
+                                                                            className="checkout__input--field border-radius-5"
+                                                                            placeholder="Address1"
+                                                                            type="text"
+                                                                            value={address}
+                                                                            onChange={(e) => setAddress(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="col-lg-6 mb-10">
+                                                                    <div className="checkout__input--list">
+                                                                        <label
+                                                                            className="checkout__input--label mb-3"
+                                                                            htmlFor="input5"
+                                                                        >
+                                                                            City
+                                                                            <span className="checkout__input--label__star">
+                                                                                *
+                                                                            </span>
+                                                                        </label>
+                                                                        <input
+                                                                            className="checkout__input--field border-radius-5"
+                                                                            placeholder="City"
+                                                                            type="text"
+                                                                            value={city}
+                                                                            onChange={(e) => setCity(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-lg-6 mb-10">
+                                                                    <div className="checkout__input--list">
+                                                                        <label
+                                                                            className="checkout__input--label mb-3"
+                                                                            htmlFor="input5"
+                                                                        >
+                                                                            State
+                                                                            <span className="checkout__input--label__star">
+                                                                                *
+                                                                            </span>
+                                                                        </label>
+                                                                        <input
+                                                                            className="checkout__input--field border-radius-5"
+                                                                            placeholder="State"
+                                                                            type="text"
+                                                                            value={state}
+                                                                            onChange={(e) => setState(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-lg-6 mb-10">
+                                                                    <div className="checkout__input--list">
+                                                                        <label
+                                                                            className="checkout__input--label mb-3"
+                                                                            htmlFor="country"
+                                                                        >
+                                                                            Country/region
+                                                                            <span className="checkout__input--label__star">
+                                                                                *
+                                                                            </span>
+                                                                        </label>
+                                                                        <input
+                                                                            className="checkout__input--field border-radius-5"
+                                                                            placeholder="State"
+                                                                            type="text"
+                                                                            value={country}
+                                                                            onChange={(e) => setCountry(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-lg-6 mb-10">
+                                                                    <div className="checkout__input--list">
+                                                                        <label
+                                                                            className="checkout__input--label mb-3"
+                                                                            htmlFor="input6"
+                                                                        >
+                                                                            Pin Code
+                                                                            <span className="checkout__input--label__star">
+                                                                                *
+                                                                            </span>
+                                                                        </label>
+                                                                        <input
+                                                                            className="checkout__input--field border-radius-5"
+                                                                            placeholder="Pin code"
+                                                                            type="text"
+                                                                            value={pincode}
+                                                                            onChange={(e) => setPincode(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="checkout__content--step__footer d-flex align-items-center">
+                                                        <button
+                                                            className="continue__shipping--btn primary__btn border-radius-5"
+                                                        >
+                                                            Continue To Save
+                                                        </button>
+                                                    </div>
+                                                    </form>
+                                </>
+                                :
+                                null}         
                                 </div>
                             </div>
                             <div className="col-lg-5 col-md-6">
