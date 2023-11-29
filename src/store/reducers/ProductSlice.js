@@ -13,7 +13,9 @@ export const productsSlice = createSlice({
     filter_multi: "",
     coupon_code: "",
     login_cart: [],
-    add_ship: []
+    add_ship: [],
+    selected_value_address:[],
+    coupon_value:""
   },
 
   reducers: {
@@ -31,6 +33,9 @@ export const productsSlice = createSlice({
 
     addSingleCategory: (state, { payload }) => {
       state.single_category = payload;
+    },
+    selectedValueAddress : (state,{payload})=>{
+      state.selected_value_address = payload;
     },
 
     //========================================================== WISHLIST ==========================================================
@@ -120,6 +125,9 @@ export const productsSlice = createSlice({
     remove_coupon_code: (state) => {
       state.coupon_code = ""
     },
+    coupon_Pricevalue:(state , { payload }) =>{
+      state.coupon_value = payload
+    },
 
     // ========================================= Ship Details =======================================================================
     // ==============================================================================================================================
@@ -156,7 +164,9 @@ export const {
   login_qtyIncrement_Decrement,
   removeAllLoginCart,
   add_ship_details,
-  removeAddress
+  removeAddress,
+  selectedValueAddress,
+  coupon_Pricevalue
 
 } = productsSlice.actions;
 

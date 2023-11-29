@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Brands } from "../Services/apiServices";
 import "./brands.css";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import HeadingSection from "../Utils/HeadingSection";
 
 const BrandsAll = () => {
@@ -48,6 +48,7 @@ const BrandsAll = () => {
     groupedElements[firstLetter].push({
       name: element.name,
       product_count: element.product_count,
+      id:element.id,
     });
   });
 
@@ -57,7 +58,7 @@ const BrandsAll = () => {
   ];
   return (
     <>
-      <section className="container mt-5">
+      <section className="container margin_top_all">
         {
           pathName == "/brands" ? <HeadingSection isInput title="Shop by Brand" value={filterLetter} onChange={handleInputChange} />
             : null
@@ -86,18 +87,20 @@ const BrandsAll = () => {
         {/* filter */}
         <ul className="brands-list">
           {Object.keys(groupedElements).map((letter) => {
+            // console.log("ll",letter);
             return (
               <li className="brands-list__group">
                 <p className="brands-list__group__name">{letter}</p>
                 <ul className="brands-list__group__list">
                   {
                     groupedElements[letter]?.map((subData, index) => {
+                      console.log("ll",subData);
                       return (
                         <>
                           <li className="brands-list__group__list__item" key={index}>
-                            <a>
+                          <Link to={`/brands/${subData?.id}`}>
                               {subData?.name}({subData?.product_count})
-                            </a>
+                            </Link>
                           </li>
                         </>
                       );

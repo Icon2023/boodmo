@@ -27,6 +27,8 @@ import Contact from './Mainpages/contact'
 import 'react-modern-drawer/dist/index.css';
 import "../node_modules/slick-carousel/slick/slick.css";
 import "../node_modules/slick-carousel/slick/slick-theme.css";
+import BrandProductsView from './Subpages/BrandProducts';
+import CarMakerListAllProducts from './Mainpages/CarMakerListAllProducts';
 
 
 function App() {
@@ -52,6 +54,7 @@ function App() {
           <Route path='/vehicles' element={<CarMakers />} />
           <Route path='/vehicles/:name/:id' element={<CarMakerListAllProducts />} />
           <Route path='/brands' element={<BrandsAll />} />
+          <Route path='/brands/:id' element={<BrandProductsView />} />
           <Route path='/privacy-policy' element={<PrivacyPolicy />} />
           <Route path='/about-us' element={<About />} />
           <Route path='/contact-us' element={<Contact />} />

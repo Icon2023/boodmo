@@ -13550,3 +13550,34 @@ details>summary::-webkit-details-marker {
 .btn_address{
     width:fit-content;
 }
+
+
+/* radio  */
+
+
+
+/* CSS for RadioTileExample */
+.radio-tile {
+    border: 1px solid #ccc; /* Default border color for unselected tiles */
+    padding: 10px;
+    /* margin: 10px; */
+  }
+  
+  .radio-tile.checked {
+    border: 2px solid #ED1D24; /* Border color for the selected tile */
+  }
+  
+  .radio-tile label input[type="radio"] {
+    display: none; /* Hide the radio button circle */
+  }
+  
+  .selected-option {
+    /* margin-top: 10px; */
+    font-weight: bold;
+    color: #ED1D24; /* Color for the selected value */
+  }
+  
+
+  .margin_top_all {
+    margin-top: 85px;
+}

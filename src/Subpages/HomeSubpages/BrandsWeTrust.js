@@ -4,12 +4,16 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import NextArrow from "../../Utils/NextArrow";
 import PrevArrow from "../../Utils/PrevArrow";
-import { Brands } from "../../Services/apiServices";
+import { BrandProduct, Brands } from "../../Services/apiServices";
 import { Link } from "react-router-dom";
 import HeadingSection from "../../Utils/HeadingSection";
+import { useParams } from 'react-router-dom'
 
 const BrandsWeTrust = () => {
   const [brands, setBrands] = useState([]);
+  const { id } = useParams();
+
+  
 
   useEffect(() => {
     Brands()
@@ -73,9 +77,11 @@ const BrandsWeTrust = () => {
       </div> */}
       <Slider {...settings}>
         {brands?.map((brand) => {
+          // console.log("bb",brand);
           return (
             <>
               <div style={{ display: "flex", alignItems: "center" }}>
+                <a href={`/brands/${brand?.id}`}>
                 <img
                   src={brand?.image}
                   width={150}
@@ -83,6 +89,7 @@ const BrandsWeTrust = () => {
                   alt={brand?.id * 2}
                   className="center-img"
                 />
+                </a>
               </div>
             </>
           );

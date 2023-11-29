@@ -251,3 +251,13 @@ export const OrderComplete = async (data) => {
         console.log("error");
     }
 }
+
+
+export const BrandProduct = async (id) => {
+    const response = await axios.get(`${BASE_URL}/api/brand/${id}`);
+    if (response?.status) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}
