@@ -5,7 +5,7 @@ import {
   CarModel,
   CarYear,
   CategoryProduct,
-} from "../../Services/apiServices";    
+} from "../../Services/apiServices";
 import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
 import { Modal } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,7 +36,6 @@ const HomeSilder = () => {
   const navigate = useNavigate();
 
   const [cateId, setCateId] = useState("");
-  console.log(cateId);
 
   const [isOpen, setIsOpen] = useState(true);
 
@@ -56,7 +55,6 @@ const HomeSilder = () => {
   useEffect(() => {
     CarCompines().then((res) => {
       setCarName(res?.data);
-      // console.log(res?.data);
     });
   }, []);
 
@@ -76,7 +74,6 @@ const HomeSilder = () => {
     setCarValName(e.target.value);
     CarModel(e.target.value).then((res) => {
       setCarModel(res?.data);
-      // console.log(res?.data);
     });
   };
 
@@ -86,7 +83,6 @@ const HomeSilder = () => {
     setCarValYear(val);
     CarYear({ carValName, val }).then((res) => {
       setCarYear(res?.data);
-      // console.log(res?.data);
     });
   };
 
@@ -101,7 +97,6 @@ const HomeSilder = () => {
 
   const handleClickOpen = (e) => {
     e.preventDefault();
-    console.log({ carValName, carValModel, carValYear, carValModei });
     setOpen(true);
   };
 
@@ -165,9 +160,9 @@ const HomeSilder = () => {
                   find the parts that fit.
                 </p>
                 {/* <div className='vehicle_btn'>
-                                    <input type="text" placeholder='MH05HK1789' value={number} maxLength={10} onChange={(e) => setNumber(e.target.value.toUpperCase())} />
-                                    <button><AiOutlineSearch /></button>
-                                </div> */}
+                  <input type="text" placeholder='MH05HK1789' value={number} maxLength={10} onChange={(e) => setNumber(e.target.value.toUpperCase())} />
+                  <button><AiOutlineSearch /></button>
+                </div> */}
               </div>
               <div className="search__filter--inner style5">
                 <form
@@ -236,26 +231,33 @@ const HomeSilder = () => {
                       <option selected="" value={0}>
                         Select Class
                       </option>
-                      {carModei.map((e, index) => {
-                        return (
-                          <option value={e?.id} key={index}>
-                            {e?.modification}
-                          </option>
-                        );
-                      })}
+                      {
+                        carModei.map((e, index) => {
+                          return (
+                            <option value={e?.id} key={index}>
+                              {e?.modification}
+                            </option>
+                          );
+                        })
+                      }
                     </select>
                   </div>
                   <div className="search__filter--width">
                     <button className="search__filter--btn primary__btn">
                       Search Parts
                     </button>
-                    {/* <Button onClick={handleOpens}>Open modal</Button> */}
                   </div>
                 </form>
+                <div className="cat_top">
+                  <a href="https://oriparts.com/" target="_blank">
+                    <button className="catalog_btn">
+                      OEM CATALOG
+                    </button>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-          {/* End search filter area */}
         </div>
       </section>
 
@@ -267,15 +269,15 @@ const HomeSilder = () => {
       >
         <Box sx={style} className="search_modal_box">
           <div className='model_box'>
-                        <div className='d-flex justify-content-between mb-4'>
-                            <h2>Search</h2>
-                            <div onClick={handleClose} style={{ cursor: "pointer" }}>
-                                <AiOutlineClose
-                                    size={"24px"}
-                                />
-                            </div>
-                        </div>
-                    </div>
+            <div className='d-flex justify-content-between mb-4'>
+              <h2>Search</h2>
+              <div onClick={handleClose} style={{ cursor: "pointer" }}>
+                <AiOutlineClose
+                  size={"24px"}
+                />
+              </div>
+            </div>
+          </div>
           {isOpen ? (
             <>
               <div className="searchster-categories-grid">
@@ -320,7 +322,7 @@ const HomeSilder = () => {
                         <a
                           className="categories__card--link"
                           onClick={() => handleMultiFilter(e?.id)}
-                          // href={`/shop/${cateId}/${e?.id}/${carValName}/${carValModel}/${carValYear}/${carValModei}`}
+                        // href={`/shop/${cateId}/${e?.id}/${carValName}/${carValModel}/${carValYear}/${carValModei}`}
                         >
                           <div className="mx-auto">
                             <img

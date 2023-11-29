@@ -17,23 +17,6 @@ const RegisterForm = () => {
   const [isopen1, setIsopen1] = useState(true);
 
 
-  // const handleSubmitRegister = (values, { setSubmitting }) => {
-  //   Register(values).then((res) => {
-  //     console.log("res----", res);
-  //     if (!res.success) {
-  //       setError(res.message);
-  //     } else {
-  //       localStorage.setItem("USER", JSON.stringify(res));
-  //       //   navigate("/");
-  //       // window.location.reload();
-  //     }
-  //   });
-  //   setTimeout(() => {
-  //     // Perform your form submission logic here
-  //     setSubmitting(false);
-  //   }, 2000); // Simulate a 2-second delay for the sake of the example
-  // };
-
   const handleChange = (e) => {
     setEmail(e.target.value);
     setType('email')
@@ -62,7 +45,7 @@ const RegisterForm = () => {
       ...type === "email" ? { email: email } : { mobile: number },
       password: password,
       device_type:'web',
-      device_token:'fdgdfsgdfg'
+      device_token:'abcd'
     }
     if (password === conpassword) {
       Register(data).then((res) => {

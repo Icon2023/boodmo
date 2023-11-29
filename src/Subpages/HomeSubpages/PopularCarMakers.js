@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { CarCompanies } from "../../Services/apiServices";
-import "../../Subpages/car_makers.css";
 import HeadingSection from "../../Utils/HeadingSection";
-import popular from '../../images/2562193.png'
-
+import "../../Subpages/car_makers.css";
+import { Link } from "react-router-dom";
 
 const PopularCarMakers = () => {
   const [carCompany, setCarCompany] = useState([]);
@@ -12,12 +11,12 @@ const PopularCarMakers = () => {
     CarCompanies()
       .then((res) => {
         setCarCompany(res?.data);
-        // console.log("pop", res?.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
 
   return (
     <div>
@@ -33,21 +32,15 @@ const PopularCarMakers = () => {
                   style={{ position: "relative" }}
                 >
                   <div className="car-maker-item">
-                    {
-                      e?.is_popular === 1 ?
-                        <div className="popular_tag" style={{ position: "absolute", left:"50%" ,top:"-15%" }}>
-                          <img src={popular} alt="" srcset="" />
-                        </div>
-                        :
-                        ""
-                    }
-                    <img
-                      src={e?.logo}
-                      alt="car-logo"
-                      width={50}
-                      height={50}
-                    />
-                    <div className="pt-2">{e?.name.toUpperCase()}</div>
+                    <Link to={`/vehicles/${e?.name}/${e?.id}`}>
+                      <img
+                        src={e?.logo}
+                        alt="car-logo"
+                        width={50}
+                        height={50}
+                      />
+                      <div className="pt-2">{e?.name.toUpperCase()}</div>
+                    </Link>
                   </div>
                 </div>
               )

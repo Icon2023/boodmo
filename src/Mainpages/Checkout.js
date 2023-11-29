@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import ShippingAddress from '../Subpages/ShippingAddress';
 import { useDispatch, useSelector } from 'react-redux';
-import { AddAddressUser, CartList,DeleteAddress,GetAddressUser,GetCouponCode } from '../Services/apiServices';
-import { addLoginCart, add_coupon_code, add_ship_details, removeAddress, remove_coupon_code } from '../store/reducers/ProductSlice';
+import { CartList, GetCouponCode } from '../Services/apiServices';
+import { addLoginCart, add_coupon_code, add_ship_details, coupon_Pricevalue, remove_coupon_code } from '../store/reducers/ProductSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 
 const Checkout = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { addto_cart, coupon_code, login_cart, add_ship } = useSelector((state) => ({ ...state.products }));
+    const { coupon_code, login_cart, add_ship } = useSelector((state) => ({ ...state.products }));
 
     const user = JSON.parse(localStorage.getItem('USER'));
     const [email, setEmail] = useState('');
@@ -28,8 +28,11 @@ const Checkout = () => {
     const [add_title, setAdd_title] = useState('');
     const countTotal = (items) => items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
 
+    const coupon_value = ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2)
+
+    console.log(coupon_value , "code");
+
     useEffect(() => {
-    
         CartList().then((res) => {
             if (res.success) {
                 dispatch(addLoginCart(res?.data))
@@ -110,42 +113,22 @@ const Checkout = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        // let data = {
+        //     first_name: fname,
+        //     last_name: lname,
+        //     company_name: companyName,
+        //     address: address,
+        //     state: state,
+        //     city: city,
+        //     zip: pincode,
+        //     country: country,
+        // }
         let data = {
-            first_name: fname,
-            last_name: lname,
-            mobile: mobile,
-            address: address,
-            pincode: pincode,
-            state: state,
-            city: city,
-            country: city,
-            address_title: add_title,
-            country:country
+            coupon,
+            coupon_value
         }
-        AddAddressUser(data).then((res) => {
-            GetAddress();
-            setIsOpen(false)
-            setFname('')
-            setLname('')
-            setMobile('')
-            setAddress('')
-            setCity('')
-            setState('')
-            setCountry('')
-            setPincode('')
-            setAdd_title('')
-        })
-    }
-
-    const handleOpenNewAddress = () => {
-        isOpen === false ? setIsOpen(true) : setIsOpen(false)
-    }
-
-    const handleAddressRemove = (id) => {
-        dispatch(removeAddress(id))
-        DeleteAddress(id).then((res) => {
-            console.log(res);
-        })
+        dispatch(coupon_Pricevalue(data))
+        navigate('/review')
     }
 
     return (
@@ -432,85 +415,38 @@ const Checkout = () => {
                                         <table className="cart__table--inner">
                                             <tbody className="cart__table--body">
                                                 {
-                                                    user?.success !== true ?
-                                                        <>
-                                                            {
-                                                                addto_cart?.map((e, index) => {
-                                                                    return (
-                                                                        <tr className="cart__table--body__items" key={index}>
-                                                                            <td className="cart__table--body__list">
-                                                                                <div className="product__image two  d-flex align-items-center">
-                                                                                    <div className="product__thumbnail border-radius-5">
-                                                                                        <a
-                                                                                            className="display-block"
-                                                                                        >
-                                                                                            <img
-                                                                                                className="display-block border-radius-5"
-                                                                                                src={e?.image}
-                                                                                                alt="cart-product"
-                                                                                            />
-                                                                                        </a>
-                                                                                        <span className="product__thumbnail--quantity">
-                                                                                            {e?.qty}
-                                                                                        </span>
-                                                                                    </div>
-                                                                                    <div className="product__description">
-                                                                                        <h4 className="product__description--name">
-                                                                                            <a href="product-details.html">
-                                                                                                {e?.name}
-                                                                                            </a>
-                                                                                        </h4>
-                                                                                        <span className="product__description--variant">
-                                                                                            COLOR: Blue
-                                                                                        </span>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td className="cart__table--body__list">
-                                                                                <span className="cart__price">{e?.qty * e?.price}/-</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </>
-                                                        :
-                                                        <>
-                                                            {
-                                                                login_cart?.map((e, index) => {
-                                                                    return (
-                                                                        <tr className="cart__table--body__items" key={index}>
-                                                                            <td className="cart__table--body__list">
-                                                                                <div className="product__image two  d-flex align-items-center">
-                                                                                    <div className="product__thumbnail border-radius-5">
-                                                                                        <a className="display-block">
-                                                                                            <img
-                                                                                                className="display-block border-radius-5"
-                                                                                                src={e?.product?.images[0].image}
-                                                                                                alt="cart-product"
-                                                                                            />
-                                                                                        </a>
-                                                                                        <span className="product__thumbnail--quantity">
-                                                                                            {e?.qty}
-                                                                                        </span>
-                                                                                    </div>
-                                                                                    <div className="product__description">
-                                                                                        <h4 className="product__description--name">
-                                                                                            <p>
-                                                                                                {e?.product?.name}
-                                                                                            </p>
-                                                                                        </h4>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td className="cart__table--body__list">
-                                                                                <span className="cart__price">{e?.price * e?.qty}/-</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </>
+                                                    login_cart?.map((e, index) => {
+                                                        return (
+                                                            <tr className="cart__table--body__items" key={index}>
+                                                                <td className="cart__table--body__list">
+                                                                    <div className="product__image two  d-flex align-items-center">
+                                                                        <div className="product__thumbnail border-radius-5">
+                                                                            <a className="display-block">
+                                                                                <img
+                                                                                    className="display-block border-radius-5"
+                                                                                    src={e?.product?.images[0].image}
+                                                                                    alt="cart-product"
+                                                                                />
+                                                                            </a>
+                                                                            <span className="product__thumbnail--quantity">
+                                                                                {e?.qty}
+                                                                            </span>
+                                                                        </div>
+                                                                        <div className="product__description">
+                                                                            <h4 className="product__description--name">
+                                                                                <p>
+                                                                                    {e?.product?.name}
+                                                                                </p>
+                                                                            </h4>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td className="cart__table--body__list">
+                                                                    <span className="cart__price">{e?.price * e?.qty}/-</span>
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    })
                                                 }
                                             </tbody>
                                         </table>
@@ -545,15 +481,7 @@ const Checkout = () => {
                                                     </td>
                                                     <td className="checkout__total--amount text-right">
                                                         {
-                                                            user?.success !== true ?
-                                                                <>
-                                                                    <h4>{countTotal(addto_cart)}/-</h4>
-                                                                </>
-                                                                : <>
-                                                                    {
-                                                                        <h4>{countTotal(login_cart)}/-</h4>
-                                                                    }
-                                                                </>
+                                                            <h4>{countTotal(login_cart)}/-</h4>
                                                         }
                                                     </td>
                                                 </tr>
@@ -562,16 +490,7 @@ const Checkout = () => {
                                                         Shipping
                                                     </td>
                                                     <td className="checkout__total--calculated__text text-right">
-                                                        {
-                                                            user?.success !== true ?
-                                                                <>
-                                                                    {(countTotal(addto_cart)) * (coupon_code?.coupon_discount / 100) ? ((countTotal(addto_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : 0}/-
-                                                                </>
-                                                                :
-                                                                <>
-                                                                    {(countTotal(login_cart)) * (coupon_code?.coupon_discount / 100) ? ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : 0}/-
-                                                                </>
-                                                        }
+                                                        {(countTotal(login_cart)) * (coupon_code?.coupon_discount / 100) ? ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : 0}/-
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -581,17 +500,7 @@ const Checkout = () => {
                                                         Total
                                                     </td>
                                                     <td className="checkout__total--footer__amount checkout__total--footer__list text-right">
-                                                        {
-                                                            user?.success !== true ?
-                                                                <>
-                                                                    {countTotal(addto_cart) - ((countTotal(addto_cart)) * (coupon_code?.coupon_discount / 100)) ? countTotal(addto_cart) - ((countTotal(addto_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : countTotal(addto_cart)}/-
-
-                                                                </>
-                                                                :
-                                                                <>
-                                                                    {countTotal(login_cart) - ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)) ? countTotal(login_cart) - ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : countTotal(login_cart)}/-
-                                                                </>
-                                                        }
+                                                        {countTotal(login_cart) - ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)) ? countTotal(login_cart) - ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : countTotal(login_cart)}/-
                                                     </td>
                                                 </tr>
                                             </tfoot>

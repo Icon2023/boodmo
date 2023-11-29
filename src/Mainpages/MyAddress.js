@@ -46,7 +46,7 @@ const MyAddress = () => {
             city: city,
             country: city,
             address_title: add_title,
-            country:country
+            country: country
         }
         AddAddressUser(data).then((res) => {
             GetAddress();
@@ -103,6 +103,7 @@ const MyAddress = () => {
                             <h2 className="section__header--title h3">My Shipping Details</h2>
                             <div className='d-flex' style={{ gap: "20px", flexWrap: "wrap" }}>
                                 {
+                                    add_ship &&
                                     add_ship?.map((e, index) => {
                                         return (
                                             <>
@@ -117,9 +118,10 @@ const MyAddress = () => {
                                             </>
                                         )
                                     })
+
                                 }
                                 <div className='Add_ship'>
-                                    <h3 className='text-center'  onClick={handleOpenNewAddress}><AiOutlinePlus className='mb-1' style={{ fontSize: "24px" }} /> Add New Address</h3>
+                                    <h3 className='text-center' onClick={handleOpenNewAddress}><AiOutlinePlus className='mb-1' style={{ fontSize: "24px" }} /> Add New Address</h3>
                                 </div>
                             </div>
                             {

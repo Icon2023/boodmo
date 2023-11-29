@@ -10,7 +10,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
-  const [emailNumber, setEmailNumber] = useState('raj.iconfisys@gmail.com')
+  const [emailNumber, setEmailNumber] = useState('dev@gmail.com')
   const [password, setPassword] = useState('123456')
   const [passwordShown, setPasswordShown] = useState(false);
 

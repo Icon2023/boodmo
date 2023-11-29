@@ -50,6 +50,7 @@ function App() {
           <Route path='/cart' element={<Cart />} />
           <Route path='/login' element={<ProtectedRouteLogin><Login /></ProtectedRouteLogin>} />
           <Route path='/vehicles' element={<CarMakers />} />
+          <Route path='/vehicles/:name/:id' element={<CarMakerListAllProducts />} />
           <Route path='/brands' element={<BrandsAll />} />
           <Route path='/privacy-policy' element={<PrivacyPolicy />} />
           <Route path='/about-us' element={<About />} />

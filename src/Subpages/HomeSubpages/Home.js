@@ -22,8 +22,6 @@ const Home = () => {
 
       {/* start banner brand */}
       <Banner />
-
-
     </>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Brands, Product } from '../Services/apiServices';
+import { Brands, CarCompines, CarMode, CarModel, CarYear, Product } from '../Services/apiServices';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProducts, removeFilter } from '../store/reducers/ProductSlice';
 import { CgMenuGridR } from "react-icons/cg";
@@ -35,11 +35,30 @@ const ProductsView = () => {
     const [isMore, setIsMore] = useState(false);
     const [selectedValues, setSelectedValues] = useState([]);
     const [isLoadingImage, setIsLoadingImage] = useState(true);
-    const [selectedBrands, setSelectedBrands] = useState([]);
+
+    const [carName, setCarName] = useState([]);
+    const [carValName, setCarValName] = useState("");
+
+    const [carModel, setCarModel] = useState([]);
+    const [carValModel, setCarValModel] = useState("");
+
+    const [carYear, setCarYear] = useState([]);
+    const [carValYear, setCarValYear] = useState("");
+
+    const [carModefication, setCarModefication] = useState([]);
+    const [carValModefication, setValModefication] = useState("");
 
     useEffect(() => {
+        CarCompines().then((res) => {
+            setCarName(res?.data);
+        });
+
+        Brands().then((res) => {
+            setBrands(res?.data);
+        })
+
         dispatch(removeFilter())
-    }, [])
+    }, []);
 
     useEffect(() => {
         const lists = localStorage.getItem('list');
@@ -49,9 +68,6 @@ const ProductsView = () => {
         if (storedSelectedValues) {
             setSelectedValues(storedSelectedValues);
         }
-        console.log('Selected Values:', storedSelectedValues); // Add this line for debugging
-        console.log("ss",selectedValues );
-
         if (lists) {
             setGridOpen(false)
             setTrifOpen(true)
@@ -60,6 +76,7 @@ const ProductsView = () => {
             setGridOpen(true)
             setTrifOpen(false)
         }
+
         if (filter_multi.length < 1) {
             const data = {
                 category: cate_id,
@@ -70,7 +87,7 @@ const ProductsView = () => {
                     setIsLoadingImage(false)
                     dispatch(addProducts(res?.data))
                 }
-            }).catch(()=>{
+            }).catch(() => {
                 setIsLoadingImage(true)
             })
 
@@ -89,14 +106,18 @@ const ProductsView = () => {
                 }
             })
         }
-        Brands()
-            .then((res) => {
-                setBrands(res?.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
+        // const data = {
+        //     category: cate_id,
+        //     sub_category: subcategory
+        // }
+        // Product(data).then((res) => {
+        //     if (res.success) {
+        //         setIsLoadingImage(false)
+        //         dispatch(addProducts(res?.data))
+        //     }
+        // }).catch(() => {
+        //     setIsLoadingImage(true)
+        // })
     }, [])
 
     // Calculate the indexes of the items to show on the current page.
@@ -151,32 +172,63 @@ const ProductsView = () => {
         })
     }
 
+    const handlecarNameChange = (e) => {
+        setCarValName(e.target.value);
+        CarModel(e.target.value).then((res) => {
+            if (res?.success) {
+                setCarModel(res?.data);
+                console.log(res?.data);
+            }
+        });
+    }
+
+    const handleModelNameChange = (e) => {
+        setCarValModel(e.target.value);
+        let val = e.target.value;
+        setCarValYear(val)
+        CarYear({ carValName, val }).then((res) => {
+            setCarYear(res?.data);
+        });
+    };
+
+    const handleModificationChange = (e) => {
+        let val = e.target.value;
+        setValModefication(e.target.value);
+        CarMode({ carValName, carValYear, val }).then((res) => {
+            setCarModefication(res?.data);
+        });
+    };
+
     const handleChecked = (e) => {
         const value = e.target.value;
         if (selectedValues.includes(value)) {
             setSelectedValues(selectedValues.filter((item) => item !== value));
         } else {
-            setSelectedValues([...selectedValues, value]);
+            setSelectedValues([...selectedValues , ...value]);
+            console.log([...selectedValues , ...value]);
         }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const price = {
+        const filterdata = {
             category: cate_id,
             sub_category: subcategory,
             price_start: Stprice,
             price_end: endPrice,
-            brand: selectedValues.join(',')
+            brand: selectedValues.join(','),
+            car_company_id: carValName,
+            car_company_model_id: carValModel,
+            car_company_year_id: carValYear,
+            car_company_year_modi_id: carValModefication
         }
-        Product(price).then((res) => {
+        Product(filterdata).then((res) => {
             if (res.success) {
                 dispatch(addProducts(res?.data))
                 console.log(res?.data);
             }
         })
     }
-
 
     return (
         <div>
@@ -208,79 +260,154 @@ const ProductsView = () => {
                             <div className="col-xl-3 col-lg-4 shop-col-width-lg-4">
                                 <div className="shop__sidebar--widget widget__area d-none d-lg-block">
                                     <div className="single__widget price__filter widget__bg">
-                                        <div className='d-flex'>
-                                            <h2 className="">Filters</h2>
-                                            <a onClick={handleReset} className="ms-5 mt-1" style={{ textDecoration: "underline", color: "red" }}>Reset</a>
+                                        <div className='d-flex justify-content-between'>
+                                            <h2>Filters</h2>
+                                            <a onClick={handleReset} className='mt-1' style={{ textDecoration: "underline", color: "red" }}>Reset</a>
                                         </div>
                                         <hr />
                                         <form onSubmit={handleSubmit}>
-                                        <div>
-                                            <h3>Brand</h3>
-                                            {
-                                                isMore ?
-                                                    <>
+                                            <div>
+                                                <h3 className='mt-4'>Origin</h3>
+                                                <div className='d-flex'>
+                                                    <input
+                                                        type='checkbox'
+                                                        value=""
+                                                    />&nbsp;&nbsp;
+                                                    <p className='mt-1'>Aftermarket &nbsp;(18700)</p>
+                                                </div>
+                                                <div className='d-flex'>
+                                                    <input
+                                                        type='checkbox'
+                                                        value=""
+                                                    />&nbsp;&nbsp;
+                                                    <p className='mt-1'>OEM &nbsp;(180)</p>
+                                                </div>
+                                            </div>
+                                            <div className='mt-4'>
+                                                <div className='d-flex justify-content-between'>
+                                                    <h3 className='mt-1'>Vehicle</h3>
+                                                    <a onClick={handleReset} style={{ color: "#12477a" }}>Reset</a>
+                                                </div>
+                                                <div className='mt-3 mb-3'>
+                                                    <select className='vehicle_select_model' onChange={handlecarNameChange}>
+                                                        <option selected value={''}>Choose Car Maker</option>
                                                         {
-                                                            brands?.map((e, index) => {
+                                                            carName.map((e, index) => {
                                                                 return (
-                                                                    <div className='d-flex' key={index}>
-                                                                        <input
-                                                                            type='checkbox'
-                                                                            value={e?.id}
-                                                                            onChange={handleChecked}
-                                                                        />
-                                                                        &nbsp;&nbsp;
-                                                                        <p className='mt-1'>{e?.name}&nbsp;({e?.product_count})</p>
-                                                                    </div>
+                                                                    <option value={e?.id} key={index}>{e?.name}</option>
                                                                 )
                                                             })
                                                         }
-                                                    </>
-                                                    :
-                                                    <>
-                                                        <div className='d-flex'>
-                                                            <input
-                                                                type='checkbox'
-                                                                value={brands[0]?.id}
-                                                                onChange={handleChecked}
-                                                            />&nbsp;&nbsp;
-                                                            <p className='mt-1'>{brands[0]?.name}&nbsp;({brands[0]?.product_count})</p>
-                                                        </div>
-                                                        <div className='d-flex'>
-                                                            <input
-                                                                type='checkbox'
-                                                                value={brands[1]?.id}
-                                                                onChange={handleChecked}
-                                                            />&nbsp;&nbsp;
-                                                            <p className='mt-1'>{brands[1]?.name}&nbsp;({brands[1]?.product_count})</p>
-                                                        </div>
-                                                        <div className='d-flex'>
-                                                            <input
-                                                                type='checkbox'
-                                                                value={brands[2]?.id}
-                                                                onChange={handleChecked}
-                                                            />&nbsp;&nbsp;
-                                                            <p className='mt-1'>{brands[2]?.name}&nbsp;({brands[2]?.product_count})</p>
-                                                        </div>
-                                                    </>
-                                            }
-                                            {
-                                                isMore == false ? <a onClick={handleLoad} style={{ fontWeight: "bold" }}>+{brands?.length} More</a> : <a onClick={handleLoad} style={{ fontWeight: "bold" }}>Less</a>
-                                            }
-                                        </div>
-                                            <h3 className='mt-4'>Price</h3>
-                                            <div className='form_filter'>
-                                                <label>
-                                                    From
-                                                    <input type="number" placeholder='0' value={Stprice} onChange={(e) => setStPrice(e.target.value)} />
-                                                </label>
-                                                <label>To
-                                                    <input type="number" placeholder='250' value={endPrice} onChange={(e) => setEndPrice(e.target.value)} />
-                                                </label>
+                                                    </select>
+                                                    {
+                                                        !carValName.length <= 0 &&
+                                                        <select className='vehicle_select_model mt-2' onChange={handleModelNameChange}>
+                                                            <option selected value={''}>Choose Model Line</option>
+                                                            {
+                                                                carModel.map((e, index) => {
+                                                                    return (
+                                                                        <option value={e?.id} key={index}>{e?.name}</option>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </select>
+                                                    }
+                                                    {
+                                                        !carValModel.length <= 0 &&
+                                                        <select className='vehicle_select_model mt-2' onChange={handleModificationChange}>
+                                                            <option selected value={''}>Choose Model Year</option>
+                                                            {
+                                                                carYear.map((e, index) => {
+                                                                    return (
+                                                                        <option value={e?.id} key={index}>{e?.year}</option>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </select>
+                                                    }
+                                                    {
+                                                        !carValModefication.length <= 0 &&
+                                                        <select className='vehicle_select_model mt-2'>
+                                                            <option selected value={''}>Choose Modification</option>
+                                                            {
+                                                                carModefication.map((e, index) => {
+                                                                    return (
+                                                                        <option value={e?.id} key={index}>{e?.modification}</option>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </select>
+                                                    }
+                                                </div>
                                             </div>
-                                            <div className='form_filter_btn'>
-                                                <button>Filter</button>
+                                            <div className='mt-4'>
+                                                <h3>Brand</h3>
+                                                {
+                                                    isMore ?
+                                                        <>
+                                                            {
+                                                                brands?.map((e, index) => {
+                                                                    return (
+                                                                        <div className='d-flex' key={index}>
+                                                                            <input
+                                                                                type='checkbox'
+                                                                                value={e?.id}
+                                                                                onChange={handleChecked}
+                                                                            />
+                                                                            &nbsp;&nbsp;
+                                                                            <p className='mt-1'>{e?.name}&nbsp;({e?.product_count})</p>
+                                                                        </div>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </>
+                                                        :
+                                                        <>
+                                                            <div className='d-flex'>
+                                                                <input
+                                                                    type='checkbox'
+                                                                    value={brands[0]?.id}
+                                                                    onChange={handleChecked}
+                                                                />&nbsp;&nbsp;
+                                                                <p className='mt-1'>{brands[0]?.name}&nbsp;({brands[0]?.product_count})</p>
+                                                            </div>
+                                                            <div className='d-flex'>
+                                                                <input
+                                                                    type='checkbox'
+                                                                    value={brands[1]?.id}
+                                                                    onChange={handleChecked}
+                                                                />&nbsp;&nbsp;
+                                                                <p className='mt-1'>{brands[1]?.name}&nbsp;({brands[1]?.product_count})</p>
+                                                            </div>
+                                                            <div className='d-flex'>
+                                                                <input
+                                                                    type='checkbox'
+                                                                    value={brands[2]?.id}
+                                                                    onChange={handleChecked}
+                                                                />&nbsp;&nbsp;
+                                                                <p className='mt-1'>{brands[2]?.name}&nbsp;({brands[2]?.product_count})</p>
+                                                            </div>
+                                                        </>
+                                                }
+                                                {
+                                                    isMore == false ? <a onClick={handleLoad} style={{ fontWeight: "bold" }}>+{brands?.length} More</a> : <a onClick={handleLoad} style={{ fontWeight: "bold" }}>Less</a>
+                                                }
                                             </div>
-                                        
+                                            <div className='mt-4'>
+                                                <h3>Price</h3>
+                                                <div className='form_filter'>
+                                                    <label>
+                                                        From
+                                                        <input type="number" placeholder='0' value={Stprice} onChange={(e) => setStPrice(e.target.value)} />
+                                                    </label>
+                                                    <label>To
+                                                        <input type="number" placeholder='250' value={endPrice} onChange={(e) => setEndPrice(e.target.value)} />
+                                                    </label>
+                                                </div>
+                                                <div className='form_filter_btn'>
+                                                    <button>Filter</button>
+                                                </div>
+                                            </div>
                                         </form>
                                     </div>
                                     <div className="single__widget widget__bg">
@@ -339,7 +466,6 @@ const ProductsView = () => {
 
                                         </ul>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -418,29 +544,29 @@ const ProductsView = () => {
                                                                                                 >
                                                                                                     {
                                                                                                         isLoadingImage ? <>
-                                                                                                        <img
+                                                                                                            <img
                                                                                                                 // src={"https://via.placeholder.com/300x200/f0f0f0"}
                                                                                                                 src={Placeholder_view}
                                                                                                                 width={300}
                                                                                                                 height={200}
                                                                                                                 alt="categories-img-placeholder"
+                                                                                                            />
+                                                                                                        </>
+                                                                                                            :
+                                                                                                            <>
+                                                                                                                <img
+                                                                                                                    className="product__card--thumbnail__img product__primary--img"
+                                                                                                                    src={e?.images[0]?.image}
+                                                                                                                    alt="product-img"
                                                                                                                 />
-                                                                                                        </>
-                                                                                                        :
-                                                                                                        <>
-                                                                                                        <img
-                                                                                                        className="product__card--thumbnail__img product__primary--img"
-                                                                                                        src={e?.images[0]?.image}
-                                                                                                        alt="product-img"
-                                                                                                    />
-                                                                                                    <img
-                                                                                                        className="product__card--thumbnail__img product__secondary--img"
-                                                                                                        src={e?.images[1]?.image}
-                                                                                                        alt="product-img"
-                                                                                                    />
-                                                                                                        </>
+                                                                                                                <img
+                                                                                                                    className="product__card--thumbnail__img product__secondary--img"
+                                                                                                                    src={e?.images[1]?.image}
+                                                                                                                    alt="product-img"
+                                                                                                                />
+                                                                                                            </>
                                                                                                     }
-                                                                                                    
+
                                                                                                 </a>
                                                                                                 {e?.discount &&
                                                                                                     <span className="product__badge">{e?.discount}%</span>
@@ -604,24 +730,24 @@ const ProductsView = () => {
                                                                                                 >
                                                                                                     {
                                                                                                         isLoadingImage ?
-                                                                                                        <>
-                                                                                                        <img
-                                                                    // src={"https://via.placeholder.com/300x200/f0f0f0"}
-                                                                    src={Placeholder_view}
-                                                                    width={300}
-                                                                    height={200}
-                                                                    alt="categories-img-placeholder"
-                                                                    />
-                                                                                                        </>
-                                                                                                        :
-                                                                                                        <>
-                                                                                                        <img
-                                                                                                        className="product__card--thumbnail__img product__primary--img"
-                                                                                                        src={e?.images[0]?.image}
-                                                                                                        alt="product-img"
-                                                                                                    />
-                                                                                                    
-                                                                                                        </>
+                                                                                                            <>
+                                                                                                                <img
+                                                                                                                    // src={"https://via.placeholder.com/300x200/f0f0f0"}
+                                                                                                                    src={Placeholder_view}
+                                                                                                                    width={300}
+                                                                                                                    height={200}
+                                                                                                                    alt="categories-img-placeholder"
+                                                                                                                />
+                                                                                                            </>
+                                                                                                            :
+                                                                                                            <>
+                                                                                                                <img
+                                                                                                                    className="product__card--thumbnail__img product__primary--img"
+                                                                                                                    src={e?.images[0]?.image}
+                                                                                                                    alt="product-img"
+                                                                                                                />
+
+                                                                                                            </>
                                                                                                     }
                                                                                                     <img
                                                                                                         className="product__card--thumbnail__img product__secondary--img"

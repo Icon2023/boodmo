@@ -208,23 +208,32 @@ const Header = () => {
                                                             : ""
                                                     }
                                                 </li>
-
-                                                {
-                                                    user?.success !== true ? <li className="header__sub--menu__items">
-                                                        <a href="/login" className="header__sub--menu__link">
-                                                            Login
-                                                        </a>
-                                                    </li> : ""
-                                                }
                                                 <li className="header__sub--menu__items">
-                                                    <a
-                                                        href="/privacy-policy"
+                                                    {
+                                                        user?.success !== true ?
+                                                            <Link to="/login" className="header__sub--menu__link">
+                                                                Login
+                                                            </Link>
+                                                            : ""
+                                                    }
+                                                </li>
+                                                <li className="header__sub--menu__items">
+                                                    <Link
+                                                        to="/privacy-policy"
                                                         className="header__sub--menu__link"
                                                     >
                                                         Privacy Policy
-                                                    </a>
+                                                    </Link>
                                                 </li>
-
+                                                <li className="header__sub--menu__items">
+                                                    {
+                                                        user?.success === true ?
+                                                            <Link to="/wishlist" className="header__sub--menu__link">
+                                                                My Wishlist
+                                                            </Link>
+                                                            : ""
+                                                    }
+                                                </li>
                                             </ul>
                                         </li>
                                         <li className="header__menu--items">

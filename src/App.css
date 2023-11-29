@@ -255,7 +255,7 @@ input[type=number] {
 img {
     max-width: 100%;
     height: auto;
-    display: block;
+    /* display: block; */
 }
 
 span {
@@ -344,6 +344,48 @@ hr {
     padding-right: var(--offset-fluid);
     padding-left: var(--offset-fluid)
 }
+
+.car_box {
+    height: 185px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 10px;
+    background-color: #fff;
+    box-shadow: 0 3px 10px #ebebeb;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.car_select_model {
+    width: 100%;
+    height: 36px;
+    text-transform: uppercase;
+    font-size: 12px;
+    border: 1px solid #d9deea;
+    border-radius: 4px;
+    color: #12477a;
+    font-weight: 400;
+}
+
+.car_box:hover {
+    box-shadow: 0 4px 15px #b6b6b6;
+}
+
+.vehicle_select_model {
+    width: 100%;
+    height: 36px;
+    padding-left: 10px;
+    text-transform: capitalize;
+    font-size: 14px;
+    border: 1px solid #d9deea;
+    border-radius: 4px;
+    color: #12477a;
+    font-weight: 400;
+}
+
+
 
 @media only screen and (min-width:992px) {
     .container-fluid {
@@ -648,6 +690,23 @@ hr {
     background: var(--secondary-color);
     color: var(--text-white-color);
     border: 0
+}
+
+.catalog_btn {
+    background-color: #ed1d24;
+    border: 0;
+    color: white;
+    margin-top: 5px;
+    padding: 0 2rem;
+    height: 4rem;
+    width: 180px;
+    border-radius: 5px;
+}
+
+.cat_top {
+    display: flex;
+    justify-content: end;
+    margin-right: 80px;
 }
 
 .primary__btn:hover {
@@ -1761,7 +1820,7 @@ select {
 }
 
 .margin_top_all {
-    margin-top: 75px;
+    margin-top: 85px;
 }
 
 .header__topbar {
@@ -7926,7 +7985,7 @@ input.quickview__value--number {
 }
 
 .search__filter--btn {
-    width: 100%;
+    width: 180px;
     height: 4rem;
     line-height: 4rem;
     border-radius: 5px
@@ -11087,14 +11146,25 @@ span.info__list--item-content {
     color: var(--secondary-color)
 }
 
-.cart__price {
-    font-weight: 600
+.cart__prices {
+    font-weight: 600;
 }
 
 @media only screen and (min-width:992px) {
-    .cart__price {
+    .cart__prices {
         font-size: 1.6rem
     }
+}
+
+.cart__checkout {
+    font-weight: 600;
+    justify-content: flex-end;
+    margin-top: 20px;
+    display: flex;
+}
+
+.cart__checkout button {
+    width: 200px;
 }
 
 .continue__shopping {
@@ -11843,14 +11913,15 @@ details>summary::-webkit-details-marker {
     padding: 3rem 2rem;
 }
 
-.ship_multiple_box{
+.ship_multiple_box {
     background: var(--body-background-color);
     -webkit-box-shadow: 0 2px 22px rgba(0, 0, 0, .16);
     box-shadow: 0 2px 22px rgba(0, 0, 0, .16);
     padding: 3rem 2rem;
     width: 350px;
 }
-.Add_ship h3{
+
+.Add_ship h3 {
     background-color: red;
     color: white;
     cursor: pointer;
@@ -13382,7 +13453,7 @@ details>summary::-webkit-details-marker {
 }
 
 
-  /* ******************* Ex-1 Thank You Page ************ */
+/* ******************* Ex-1 Thank You Page ************ */
 
 
 .thank-you-main {
@@ -13392,57 +13463,58 @@ details>summary::-webkit-details-marker {
     justify-content: center;
     align-items: center;
     height: 100vh;
-  }
-  
-  .image-container-thank-you {
+}
+
+.image-container-thank-you {
     position: relative;
     text-align: center;
-  }
-  
-  .image-container-thank-you img {
+}
+
+.image-container-thank-you img {
     max-width: 100%;
     height: auto;
     display: block;
-  }
-  
-  .centered-text-thank-you {
+}
+
+.centered-text-thank-you {
     position: absolute;
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
     /* background-color: rgba(255, 255, 255, 0.7); */
-    color:rgba(255, 255, 255, 0.7) ;
-    padding: 20px; /* Optional: Add padding to the text */
-  }
+    color: rgba(255, 255, 255, 0.7);
+    padding: 20px;
+    /* Optional: Add padding to the text */
+}
 
-  /* ******************* Ex-2 Thank You Page ************ */
-  .thank_you {
+/* ******************* Ex-2 Thank You Page ************ */
+.thank_you {
     margin-left: auto;
     margin-right: auto;
     margin-top: 60px;
     text-align: center;
     width: 500px;
     border-radius: 10px;
-  }
-  
-  .thank_btn button {
+}
+
+.thank_btn button {
     padding: 10px 30px;
     background-color: lightcoral;
     color: #fff;
     margin-bottom: 50px;
     background-color: 5px;
     border-radius: 5px;
-    border:none;
-  }
-  
-  .thank_btn button:hover {
+    border: none;
+}
+
+.thank_btn button:hover {
     background-color: white;
     color: lightcoral;
     border: 1px solid lightcoral;
     transition: 0.3s;
-  }
+}
 
-  .txt--gradient-green {
+.txt--gradient-green {
     background-image: linear-gradient(to right, #16d6d9, #96cc29);
     color: rgba(0, 0, 0, 0);
     -webkit-background-clip: text;

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import "./car_makers.css";
 import { CarCompanies } from "../Services/apiServices";
-import PopularCarMakers from "./HomeSubpages/PopularCarMakers";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import HeadingSection from "../Utils/HeadingSection";
+import "./car_makers.css";
 
 const CarMakers = () => {
 
@@ -11,22 +10,18 @@ const CarMakers = () => {
   let pathName = location.pathname;
 
   const [carCompany, setCarCompany] = useState([]);
-  // State to track the filter letter
   const [filterLetter, setFilterLetter] = useState("");
 
   useEffect(() => {
     CarCompanies()
       .then((res) => {
         setCarCompany(res?.data);
+        console.log(res?.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-
-  const handleFilterClick = (letter) => {
-    setFilterLetter(letter);
-  };
 
   // Function to filter elements based on the first letter
   const filterElements = () => {
@@ -60,19 +55,9 @@ const CarMakers = () => {
     ),
   ];
   return (
-    <div>
-      <div className="container mt-5">
-        {/* <div className="section__heading border-bottom mb-30 d-flex flex-wrap justify-content-between">
-          <h2 className="section__heading--maintitle">
-            Search Parts by <span>VEHICLE MAKERS</span>
-          </h2>
-          <input
-            type="text"
-            placeholder="Search Car Makes"
-            value={filterLetter}
-            onChange={handleInputChange}
-          />
-        </div> */}
+    <div className="margin_top_all">
+      <div className="container">
+
         {
           pathName == "/vehicles" ? <HeadingSection isInput title="Search Parts by VEHICLE MAKERS" value={filterLetter} onChange={handleInputChange} />
             : null

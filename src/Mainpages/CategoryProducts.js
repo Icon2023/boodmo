@@ -59,7 +59,7 @@ const CategoryProducts = () => {
                                             <a href="/">Home</a>
                                         </li>
                                         <li className="breadcrumb__content--menu__items">
-                                            <span>ategory</span>
+                                            <span>Category</span>
                                         </li>
                                     </ul>
                                 </div>

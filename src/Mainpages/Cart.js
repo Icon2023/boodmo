@@ -151,7 +151,7 @@ const Cart = () => {
                                                                                             </div>
                                                                                         </td>
                                                                                         <td className="cart__table--body__list">
-                                                                                            <span className="cart__price">{e?.price}/-</span>
+                                                                                            <span className="cart__prices">{e?.price}/-</span>
                                                                                         </td>
                                                                                         <td className="cart__table--body__list">
                                                                                             <div className="quantity__box">
@@ -173,7 +173,7 @@ const Cart = () => {
                                                                                             </div>
                                                                                         </td>
                                                                                         <td className="cart__table--body__list">
-                                                                                            <span className="cart__price end">{e?.price * e?.qty}/-</span>
+                                                                                            <span className="cart__prices">{e?.price * e?.qty}/-</span>
                                                                                         </td>
                                                                                     </tr>
                                                                                 )
@@ -214,7 +214,7 @@ const Cart = () => {
                                                                                             </div>
                                                                                         </td>
                                                                                         <td className="cart__table--body__list">
-                                                                                            <span className="cart__price">{e?.product?.original_price}/-</span>
+                                                                                            <span className="cart__prices">{e?.product?.original_price}/-</span>
                                                                                         </td>
                                                                                         <td className="cart__table--body__list">
                                                                                             <div className="quantity__box">
@@ -236,7 +236,7 @@ const Cart = () => {
                                                                                             </div>
                                                                                         </td>
                                                                                         <td className="cart__table--body__list">
-                                                                                            <span className="cart__price end">{e?.product?.original_price * e?.qty}/-</span>
+                                                                                            <span className="cart__prices">{e?.product?.original_price * e?.qty}/-</span>
                                                                                         </td>
                                                                                     </tr>
                                                                                 )
@@ -244,25 +244,13 @@ const Cart = () => {
                                                                         }
                                                                     </>
                                                             }
-
-                                                            <tr className="cart__table--body__items" >
-                                                                <td className="cart__table--body__list">
-                                                                    {/* <span className="cart__price end">Total Price</span> */}
-                                                                </td>
-                                                                <td className="cart__table--body__list">
-                                                                </td>
-                                                                <td className="cart__table--body__list">
-                                                                </td>
-                                                                <td className="cart__table--body__list">
-                                                                    <span className="cart__price end">
-                                                                        <button className='checkout_btn' onClick={handleCheckout}>
-                                                                            CheckOut
-                                                                        </button>
-                                                                    </span>
-                                                                </td>
-                                                            </tr>
                                                         </tbody>
                                                     </table>
+                                                    <span className="cart__checkout">
+                                                        <button className='checkout_btn' onClick={handleCheckout}>
+                                                            CheckOut
+                                                        </button>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
