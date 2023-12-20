@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./apiHeader";
 
-const BASE_URL = "http://192.168.100.123:8000"
+const BASE_URL = "http://192.168.100.51:8002"
 
 export const Product = async (data) => {
     const response = await axios.post(`${BASE_URL}/api/product/`, data);
@@ -32,6 +32,15 @@ export const Categories = async () => {
 
 export const SingleProductDetails = async (id) => {
     const response = await axios.get(`${BASE_URL}/api/product/${id}`);
+    if (response?.status) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}
+
+export const SearchProduct = async (pn) => {
+    const response = await axios.get(`${BASE_URL}/api/search/${pn}`);
     if (response?.status) {
         return response.data;
     } else {

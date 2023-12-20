@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ShippingAddress from '../Subpages/ShippingAddress';
 import { useDispatch, useSelector } from 'react-redux';
-import { CartList, GetCouponCode } from '../Services/apiServices';
+import { CartList, GetAddressUser, GetCouponCode } from '../Services/apiServices';
 import { addLoginCart, add_coupon_code, add_ship_details, coupon_Pricevalue, remove_coupon_code } from '../store/reducers/ProductSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
@@ -30,7 +30,7 @@ const Checkout = () => {
 
     const coupon_value = ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2)
 
-    console.log(coupon_value , "code");
+    console.log(coupon_value, "code");
 
     useEffect(() => {
         CartList().then((res) => {
@@ -159,52 +159,52 @@ const Checkout = () => {
                         <div className="row">
                             <div className="col-lg-7 col-md-6">
                                 <div className="main checkout__mian">
-                                        <div className="checkout__content--step section__contact--information">
-                                            <div className="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
-                                                <h2 className="section__header--title h3">
-                                                    Contact information
-                                                </h2>
-                                            </div>
-                                            <div className="customer__information">
-                                                <div className="checkout__email--phone mb-12">
-                                                    <label>
-                                                        <input
-                                                            className="checkout__input--field border-radius-5"
-                                                            placeholder="Email or mobile phone mumber"
-                                                            type="text"
-                                                            value={email}
-                                                            disabled
-                                                        />
-                                                    </label>
-                                                </div>
+                                    <div className="checkout__content--step section__contact--information">
+                                        <div className="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
+                                            <h2 className="section__header--title h3">
+                                                Contact information
+                                            </h2>
+                                        </div>
+                                        <div className="customer__information">
+                                            <div className="checkout__email--phone mb-12">
+                                                <label>
+                                                    <input
+                                                        className="checkout__input--field border-radius-5"
+                                                        placeholder="Email or mobile phone mumber"
+                                                        type="text"
+                                                        value={email}
+                                                        disabled
+                                                    />
+                                                </label>
                                             </div>
                                         </div>
-                                        <div className='Add_ship'>
-                                    <h3 className='text-center mx-auto btn_address'  onClick={handleOpenNewAddress}><AiOutlinePlus className='mb-1' style={{ fontSize: "24px" }} /> Add New Address</h3>
-                                </div>
+                                    </div>
+                                    <div className='Add_ship'>
+                                        {/* <h3 className='text-center mx-auto btn_address'  onClick={handleOpenNewAddress}><AiOutlinePlus className='mb-1' style={{ fontSize: "24px" }} /> Add New Address</h3> */}
+                                    </div>
                                     <div className='flex_address d-flex flex-wrap'>
-                                {
-                                    add_ship?.map((e, index) => {
-                                        return (
+                                        {
+                                            add_ship?.map((e, index) => {
+                                                return (
+                                                    <>
+                                                        <div className='ship_multiple_box2 mt-5 ' key={index}>
+                                                            <div className='d-flex justify-content-between'>
+                                                                <h3>{e?.name}</h3>
+                                                                {/* <AiOutlineClose style={{ cursor: "pointer" }} onClick={() => handleAddressRemove(e?.id)} /> */}
+                                                            </div>
+                                                            <p>{e?.address}  - {e?.mobile}</p>
+                                                            <p>{e?.city},{e?.state},{e?.country}</p>
+                                                        </div>
+                                                    </>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                    {
+                                        isOpen ?
                                             <>
-                                                <div className='ship_multiple_box2 mt-5 ' key={index}>
-                                                    <div className='d-flex justify-content-between'>
-                                                        <h3>{e?.name}</h3>
-                                                        <AiOutlineClose style={{ cursor: "pointer" }} onClick={() => handleAddressRemove(e?.id)} />
-                                                    </div>
-                                                    <p>{e?.address}  - {e?.mobile}</p>
-                                                    <p>{e?.city},{e?.state},{e?.country}</p>
-                                                </div>
-                                            </>
-                                        )
-                                    })
-                                }
-                                </div>
-                                {
-                                isOpen  ? 
-                                <>
-                                <form onSubmit={handleSubmit}>
-                                <div className="checkout__content--step section__shipping--address">
+                                                <form onSubmit={handleSubmit}>
+                                                    <div className="checkout__content--step section__shipping--address">
                                                         <div className="section__header mb-25">
                                                         </div>
                                                         <div className="section__shipping--address__content">
@@ -400,10 +400,10 @@ const Checkout = () => {
                                                             Continue To Save
                                                         </button>
                                                     </div>
-                                                    </form>
-                                </>
-                                :
-                                null}         
+                                                </form>
+                                            </>
+                                            :
+                                            null}
                                 </div>
                             </div>
                             <div className="col-lg-5 col-md-6">
@@ -487,7 +487,7 @@ const Checkout = () => {
                                                 </tr>
                                                 <tr className="checkout__total--items">
                                                     <td className="checkout__total--title text-left">
-                                                        Shipping
+                                                        Discount ( {add_ship?.coupon} Appied )
                                                     </td>
                                                     <td className="checkout__total--calculated__text text-right">
                                                         {(countTotal(login_cart)) * (coupon_code?.coupon_discount / 100) ? ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : 0}/-

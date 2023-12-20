@@ -33,7 +33,7 @@ const ProductsView = () => {
 
     const [brands, setBrands] = useState([]);
     const [isMore, setIsMore] = useState(false);
-    const [selectedValues, setSelectedValues] = useState([]);
+    const [selectedValues, setSelectedValues] = useState();
     const [isLoadingImage, setIsLoadingImage] = useState(true);
 
     const [carName, setCarName] = useState([]);
@@ -201,12 +201,15 @@ const ProductsView = () => {
 
     const handleChecked = (e) => {
         const value = e.target.value;
-        if (selectedValues.includes(value)) {
-            setSelectedValues(selectedValues.filter((item) => item !== value));
-        } else {
-            setSelectedValues([...selectedValues , ...value]);
-            console.log([...selectedValues , ...value]);
-        }
+        // if (selectedValues.includes(value)) {
+        //     setSelectedValues(selectedValues.filter((item) => item !== value));
+        // } else {
+        //     setSelectedValues([...selectedValues, ...value]);
+        //     console.log([...selectedValues, ...value]);
+        // }
+        setSelectedValues(value);
+        // console.log(value);
+
     };
 
     const handleSubmit = (e) => {
@@ -216,7 +219,7 @@ const ProductsView = () => {
             sub_category: subcategory,
             price_start: Stprice,
             price_end: endPrice,
-            brand: selectedValues.join(','),
+            brand: selectedValues,
             car_company_id: carValName,
             car_company_model_id: carValModel,
             car_company_year_id: carValYear,
@@ -253,6 +256,7 @@ const ProductsView = () => {
                         </div>
                     </div>
                 </section>
+
                 {/* Start shop section */}
                 <div className="shop__section section--padding">
                     <div className="container">
@@ -270,14 +274,14 @@ const ProductsView = () => {
                                                 <h3 className='mt-4'>Origin</h3>
                                                 <div className='d-flex'>
                                                     <input
-                                                        type='checkbox'
+                                                        type='radio'
                                                         value=""
                                                     />&nbsp;&nbsp;
                                                     <p className='mt-1'>Aftermarket &nbsp;(18700)</p>
                                                 </div>
                                                 <div className='d-flex'>
                                                     <input
-                                                        type='checkbox'
+                                                        type='radio'
                                                         value=""
                                                     />&nbsp;&nbsp;
                                                     <p className='mt-1'>OEM &nbsp;(180)</p>
@@ -350,7 +354,8 @@ const ProductsView = () => {
                                                                     return (
                                                                         <div className='d-flex' key={index}>
                                                                             <input
-                                                                                type='checkbox'
+                                                                                type='radio'
+                                                                                name='brand'
                                                                                 value={e?.id}
                                                                                 onChange={handleChecked}
                                                                             />
@@ -365,7 +370,8 @@ const ProductsView = () => {
                                                         <>
                                                             <div className='d-flex'>
                                                                 <input
-                                                                    type='checkbox'
+                                                                    type='radio'
+                                                                    name='brand'
                                                                     value={brands[0]?.id}
                                                                     onChange={handleChecked}
                                                                 />&nbsp;&nbsp;
@@ -373,7 +379,8 @@ const ProductsView = () => {
                                                             </div>
                                                             <div className='d-flex'>
                                                                 <input
-                                                                    type='checkbox'
+                                                                    type='radio'
+                                                                    name='brand'
                                                                     value={brands[1]?.id}
                                                                     onChange={handleChecked}
                                                                 />&nbsp;&nbsp;
@@ -381,7 +388,8 @@ const ProductsView = () => {
                                                             </div>
                                                             <div className='d-flex'>
                                                                 <input
-                                                                    type='checkbox'
+                                                                    type='radio'
+                                                                    name='brand'
                                                                     value={brands[2]?.id}
                                                                     onChange={handleChecked}
                                                                 />&nbsp;&nbsp;

@@ -22,13 +22,14 @@ import Page404 from './Mainpages/Page404';
 import Review from './Mainpages/Review';
 import MyOrders from './Mainpages/MyOrders';
 import MyAddress from './Mainpages/MyAddress';
-import ThankYou from './Subpages/ThankYou'
-import Contact from './Mainpages/contact'
+import ThankYou from './Subpages/ThankYou';
+import Contact from './Mainpages/contact';
 import 'react-modern-drawer/dist/index.css';
 import "../node_modules/slick-carousel/slick/slick.css";
 import "../node_modules/slick-carousel/slick/slick-theme.css";
 import BrandProductsView from './Subpages/BrandProducts';
 import CarMakerListAllProducts from './Mainpages/CarMakerListAllProducts';
+import SearchBar from './Mainpages/SearchBar';
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
           <Route path='/shop/:id' element={<CategoryProducts />} />
           <Route path='/shop/:cate_id/:subcategory' element={<ProductsView />} />
           <Route path='/productsdetail/:id' element={<SingleProductsDetails />} />
+          <Route path='/search/:pn' element={<SearchBar />} />
 
           <Route path='/wishlist' element={<ProtectedRouteWishlist><WishList /></ProtectedRouteWishlist>} />
           <Route path='/checkout' element={<ProtectedRouteWishlist><Checkout /></ProtectedRouteWishlist>} />

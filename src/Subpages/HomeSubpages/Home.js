@@ -11,6 +11,9 @@ const Home = () => {
       {/* Start slider section */}
       <HomeSilder />
 
+      {/* start banner brand */}
+      <Banner />
+
       {/* Start categories section */}
       <ShopCategory />
 
@@ -20,8 +23,7 @@ const Home = () => {
       {/* start Popular brand */}
       <BrandsWeTrust />
 
-      {/* start banner brand */}
-      <Banner />
+
     </>
   );
 };

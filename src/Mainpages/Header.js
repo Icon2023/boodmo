@@ -5,15 +5,19 @@ import { BiLogoFacebook, BiLogoInstagramAlt, BiLogoPinterest, BiLogoTwitter, BiL
 import { BsShop } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 import Drawer from 'react-modern-drawer';
-import { Link } from 'react-router-dom'
-import { removeAllItemWishlist, removeAllLoginCart } from '../store/reducers/ProductSlice'
+import { Link, useNavigate } from 'react-router-dom'
+import { add_search, removeAllItemWishlist, removeAllLoginCart } from '../store/reducers/ProductSlice'
+import { Product } from '../Services/apiServices'
 
 const Header = () => {
     const dispatch = useDispatch();
-    const { add_wish, addto_cart, login_cart } = useSelector((state) => ({ ...state.products }));
+    const navigate = useNavigate();
+    const { add_wish, addto_cart, login_cart, serach_bar } = useSelector((state) => ({ ...state.products }));
     const user = JSON.parse(localStorage.getItem('USER'));
     const [isOpen, setIsOpen] = useState(false);
     const [scroll, setScroll] = useState(false);
+
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
         const changeNavbarBg = () => {
@@ -45,6 +49,16 @@ const Header = () => {
         setIsOpen(false)
     }
 
+    const handleSearchClick = (e) => {
+        setSearch(e.target.value)
+    }
+
+    const handleSearch = () => {
+        if (search.length > 0) {
+            navigate(`/search/${search}`)
+            window.location.reload();
+        }
+    };
     return (
         <>
             <header className="header__section">
@@ -152,7 +166,7 @@ const Header = () => {
                     </div>
                 </div>
 
-                <div className={`main__header ${scroll ? " header__stickyclose" : "header__sticky"}`}>
+                <div className={`main__header ${scroll ? "header__stickyclose" : "header__sticky"}`}>
                     <div className="container-fluid">
                         <div className="main__header--inner position__relative d-flex justify-content-between align-items-center">
                             <div className='toggle_icon'>
@@ -236,25 +250,20 @@ const Header = () => {
                                                 </li>
                                             </ul>
                                         </li>
-                                        <li className="header__menu--items">
-                                            <a className="header__menu--link" href="/contact-us">
-                                                Contact
-                                            </a>
-                                        </li>
                                     </ul>
                                 </nav>
                             </div>
                             <div className="header__account">
                                 <ul className="header__account--wrapper d-flex align-items-center">
                                     <li className="header__account--items  header__account--search__items d-sm-2-none">
-                                        <a
-                                            className="header__account--btn search__open--btn"
-                                            href="/"
-                                            data-offcanvas=""
+                                        <p
+                                            className=""
+                                            style={{ cursor: "pointer" }}
                                         >
-                                            <AiOutlineSearch style={{ fontSize: "28px" }} />
                                             <span className="visually-hidden">Search</span>
-                                        </a>
+                                            <input type='text' placeholder='Search Here...' className='search_box' value={search} onChange={handleSearchClick} />
+                                            <AiOutlineSearch style={{ fontSize: "28px" }} onClick={handleSearch} />
+                                        </p>
                                     </li>
                                     <li className="header__account--items d-none d-lg-block">
                                         {
@@ -301,6 +310,22 @@ const Header = () => {
                         </div>
                     </div>
                 </div>
+                {/* {
+                    <div className={search.length > 0 && allData.length > 0 ? 'search_barview' : ""}>
+                        {allData.length > 0 &&
+                            search.length > 0 &&
+                            allData.map((e, index) => {
+                                return (
+                                    <div key={index}>
+                                        <p>{e?.name}</p>
+                                        <hr />
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                } */}
+
 
                 {/* Start Offcanvas stikcy toolbar */}
                 <div className="offcanvas__stikcy--toolbar">

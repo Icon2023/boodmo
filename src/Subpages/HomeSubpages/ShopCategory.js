@@ -10,7 +10,7 @@ const ShopCategory = () => {
 
     useEffect(() => {
         Categories().then((res) => {
-            if (res.success) {
+            if (res?.success) {
                 dispatch(addCategory(res?.data))
                 // console.log(res?.data);
             }
@@ -25,7 +25,7 @@ const ShopCategory = () => {
  
     return (
         <>
-            <section className="categories__section section--padding">
+            <section className="categories__section">
                 <div className="container">
                     <div className="section__heading border-bottom mb-30">
                         <h2 className="section__heading--maintitle">
@@ -37,7 +37,7 @@ const ShopCategory = () => {
                             isOpen ?
                                 <>
                                     {
-                                        category_list.map((e, index) => {
+                                        category_list?.map((e, index) => {
                                             return (
                                                 <div className="categories__card--style3 text-center" key={index}>
                                                     <a className="categories__card--link" href={`/shop/${e?.id}`}>

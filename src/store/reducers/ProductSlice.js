@@ -15,7 +15,8 @@ export const productsSlice = createSlice({
     login_cart: [],
     add_ship: [],
     selected_value_address:[],
-    coupon_value:""
+    coupon_value:"",
+    serach_bar:[]
   },
 
   reducers: {
@@ -139,6 +140,10 @@ export const productsSlice = createSlice({
       state.add_ship = state.add_ship.filter((e) => e.id !== payload)
     },
 
+    add_search: (state, { payload }) => {
+      state.serach_bar = payload
+    },
+
   }
 })
 
@@ -166,7 +171,8 @@ export const {
   add_ship_details,
   removeAddress,
   selectedValueAddress,
-  coupon_Pricevalue
+  coupon_Pricevalue,
+  add_search
 
 } = productsSlice.actions;
 
