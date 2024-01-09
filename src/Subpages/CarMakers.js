@@ -3,6 +3,7 @@ import { CarCompanies } from "../Services/apiServices";
 import { Link, useLocation } from "react-router-dom";
 import HeadingSection from "../Utils/HeadingSection";
 import "./car_makers.css";
+import { ScrollToTop } from "../Utils/ScrollToTop";
 
 const CarMakers = () => {
 
@@ -13,6 +14,7 @@ const CarMakers = () => {
   const [filterLetter, setFilterLetter] = useState("");
 
   useEffect(() => {
+    ScrollToTop();
     CarCompanies()
       .then((res) => {
         setCarCompany(res?.data);
@@ -21,6 +23,7 @@ const CarMakers = () => {
       .catch((err) => {
         console.log(err);
       });
+      ScrollToTop();
   }, []);
 
   // Function to filter elements based on the first letter
@@ -92,9 +95,12 @@ const CarMakers = () => {
                   <ul className="makers-list__group__list">
                     {groupedElements[letter].map((element, index) => (
                       <div className="makers-list__group__list__item">
-                        <a href="#" className="car-maker-item" key={index}>
+                        <Link to={`/vehicles/${element?.name}/${element?.id}`} className="car-maker-item">
+                          
+                        {/* <a href="#" className="car-maker-item" key={index}> */}
                           {element.toUpperCase()}
-                        </a>
+                        </Link>
+                        {/* </a> */}
                       </div>
                     ))}
                   </ul>

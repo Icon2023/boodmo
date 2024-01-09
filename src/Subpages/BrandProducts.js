@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrandProduct, Brands, Product } from "../Services/apiServices";
+import { BrandProduct, BrandWiseFilter, Brands, Product } from "../Services/apiServices";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -18,6 +18,7 @@ const BrandProductsView = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [seletedBand, setSeletedBand] = useState([]);
+  const [BandWise, setBandWise] = useState(null);
 
   const [brands, setBrands] = useState([]);
 
@@ -123,6 +124,14 @@ const BrandProductsView = () => {
       })
   }
 
+  useEffect(() => {
+    BrandWiseFilter(id).then((res) => {
+        console.log(";;;;;;;",res?.data);
+        setBandWise(res?.data)
+        
+    });
+}, [])
+
 
 
   useEffect(() => {
@@ -220,7 +229,7 @@ const BrandProductsView = () => {
                 <div className="row">
                   <div className="col-xl-3 col-lg-4 shop-col-width-lg-4">
                     <div className="shop__sidebar--widget widget__area d-none d-lg-block">
-                      <div className="single__widget price__filter widget__bg">
+                      {/* <div className="single__widget price__filter widget__bg">
                         <div className="d-flex">
                           <h2 className="">Filters</h2>
                           <a
@@ -337,7 +346,7 @@ const BrandProductsView = () => {
                             <button>Filter</button>
                           </div>
                         </form>
-                      </div>
+                      </div> */}
                       <div className="single__widget widget__bg">
                         <h2 className="widget__title h3">Categories</h2>
                         <ul
@@ -485,7 +494,8 @@ const BrandProductsView = () => {
                               <div className="tab_pane active">
                                 <div className="product__section--inner product__section--style3__inner">
                                   <div className="row row-cols-1 mb--n30">
-                                    {seletedBand?.map((e, index) => {
+                                    {/* {seletedBand?.map((e, index) => { */}
+                                    {BandWise?.map((e, index) => {
                                       return (
                                         <>
                                           <div

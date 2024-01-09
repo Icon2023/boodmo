@@ -16,6 +16,11 @@ import { dateFormate } from "../Utils/utils";
 import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 import "../../node_modules/react-responsive-carousel/lib/styles/carousel.min.css";
 import Rating from '@mui/material/Rating';
+import Lightbox from 'react-image-lightbox';
+import '../../node_modules/react-image-lightbox/style.css';
+import { GoSearch } from "react-icons/go";
+import { FiSearch } from "react-icons/fi";
+
 
 
 const SingleProductsDetails = () => {
@@ -28,6 +33,29 @@ const SingleProductsDetails = () => {
     const [rating, setRating] = useState(0);
     const [reviewText, setReviewText] = useState("");
     const { add_Details, add_wish, addto_cart, login_cart } = useSelector((state) => ({ ...state.products }));
+    const [lightboxIsOpen, setLightboxIsOpen] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [currentImageSetIndex, setCurrentImageSetIndex] = useState(0);
+  
+    const openLightbox = (index) => {
+        setCurrentImageIndex(index);
+        setLightboxIsOpen(true);
+        document.body.style.overflow = 'hidden';
+      };
+    
+      const closeLightbox = () => {
+        setLightboxIsOpen(false);
+        document.body.style.overflow = 'auto';
+      };
+
+      const gotoPrevious = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + add_Details?.images?.length) % add_Details?.images?.length);
+      };
+    
+      const gotoNext = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % add_Details?.images?.length);
+      };
+
 
     useEffect(() => {
         SingleProductDetails(id).then((res) => {
@@ -164,12 +192,25 @@ const SingleProductsDetails = () => {
 
                 {/* Start product details section */}
 
+                {lightboxIsOpen && (
+                    <Lightbox
+                    mainSrc={add_Details?.images?.[currentImageIndex]?.image}
+                    onCloseRequest={closeLightbox}
+                    nextSrc={add_Details?.images?.[(currentImageIndex + 1) % add_Details?.images?.length]?.image}
+                    prevSrc={add_Details?.images?.[(currentImageIndex - 1 + add_Details?.images?.length) % add_Details?.images?.length]?.image}
+                    onMovePrevRequest={gotoPrevious}
+                    onMoveNextRequest={gotoNext}
+                    />
+                )}
+
                 <section className="product__details--section section--padding">
                     <div className="container">
                         <div className="row">
                             <div className="col-md-6">
                                 <Carousel
-                                    showThumbs={true} // Display thumbnail images
+                                selectedItem={currentImageIndex}
+                                // onClickItem={(index) => openLightbox(index)}
+                                    showThumbs={true}
                                     showStatus={false}
                                     infiniteLoop={true}
                                     dynamicHeight={false}
@@ -185,15 +226,22 @@ const SingleProductsDetails = () => {
                                         </button>
                                     )}
                                 >
-                                    {
-                                        add_Details?.images?.map((e) => {
-                                            return (
-                                                <div className="image-container">
-                                                    <img src={e?.image} />
-                                                </div>
-                                            )
-                                        })
-                                    }
+                                {Array.isArray(add_Details?.images) &&
+                                        add_Details.images.map((image, index) => (
+                                        <div key={index} style={{ position: 'relative', textAlign: 'center' }}>
+                                            <img src={image.image} alt={`Product Image ${index + 1}`} />
+                                            <FiSearch 
+                                             onClick={() => openLightbox(index)}
+                                             style={{
+                                                position: 'absolute',
+                                                bottom: '10px',
+                                                right: '10px',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                color:"#ED1D24"
+                                            }} size={36} />
+                                        </div>
+                                ))}
                                 </Carousel>
                             </div>
                             <div className="col-md-6">
