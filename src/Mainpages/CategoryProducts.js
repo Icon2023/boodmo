@@ -32,7 +32,7 @@ const CategoryProducts = () => {
         }).catch((e) => {
             console.log(e);
             setIsLoadingImage(true);
-            
+
         })
     }, [])
 
@@ -77,10 +77,10 @@ const CategoryProducts = () => {
                                         <h2 className="widget__title h3">Categories</h2>
                                         <ul className="widget__categories--menu" style={{ height: "80vh", overflowY: "scroll" }}>
                                             {
-                                                category_list.map((e, index) => {
+                                                category_list?.map((e, index) => {
                                                     return (
-                                                        <>
-                                                            <Accordion expanded={expanded === e?.id} onChange={handleChange(e?.id)} key={index}>
+                                                        <div key={index}>
+                                                            <Accordion expanded={expanded === e?.id} onChange={handleChange(e?.id)}>
                                                                 <AccordionSummary
                                                                     expandIcon={<ExpandMoreIcon style={{ fontSize: "28px" }} />}
                                                                     aria-controls="panel1bh-content"
@@ -122,7 +122,7 @@ const CategoryProducts = () => {
                                                                     }
                                                                 </AccordionDetails>
                                                             </Accordion >
-                                                        </>
+                                                        </div>
                                                     )
                                                 })
                                             }
@@ -142,7 +142,7 @@ const CategoryProducts = () => {
                                         </div>
                                         <ul className="categories__shop--inner">
                                             {
-                                                single_category.map((e, index) => {
+                                                single_category?.map((e, index) => {
                                                     return (
                                                         <li className="categories__shop--card" key={index}>
                                                             <a
@@ -151,26 +151,26 @@ const CategoryProducts = () => {
                                                             >
                                                                 <div className="categories__thumbnail mb-15">
                                                                     {
-                                                                        isLoadingImage ? 
-                                                                    <>
-                                                                    <img
-                                                                    // src={"https://via.placeholder.com/300x200/f0f0f0"}
-                                                                    src={Placeholder_view}
-                                                                    width={300}
-                                                                    height={200}
-                                                                    alt="categories-img-placeholder"
-                                                                    />
-                                                                    </>:
-                                                                    <>
-                                                                    <img
-                                                                    className="categories__thumbnail--img"
-                                                                    src={e?.image}
-                                                                    alt="categories-img"
-                                                                />
-                                                                </>
+                                                                        isLoadingImage ?
+                                                                            <>
+                                                                                <img
+                                                                                    // src={"https://via.placeholder.com/300x200/f0f0f0"}
+                                                                                    src={Placeholder_view}
+                                                                                    width={300}
+                                                                                    height={200}
+                                                                                    alt="categories-img-placeholder"
+                                                                                />
+                                                                            </> :
+                                                                            <>
+                                                                                <img
+                                                                                    className="categories__thumbnail--img"
+                                                                                    src={e?.image}
+                                                                                    alt="categories-img"
+                                                                                />
+                                                                            </>
                                                                     }
-                                                                    
-                                                                    
+
+
                                                                 </div>
                                                                 <div className="categories__content">
                                                                     <h2 className="categories__content--title">{e?.name}</h2>
@@ -198,8 +198,8 @@ const CategoryProducts = () => {
                         {
                             category_list.map((e, index) => {
                                 return (
-                                    <>
-                                        <Accordion expanded={expanded === e?.id} onChange={handleChange(e?.id)} key={index}>
+                                    <div key={index}>
+                                        <Accordion expanded={expanded === e?.id} onChange={handleChange(e?.id)}>
                                             <AccordionSummary
                                                 expandIcon={<ExpandMoreIcon style={{ fontSize: "28px" }} />}
                                                 aria-controls="panel1bh-content"
@@ -239,7 +239,7 @@ const CategoryProducts = () => {
                                                 }
                                             </AccordionDetails>
                                         </Accordion >
-                                    </>
+                                    </div>
                                 )
                             })
                         }

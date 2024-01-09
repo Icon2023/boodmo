@@ -1,10 +1,11 @@
 import axios from "axios";
 import authHeader from "./apiHeader";
 
-const BASE_URL = "http://192.168.100.51:8002"
+// const BASE_URL = "http://192.168.100.51:8002"
+const BASE_URL = "https://adminbood.hypehy.com"
 
 export const Product = async (data) => {
-    const response = await axios.post(`${BASE_URL}/api/product/`, data);
+    const response = await axios.post(`${BASE_URL}/api/products`, data);
     if (response?.status) {
         return response.data;
     } else {
@@ -83,7 +84,8 @@ export const CarYear = async (data) => {
         console.log("error");
     }
 }
-export const CarMode = async (data) => {
+
+export const CarModefication = async (data) => {
     const response = await axios.get(`${BASE_URL}/api/car-companies/${data.carValName}/${data.carValYear}/${data.val}`);
     if (response?.status) {
         return response.data;
@@ -243,7 +245,7 @@ export const WishListLoginDelete = async (data) => {
 
 //  Order List ========================================================================================================================
 
-export const OrderList = async (data) => {
+export const MakeOrderId = async (data) => {
     const response = await axios.post(`${BASE_URL}/api/make-orderid`, data);
     if (response?.data?.success) {
         return response.data;
@@ -253,7 +255,7 @@ export const OrderList = async (data) => {
 }
 
 export const OrderComplete = async (data) => {
-    const response = await axios.post(`${BASE_URL}/api/complete-order`, data , { headers: authHeader() });
+    const response = await axios.post(`${BASE_URL}/api/complete-order`, data, { headers: authHeader() });
     if (response?.data?.success) {
         return response.data;
     } else {
@@ -268,5 +270,40 @@ export const BrandProduct = async (id) => {
         return response.data;
     } else {
         console.log("error");
+    }
+}
+
+export const OffersBanner = async () => {
+    const response = await axios.get(`${BASE_URL}/api/slider`);
+    if (response?.status) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}
+
+
+export const BrandWiseFilter = async (id) => {
+    const response = await axios.post(`${BASE_URL}/api/products?brand=${id}`);
+    if (response?.status) {
+        return response.data;
+    } else {
+        console.log("error");
+    }
+}
+
+export const searchProducts = async (searchTerm) => {
+    try {
+        const response = await axios.post(`${BASE_URL}/api/products`, { search: searchTerm });
+
+        if (response?.status === 200) {
+            return response?.data;
+        } else {
+            console.log("Error: Unexpected response status");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
     }
 }

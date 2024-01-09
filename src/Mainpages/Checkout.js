@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import ShippingAddress from '../Subpages/ShippingAddress';
 import { useDispatch, useSelector } from 'react-redux';
-import { CartList, GetAddressUser, GetCouponCode } from '../Services/apiServices';
-import { addLoginCart, add_coupon_code, add_ship_details, coupon_Pricevalue, remove_coupon_code } from '../store/reducers/ProductSlice';
+import { AddAddressUser, CartList, DeleteAddress, GetAddressUser, GetCouponCode } from '../Services/apiServices';
+import { addLoginCart, add_coupon_code, add_ship_details, coupon_Pricevalue, removeAddress, remove_coupon_code, selectedValueAddress } from '../store/reducers/ProductSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 
@@ -26,11 +26,10 @@ const Checkout = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [mobile, setMobile] = useState('');
     const [add_title, setAdd_title] = useState('');
+    const [selectedValue, setSelectedValue] = useState("");
     const countTotal = (items) => items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
 
     const coupon_value = ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2)
-
-    console.log(coupon_value, "code");
 
     useEffect(() => {
         CartList().then((res) => {
@@ -59,6 +58,10 @@ const Checkout = () => {
         }
     }, [])
 
+    useEffect(() => {
+        GetAddress();
+    }, [])
+
     const handleChange = (e) => {
         if (!e.target.value) {
             dispatch(remove_coupon_code())
@@ -79,28 +82,6 @@ const Checkout = () => {
         })
     }
 
-    // const handleSubmit = (e) => {
-    //     e.preventDefault()
-    //     let data = {
-    //         first_name: fname,
-    //         last_name: lname,
-    //         company_name: companyName,
-    //         address: address,
-    //         state: state,
-    //         city: city,
-    //         zip: pincode,
-    //         country: country,
-    //     }
-    //     console.log(data);
-    //     dispatch(add_ship_details(data))
-    //     navigate('/review')
-    // }
-
-    useEffect(() => {
-        GetAddress();
-    }, [])
-
-
     const GetAddress = () => {
         GetAddressUser().then((res) => {
             if (res?.success) {
@@ -111,25 +92,82 @@ const Checkout = () => {
         })
     }
 
+    // const handleSubmit = (e) => {
+    //     e.preventDefault()
+    //     // let data = {
+    //     //     first_name: fname,
+    //     //     last_name: lname,
+    //     //     company_name: companyName,
+    //     //     address: address,
+    //     //     state: state,
+    //     //     city: city,
+    //     //     zip: pincode,
+    //     //     country: country,
+    //     // }
+    //     let data = {
+    //         coupon,
+    //         coupon_value
+    //     }
+    //     dispatch(coupon_Pricevalue(data))
+    //     navigate('/review')
+    // }
+
     const handleSubmit = (e) => {
-        e.preventDefault()
-        // let data = {
-        //     first_name: fname,
-        //     last_name: lname,
-        //     company_name: companyName,
-        //     address: address,
-        //     state: state,
-        //     city: city,
-        //     zip: pincode,
-        //     country: country,
-        // }
-        let data = {
+        e.preventDefault();
+
+        let code = {
             coupon,
-            coupon_value
-        }
-        dispatch(coupon_Pricevalue(data))
-        navigate('/review')
-    }
+            coupon_value,
+        };
+        dispatch(coupon_Pricevalue(code));
+        navigate("/review");
+        let data = {
+            first_name: fname,
+            last_name: lname,
+            mobile: mobile,
+            address: address,
+            pincode: pincode,
+            state: state,
+            city: city,
+            country: city,
+            address_title: add_title,
+            country: country,
+        };
+        AddAddressUser(data).then((res) => {
+            GetAddress();
+            setIsOpen(false);
+            setFname("");
+            setLname("");
+            setMobile("");
+            setAddress("");
+            setCity("");
+            setState("");
+            setCountry("");
+            setPincode("");
+            setAdd_title("");
+        });
+    };
+
+    const addressSave = () => {
+        add_ship?.map((e) => {
+            if (e?.id === selectedValue) {
+                dispatch(selectedValueAddress(e));
+                navigate("/review");
+            }
+        });
+    };
+
+    const handleOpenNewAddress = () => {
+        isOpen === false ? setIsOpen(true) : setIsOpen(false);
+    };
+
+    const handleAddressRemove = (id) => {
+        dispatch(removeAddress(id));
+        DeleteAddress(id).then((res) => {
+            console.log(res);
+        });
+    };
+
 
     return (
         <>
@@ -159,6 +197,26 @@ const Checkout = () => {
                         <div className="row">
                             <div className="col-lg-7 col-md-6">
                                 <div className="main checkout__mian">
+                                    {/* <div className="checkout__content--step section__contact--information">
+                                        <div className="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
+                                            <h2 className="section__header--title h3">
+                                                Contact information
+                                            </h2>
+                                        </div>
+                                        <div className="customer__information">
+                                            <div className="checkout__email--phone mb-12">
+                                                <label>
+                                                    <input
+                                                        className="checkout__input--field border-radius-5"
+                                                        placeholder="Email or mobile phone mumber"
+                                                        type="text"
+                                                        value={email}
+                                                        disabled
+                                                    />
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div> */}
                                     <div className="checkout__content--step section__contact--information">
                                         <div className="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
                                             <h2 className="section__header--title h3">
@@ -179,27 +237,73 @@ const Checkout = () => {
                                             </div>
                                         </div>
                                     </div>
+
                                     <div className='Add_ship'>
+                                        <h3
+                                            className="text-center mx-auto btn_address"
+                                            onClick={handleOpenNewAddress}
+                                        >
+                                            <AiOutlinePlus
+                                                className="mb-1"
+                                                style={{ fontSize: "24px" }}
+                                            />
+                                            Add New Address
+                                        </h3>
                                         {/* <h3 className='text-center mx-auto btn_address'  onClick={handleOpenNewAddress}><AiOutlinePlus className='mb-1' style={{ fontSize: "24px" }} /> Add New Address</h3> */}
                                     </div>
-                                    <div className='flex_address d-flex flex-wrap'>
+                                    <div className='flex_address d-flex flex-wrap mt-4'>
                                         {
                                             add_ship?.map((e, index) => {
                                                 return (
-                                                    <>
-                                                        <div className='ship_multiple_box2 mt-5 ' key={index}>
-                                                            <div className='d-flex justify-content-between'>
-                                                                <h3>{e?.name}</h3>
-                                                                {/* <AiOutlineClose style={{ cursor: "pointer" }} onClick={() => handleAddressRemove(e?.id)} /> */}
-                                                            </div>
-                                                            <p>{e?.address}  - {e?.mobile}</p>
-                                                            <p>{e?.city},{e?.state},{e?.country}</p>
+                                                    <div
+                                                        className={`w-100 mb-4 ${selectedValue === e?.id
+                                                            ? "radio-tile checked"
+                                                            : "radio-tile"
+                                                            }`}
+                                                        key={index}
+                                                    >
+                                                        <div className="card-body">
+                                                            <label className="form-check">
+                                                                <input
+                                                                    type="radio"
+                                                                    className="form-check-input"
+                                                                    checked={selectedValue === e.id}
+                                                                    onChange={() => setSelectedValue(e.id)}
+                                                                />
+                                                                <div>
+                                                                    <AiOutlineClose
+                                                                        style={{ cursor: "pointer", textAlign: "end" }}
+                                                                        onClick={() => handleAddressRemove(e?.id)}
+                                                                    />
+                                                                    <h3 className="card-title">
+                                                                        <b>Name: </b> {e.name}
+                                                                    </h3>
+                                                                    <p className="card-text">
+                                                                        {e.address_title}: {e.address}, {e.city},
+                                                                        {e.state}, {e.pincode}, {e.country}
+                                                                    </p>
+                                                                    <p>
+                                                                        <b>Mobile No.</b>
+                                                                        {e.mobile}
+                                                                    </p>
+                                                                </div>
+                                                            </label>
                                                         </div>
-                                                    </>
+                                                    </div>
                                                 )
                                             })
                                         }
                                     </div>
+                                    {add_ship?.map((e) => {
+                                        if (e.id == selectedValue) {
+                                        }
+                                    })}
+                                    {
+                                        add_ship.length > 0 &&
+                                        <button onClick={addressSave} className="primary__btn border-radius-5 w-auto">
+                                            Continue
+                                        </button>
+                                    }
                                     {
                                         isOpen ?
                                             <>
@@ -403,7 +507,8 @@ const Checkout = () => {
                                                 </form>
                                             </>
                                             :
-                                            null}
+                                            null
+                                    }
                                 </div>
                             </div>
                             <div className="col-lg-5 col-md-6">

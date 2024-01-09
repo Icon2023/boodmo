@@ -24,12 +24,12 @@ import MyOrders from './Mainpages/MyOrders';
 import MyAddress from './Mainpages/MyAddress';
 import ThankYou from './Subpages/ThankYou';
 import Contact from './Mainpages/contact';
-import 'react-modern-drawer/dist/index.css';
-import "../node_modules/slick-carousel/slick/slick.css";
-import "../node_modules/slick-carousel/slick/slick-theme.css";
 import BrandProductsView from './Subpages/BrandProducts';
 import CarMakerListAllProducts from './Mainpages/CarMakerListAllProducts';
 import SearchBar from './Mainpages/SearchBar';
+import 'react-modern-drawer/dist/index.css';
+import "../node_modules/slick-carousel/slick/slick-theme.css";
+import "../node_modules/slick-carousel/slick/slick.css";
 
 
 function App() {
@@ -61,7 +61,7 @@ function App() {
           <Route path='/about-us' element={<About />} />
           <Route path='/contact-us' element={<Contact />} />
           <Route path='/thank-you' element={<ThankYou />} />
-          <Route path='*' element={<Page404 />} />
+          <Route path='*' element={<Page404 />} />  
         </Routes>
       </main>
       <Footer />

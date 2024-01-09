@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   CarCompines,
-  CarMode,
+  CarModefication,
   CarModel,
   CarYear,
   CategoryProduct,
@@ -36,7 +36,6 @@ const HomeSilder = () => {
   const navigate = useNavigate();
 
   const [cateId, setCateId] = useState("");
-
   const [isOpen, setIsOpen] = useState(true);
 
   const [carName, setCarName] = useState([]);
@@ -59,15 +58,17 @@ const HomeSilder = () => {
   }, []);
 
   useEffect(() => {
-    CategoryProduct(cateId)
-      .then((res) => {
-        if (res.success) {
-          dispatch(addSingleCategory(res?.data));
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (cateId) {
+      CategoryProduct(cateId)
+        .then((res) => {
+          if (res.success) {
+            dispatch(addSingleCategory(res?.data));
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   }, [cateId]);
 
   const handleChange = (e) => {
@@ -89,7 +90,7 @@ const HomeSilder = () => {
   const handleChange2 = (e) => {
     setValModei(e.target.value);
     let val = e.target.value;
-    CarMode({ carValName, carValYear, val }).then((res) => {
+    CarModefication({ carValName, carValYear, val }).then((res) => {
       setCarModei(res?.data);
       // console.log(res?.data);
     });
@@ -229,7 +230,7 @@ const HomeSilder = () => {
                       disabled={carValModei.length <= 0 ? true : false}
                     >
                       <option selected="" value={0}>
-                        Select Class
+                        Select className
                       </option>
                       {
                         carModei.map((e, index) => {
@@ -247,14 +248,17 @@ const HomeSilder = () => {
                       Search Parts
                     </button>
                   </div>
+                  {
+                    carModei.length > 0 ?
+                      <div className="cat_top">
+                        <a href="https://oriparts.com/" target="_blank">
+                          <button className="catalog_btn">
+                            OEM CATALOG
+                          </button>
+                        </a>
+                      </div> : null
+                  }
                 </form>
-                <div className="cat_top">
-                  <a href="https://oriparts.com/" target="_blank">
-                    <button className="catalog_btn">
-                      OEM CATALOG
-                    </button>
-                  </a>
-                </div>
               </div>
             </div>
           </div>
@@ -283,28 +287,26 @@ const HomeSilder = () => {
               <div className="searchster-categories-grid">
                 {category_list?.map((e, index) => {
                   return (
-                    <>
-                      <div
-                        className="searchster-categories-grid__item"
-                        key={index + 1}
+                    <div
+                      className="searchster-categories-grid__item"
+                      key={index}
+                    >
+                      <a
+                        className="categories__card--link"
+                        onClick={() => handleCateId(e?.id)}
                       >
-                        <a
-                          className="categories__card--link"
-                          onClick={() => handleCateId(e?.id)}
-                        >
-                          <div className="mx-auto">
-                            <img
-                              className="searchster-categories-grid__item__images"
-                              src={e?.image}
-                              alt=""
-                            />
-                          </div>
-                          <span className="searchster-categories-grid__item__name">
-                            {e?.name}
-                          </span>
-                        </a>
-                      </div>
-                    </>
+                        <div className="mx-auto">
+                          <img
+                            className="searchster-categories-grid__item__images"
+                            src={e?.image}
+                            alt=""
+                          />
+                        </div>
+                        <span className="searchster-categories-grid__item__name">
+                          {e?.name}
+                        </span>
+                      </a>
+                    </div>
                   );
                 })}
               </div>

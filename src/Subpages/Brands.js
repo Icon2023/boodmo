@@ -94,7 +94,6 @@ const BrandsAll = () => {
                 <ul className="brands-list__group__list">
                   {
                     groupedElements[letter]?.map((subData, index) => {
-                      console.log("ll",subData);
                       return (
                         <>
                           <li className="brands-list__group__list__item" key={index}>

@@ -12,7 +12,6 @@ const ShopCategory = () => {
         Categories().then((res) => {
             if (res?.success) {
                 dispatch(addCategory(res?.data))
-                // console.log(res?.data);
             }
         }).catch((e) => {
             console.log(e);
@@ -32,7 +31,7 @@ const ShopCategory = () => {
                             Shop by <span>Categories</span>
                         </h2>
                     </div>
-                    <div className="categories__inner--style3 d-flex">
+                    <div className="categories__inner--style3 d-flex mb-5">
                         {
                             isOpen ?
                                 <>
@@ -136,7 +135,6 @@ const ShopCategory = () => {
                         {
                             isOpen === false ? <button onClick={handleLoad}>Load More</button> : <button onClick={handleLoad}>Hide More</button>
                         }
-
                     </div>
                 </div>
             </section>

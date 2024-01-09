@@ -27,14 +27,6 @@ const ThankYou = () => {
   return (
     <div>
       <Header />
-      {/* <section className="thank-you-main h-100 my-5">
-      <div class="image-container-thank-you">
-        <img src={thank} alt="Your Image" className="shadow-lg bg-white rounded" />
-        <div class="centered-text-thank-you display-4" style={{fontWeight:"800"}}>Thank You!</div>
-      </div>
-      </section> */}
-
-      {/* ex-2 */}
       <div
         className="thank_you shadow-lg p-3 mb-5 bg-white rounded"
         style={{ maxWidth: "100%" }}

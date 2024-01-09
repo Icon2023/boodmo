@@ -725,11 +725,11 @@ hr {
     border-radius: 5px;
 }
 
-.cat_top {
+/* .cat_top {
     display: flex;
     justify-content: end;
     margin-right: 80px;
-}
+} */
 
 .primary__btn:hover {
     background: var(--primary-color);
@@ -11649,7 +11649,7 @@ details>summary::-webkit-details-marker {
 }
 
 .previous__link--content {
-    margin-left: 2rem;
+    /* margin-left: 2rem; */
     color: var(--secondary-color)
 }
 
@@ -13434,6 +13434,7 @@ details>summary::-webkit-details-marker {
 @media (min-width: 770px) {
     .searchster-categories-grid__item {
         width: calc(25% - 14px);
+        /* width: 100%; */
         padding: 15px 10px;
         font-size: 16px;
     }
@@ -13582,14 +13583,13 @@ details>summary::-webkit-details-marker {
 /* CSS for RadioTileExample */
 .radio-tile {
     border: 1px solid #ccc;
-    /* Default border color for unselected tiles */
     padding: 10px;
-    /* margin: 10px; */
+    border-radius: 10px;
 }
 
 .radio-tile.checked {
     border: 2px solid #ED1D24;
-    /* Border color for the selected tile */
+    border-radius: 10px;
 }
 
 .radio-tile label input[type="radio"] {
@@ -13607,4 +13607,44 @@ details>summary::-webkit-details-marker {
 
 .margin_top_all {
     margin-top: 85px;
+}
+
+.swiper {
+    width: 100%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.swiper-slide {
+    background-position: center;
+    background-size: cover;
+    width: 300px;
+    height: 300px;
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+}
+
+
+/*  */
+.input-groups label {
+    font-size: 2.8rem;
+}
+
+input[type=radio] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-clip: content-box;
+    border: 2px solid #000;
+    /* background-color: rgba(255,252,229,1); */
+}
+
+input[type="radio"]:checked {
+    background-color: #000;
+    padding: 4px;
+    border: 2px solid #000;
 }

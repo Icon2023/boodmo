@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Brands, CarCompines, CarMode, CarModel, CarYear, Product } from '../Services/apiServices';
+import { Brands, CarCompines, CarModefication, CarModel, CarYear, Product } from '../Services/apiServices';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProducts, removeFilter } from '../store/reducers/ProductSlice';
 import { CgMenuGridR } from "react-icons/cg";
@@ -121,10 +121,10 @@ const ProductsView = () => {
     }, [])
 
     // Calculate the indexes of the items to show on the current page.
-    const totalPages = Math.ceil(add_product.length / itemsPerPage);
+    const totalPages = Math?.ceil(add_product?.length / itemsPerPage);
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = add_product.slice(
+    const currentItems = add_product?.slice(
         indexOfFirstItem,
         indexOfLastItem
     );
@@ -133,25 +133,31 @@ const ProductsView = () => {
         window.scrollTo(0, 0);
         setCurrentPage(pageNumber);
     };
+
     const handleGridClick = () => {
         gridOpen ? setTrifOpen(false) : setGridOpen(true)
         localStorage.setItem('grid', gridOpen);
         localStorage.removeItem('list', trifOpen);
     }
+
     const handleTfiClick = () => {
         gridOpen ? setGridOpen(false) : setTrifOpen(true)
         localStorage.setItem('list', trifOpen);
         localStorage.removeItem('grid', gridOpen);
     }
+
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+
     const toggleDrawer = () => {
         setIsOpen((prevState) => !prevState)
     }
+
     const handleLoad = () => {
         isMore === true ? setIsMore(false) : setIsMore(true)
     }
+
     const handleReset = () => {
         window.location.reload();
         dispatch(removeFilter())
@@ -177,7 +183,6 @@ const ProductsView = () => {
         CarModel(e.target.value).then((res) => {
             if (res?.success) {
                 setCarModel(res?.data);
-                console.log(res?.data);
             }
         });
     }
@@ -194,7 +199,7 @@ const ProductsView = () => {
     const handleModificationChange = (e) => {
         let val = e.target.value;
         setValModefication(e.target.value);
-        CarMode({ carValName, carValYear, val }).then((res) => {
+        CarModefication({ carValName, carValYear, val }).then((res) => {
             setCarModefication(res?.data);
         });
     };
@@ -351,6 +356,7 @@ const ProductsView = () => {
                                                         <>
                                                             {
                                                                 brands?.map((e, index) => {
+                                                                    console.log(e);
                                                                     return (
                                                                         <div className='d-flex' key={index}>
                                                                             <input
@@ -422,10 +428,10 @@ const ProductsView = () => {
                                         <h2 className="widget__title h3">Categories</h2>
                                         <ul className="widget__categories--menu" style={{ height: "70vh", overflowY: "scroll" }}>
                                             {
-                                                category_list.map((e, index) => {
+                                                category_list?.map((e, index) => {
                                                     return (
-                                                        <>
-                                                            <Accordion expanded={expanded === e?.id} onChange={handleChange(e?.id)} key={index}>
+                                                        <div key={index}>
+                                                            <Accordion expanded={expanded === e?.id} onChange={handleChange(e?.id)}>
                                                                 <AccordionSummary
                                                                     expandIcon={<ExpandMoreIcon style={{ fontSize: "28px" }} />}
                                                                     aria-controls="panel1bh-content"
@@ -467,7 +473,7 @@ const ProductsView = () => {
                                                                     }
                                                                 </AccordionDetails>
                                                             </Accordion >
-                                                        </>
+                                                        </div>
                                                     )
                                                 })
                                             }
@@ -529,7 +535,7 @@ const ProductsView = () => {
                                                 </div>
                                             </div>
                                             <p className="product__showing--count">
-                                                Showing 1 of {add_product.length} results
+                                                Showing 1 of {add_product?.length} results
                                             </p>
                                         </div>
                                         <div className="tab_content">
@@ -540,49 +546,48 @@ const ProductsView = () => {
                                                             <div className="product__section--inner">
                                                                 <div className="row mb--n30">
                                                                     {
-                                                                        currentItems.map((e, index) => {
+                                                                        currentItems && currentItems?.map((e, index) => {
                                                                             return (
-                                                                                <>
-                                                                                    <div className="col-lg-4 col-md-4 col-sm-6 col-6 custom-col mb-30" key={index}>
-                                                                                        <article className="product__card">
-                                                                                            <div className="product__card--thumbnail">
-                                                                                                <a
-                                                                                                    className="product__card--thumbnail__link display-block"
-                                                                                                    href={`/productsdetail/${e?.id}`}
-                                                                                                >
-                                                                                                    {
-                                                                                                        isLoadingImage ? <>
+                                                                                <div className="col-lg-4 col-md-4 col-sm-6 col-6 custom-col mb-30" key={index}>
+                                                                                    <article className="product__card">
+                                                                                        <div className="product__card--thumbnail">
+                                                                                            <a
+                                                                                                className="product__card--thumbnail__link display-block"
+                                                                                                href={`/productsdetail/${e?.id}`}
+                                                                                            >
+                                                                                                {
+                                                                                                    isLoadingImage ? <>
+                                                                                                        <img
+                                                                                                            // src={"https://via.placeholder.com/300x200/f0f0f0"}
+                                                                                                            src={Placeholder_view}
+                                                                                                            width={300}
+                                                                                                            height={200}
+                                                                                                            alt="categories-img-placeholder"
+                                                                                                        />
+                                                                                                    </>
+                                                                                                        :
+                                                                                                        <>
                                                                                                             <img
-                                                                                                                // src={"https://via.placeholder.com/300x200/f0f0f0"}
-                                                                                                                src={Placeholder_view}
-                                                                                                                width={300}
-                                                                                                                height={200}
-                                                                                                                alt="categories-img-placeholder"
+                                                                                                                className="product__card--thumbnail__img product__primary--img"
+                                                                                                                src={e?.images[0]?.image}
+                                                                                                                alt="product-img"
+                                                                                                            />
+                                                                                                            <img
+                                                                                                                className="product__card--thumbnail__img product__secondary--img"
+                                                                                                                src={e?.images[1]?.image}
+                                                                                                                alt="product-img"
                                                                                                             />
                                                                                                         </>
-                                                                                                            :
-                                                                                                            <>
-                                                                                                                <img
-                                                                                                                    className="product__card--thumbnail__img product__primary--img"
-                                                                                                                    src={e?.images[0]?.image}
-                                                                                                                    alt="product-img"
-                                                                                                                />
-                                                                                                                <img
-                                                                                                                    className="product__card--thumbnail__img product__secondary--img"
-                                                                                                                    src={e?.images[1]?.image}
-                                                                                                                    alt="product-img"
-                                                                                                                />
-                                                                                                            </>
-                                                                                                    }
+                                                                                                }
 
-                                                                                                </a>
-                                                                                                {e?.discount &&
-                                                                                                    <span className="product__badge">{e?.discount}%</span>
-                                                                                                }
-                                                                                                {e?.is_tranding === 1 &&
-                                                                                                    <span className="product__badge_tranding">Tranding</span>
-                                                                                                }
-                                                                                                {/* <ul className="product__card--action d-flex align-items-center justify-content-center">
+                                                                                            </a>
+                                                                                            {e?.discount &&
+                                                                                                <span className="product__badge">{e?.discount}%</span>
+                                                                                            }
+                                                                                            {e?.is_tranding === 1 &&
+                                                                                                <span className="product__badge_tranding">Tranding</span>
+                                                                                            }
+                                                                                            {/* <ul className="product__card--action d-flex align-items-center justify-content-center">
                                                                                                     <li className="product__card--action__list">
                                                                                                         <a
                                                                                                             className="product__card--action__btn"
@@ -608,277 +613,91 @@ const ProductsView = () => {
                                                                                                         </a>
                                                                                                     </li>
                                                                                                 </ul> */}
-                                                                                            </div>
-                                                                                            <div className="product__card--content">
-                                                                                                <ul className="rating product__card--rating d-flex">
-                                                                                                    <li className="rating__list">
-                                                                                                        <span className="rating__icon mt-2">
-                                                                                                            {
-                                                                                                                e?.average_rating === 0 &&
-                                                                                                                <>
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                </>
-                                                                                                            }
-                                                                                                            {
-                                                                                                                e?.average_rating === 1 &&
-                                                                                                                <>
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                </>
-                                                                                                            }
-                                                                                                            {
-                                                                                                                e?.average_rating === 2 &&
-                                                                                                                <>
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                </>
-                                                                                                            }
-                                                                                                            {
-                                                                                                                e?.average_rating === 3 &&
-                                                                                                                <>
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                </>
-                                                                                                            }
-                                                                                                            {
-                                                                                                                e?.average_rating === 4 &&
-                                                                                                                <>
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                </>
-                                                                                                            }
-                                                                                                            {
-                                                                                                                e?.average_rating === 5 &&
-                                                                                                                <>
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                </>
-                                                                                                            }
+                                                                                        </div>
+                                                                                        <div className="product__card--content">
+                                                                                            <ul className="rating product__card--rating d-flex">
+                                                                                                <li className="rating__list">
+                                                                                                    <span className="rating__icon mt-2">
+                                                                                                        {
+                                                                                                            e?.average_rating === 0 &&
+                                                                                                            <>
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                            </>
+                                                                                                        }
+                                                                                                        {
+                                                                                                            e?.average_rating === 1 &&
+                                                                                                            <>
+                                                                                                                <AiFillStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                            </>
+                                                                                                        }
+                                                                                                        {
+                                                                                                            e?.average_rating === 2 &&
+                                                                                                            <>
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                            </>
+                                                                                                        }
+                                                                                                        {
+                                                                                                            e?.average_rating === 3 &&
+                                                                                                            <>
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                            </>
+                                                                                                        }
+                                                                                                        {
+                                                                                                            e?.average_rating === 4 &&
+                                                                                                            <>
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                            </>
+                                                                                                        }
+                                                                                                        {
+                                                                                                            e?.average_rating === 5 &&
+                                                                                                            <>
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                            </>
+                                                                                                        }
 
-                                                                                                        </span>
-                                                                                                    </li>
-                                                                                                    <span>({e?.review_count})</span>
-                                                                                                </ul>
-                                                                                                <h3 className="product_name">
-                                                                                                    <a href={`/productsdetail/${e?.id}`} title={e?.name}>
-                                                                                                        {e?.name}
-                                                                                                    </a>
-                                                                                                </h3>
-                                                                                                <div className="product__card--price">
-                                                                                                    {
-                                                                                                        e?.selling_price && <span className="current__price">₹{e?.selling_price}/-</span>
-                                                                                                    }
-                                                                                                    <span className="old__price">
-                                                                                                        ₹{e?.original_price}/-
                                                                                                     </span>
-                                                                                                    {e?.discount && <span className="product-discount">({e?.discount}% OFF)</span>}
-                                                                                                </div>
-                                                                                                <div className="product__card--footer">
-                                                                                                    {
-                                                                                                        e?.out_of_stock === 1 ?
-                                                                                                            <a
-                                                                                                                className="product__card--btn primary__btn"
-                                                                                                                href={`/productsdetail/${e?.id}`}
-                                                                                                            >
-                                                                                                                Out Of Stock
-                                                                                                            </a> :
-                                                                                                            <a
-                                                                                                                className="product__card--btn primary__btn"
-                                                                                                                href={`/productsdetail/${e?.id}`}
-                                                                                                            >
-                                                                                                                View to Details
-                                                                                                            </a>
-                                                                                                    }
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </article>
-                                                                                    </div>
-                                                                                </>
-                                                                            )
-                                                                        })
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </>
-                                                    :
-                                                    <>
-                                                        <div className="tab_pane active">
-                                                            <div className="product__section--inner product__section--style3__inner">
-                                                                <div className="row row-cols-1 mb--n30">
-                                                                    {
-                                                                        currentItems.map((e, index) => {
-                                                                            return (
-                                                                                <>
-                                                                                    <div className="col mb-30" key={index}>
-                                                                                        <div className="product__card product__list d-flex align-items-center">
-                                                                                            <div className="product__card--thumbnail product__list--thumbnail">
-                                                                                                <a
-                                                                                                    className="product__card--thumbnail__link display-block"
-                                                                                                    href={`/productsdetail/${e?.id}`}
-                                                                                                >
-                                                                                                    {
-                                                                                                        isLoadingImage ?
-                                                                                                            <>
-                                                                                                                <img
-                                                                                                                    // src={"https://via.placeholder.com/300x200/f0f0f0"}
-                                                                                                                    src={Placeholder_view}
-                                                                                                                    width={300}
-                                                                                                                    height={200}
-                                                                                                                    alt="categories-img-placeholder"
-                                                                                                                />
-                                                                                                            </>
-                                                                                                            :
-                                                                                                            <>
-                                                                                                                <img
-                                                                                                                    className="product__card--thumbnail__img product__primary--img"
-                                                                                                                    src={e?.images[0]?.image}
-                                                                                                                    alt="product-img"
-                                                                                                                />
-
-                                                                                                            </>
-                                                                                                    }
-                                                                                                    <img
-                                                                                                        className="product__card--thumbnail__img product__secondary--img"
-                                                                                                        src={e?.images[1]?.image}
-                                                                                                        alt="product-img"
-                                                                                                    />
+                                                                                                </li>
+                                                                                                <span>({e?.review_count})</span>
+                                                                                            </ul>
+                                                                                            <h3 className="product_name">
+                                                                                                <a href={`/productsdetail/${e?.id}`} title={e?.name}>
+                                                                                                    {e?.name}
                                                                                                 </a>
-                                                                                                {e?.discount &&
-                                                                                                    <span className="product__badge">{e?.discount}%</span>
+                                                                                            </h3>
+                                                                                            <div className="product__card--price">
+                                                                                                {
+                                                                                                    e?.selling_price && <span className="current__price">₹{e?.selling_price}/-</span>
                                                                                                 }
-                                                                                                {e?.is_tranding === 1 &&
-                                                                                                    <span className="product__badge_tranding">Tranding</span>
-                                                                                                }
-                                                                                                {/* <ul className="product__card--action d-flex align-items-center justify-content-center">    
-                                                                                                    <li className="product__card--action__list">
-                                                                                                        <a
-                                                                                                            className="product__card--action__btn"
-                                                                                                            title="Wishlist"
-                                                                                                            href="wishlist.html"
-                                                                                                        >
-                                                                                                            <svg
-                                                                                                                className="product__card--action__btn--svg"
-                                                                                                                width={18}
-                                                                                                                height={18}
-                                                                                                                viewBox="0 0 16 13"
-                                                                                                                fill="none"
-                                                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                                                            >
-                                                                                                                <path
-                                                                                                                    d="M13.5379 1.52734C11.9519 0.1875 9.51832 0.378906 8.01442 1.9375C6.48317 0.378906 4.04957 0.1875 2.46364 1.52734C0.412855 3.25 0.713636 6.06641 2.1902 7.57031L6.97536 12.4648C7.24879 12.7383 7.60426 12.9023 8.01442 12.9023C8.39723 12.9023 8.7527 12.7383 9.02614 12.4648L13.8386 7.57031C15.2879 6.06641 15.5886 3.25 13.5379 1.52734ZM12.8816 6.64062L8.09645 11.5352C8.04176 11.5898 7.98707 11.5898 7.90504 11.5352L3.11989 6.64062C2.10817 5.62891 1.91676 3.71484 3.31129 2.53906C4.3777 1.63672 6.01832 1.77344 7.05739 2.8125L8.01442 3.79688L8.97145 2.8125C9.98317 1.77344 11.6238 1.63672 12.6902 2.51172C14.0847 3.71484 13.8933 5.62891 12.8816 6.64062Z"
-                                                                                                                    fill="currentColor"
-                                                                                                                />
-                                                                                                            </svg>
-                                                                                                            <span className="visually-hidden">
-                                                                                                                Wishlist
-                                                                                                            </span>
-                                                                                                        </a>
-                                                                                                    </li>
-                                                                                                </ul> */}
+                                                                                                <span className="old__price">
+                                                                                                    ₹{e?.original_price}/-
+                                                                                                </span>
+                                                                                                {e?.discount && <span className="product-discount">({e?.discount}% OFF)</span>}
                                                                                             </div>
-                                                                                            <div className="product__card--content product__list--content">
-                                                                                                <h3 className="product__card--title">
-                                                                                                    <a href="/">
-                                                                                                        {e?.name}
-                                                                                                    </a>
-                                                                                                </h3>
-                                                                                                <ul className="rating product__card--rating d-flex">
-                                                                                                    <li className="rating__list">
-                                                                                                        <span className="rating__icon">
-                                                                                                            {
-                                                                                                                e?.average_rating === 0 &&
-                                                                                                                <>
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                </>
-                                                                                                            }
-                                                                                                            {
-                                                                                                                e?.average_rating === 1 &&
-                                                                                                                <>
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                </>
-                                                                                                            }
-                                                                                                            {
-                                                                                                                e?.average_rating === 2 &&
-                                                                                                                <>
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                </>
-                                                                                                            }
-                                                                                                            {
-                                                                                                                e?.average_rating === 3 &&
-                                                                                                                <>
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                </>
-                                                                                                            }
-                                                                                                            {
-                                                                                                                e?.average_rating === 4 &&
-                                                                                                                <>
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiOutlineStar />
-                                                                                                                </>
-                                                                                                            }
-                                                                                                            {
-                                                                                                                e?.average_rating === 5 &&
-                                                                                                                <>
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                    <AiFillStar />
-                                                                                                                </>
-                                                                                                            }
-                                                                                                        </span>
-                                                                                                    </li>
-
-                                                                                                    <li>
-                                                                                                        <span className="rating__review--text">
-                                                                                                            ({e?.review_count})Review
-                                                                                                        </span>
-                                                                                                    </li>
-                                                                                                </ul>
-                                                                                                <div className="product__list--price">
-                                                                                                    {e?.selling_price && <span className="current__price" style={{ paddingRight: "5px" }}>{e?.selling_price}/-</span>}
-                                                                                                    <span className=" old__price">{e?.original_price}/-</span>
-                                                                                                    {e?.discount && <span className="product-discount">({e?.discount}% OFF)</span>}
-                                                                                                </div>
+                                                                                            <div className="product__card--footer">
                                                                                                 {
                                                                                                     e?.out_of_stock === 1 ?
                                                                                                         <a
@@ -896,8 +715,191 @@ const ProductsView = () => {
                                                                                                 }
                                                                                             </div>
                                                                                         </div>
+                                                                                    </article>
+                                                                                </div>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <div className="tab_pane active">
+                                                            <div className="product__section--inner product__section--style3__inner">
+                                                                <div className="row row-cols-1 mb--n30">
+                                                                    {
+                                                                        currentItems && currentItems?.map((e, index) => {
+                                                                            return (
+                                                                                <div className="col mb-30" key={index}>
+                                                                                    <div className="product__card product__list d-flex align-items-center">
+                                                                                        <div className="product__card--thumbnail product__list--thumbnail">
+                                                                                            <a
+                                                                                                className="product__card--thumbnail__link display-block"
+                                                                                                href={`/productsdetail/${e?.id}`}
+                                                                                            >
+                                                                                                {
+                                                                                                    isLoadingImage ?
+                                                                                                        <>
+                                                                                                            <img
+                                                                                                                // src={"https://via.placeholder.com/300x200/f0f0f0"}
+                                                                                                                src={Placeholder_view}
+                                                                                                                width={300}
+                                                                                                                height={200}
+                                                                                                                alt="categories-img-placeholder"
+                                                                                                            />
+                                                                                                        </>
+                                                                                                        :
+                                                                                                        <>
+                                                                                                            <img
+                                                                                                                className="product__card--thumbnail__img product__primary--img"
+                                                                                                                src={e?.images[0]?.image}
+                                                                                                                alt="product-img"
+                                                                                                            />
+
+                                                                                                        </>
+                                                                                                }
+                                                                                                <img
+                                                                                                    className="product__card--thumbnail__img product__secondary--img"
+                                                                                                    src={e?.images[1]?.image}
+                                                                                                    alt="product-img"
+                                                                                                />
+                                                                                            </a>
+                                                                                            {e?.discount &&
+                                                                                                <span className="product__badge">{e?.discount}%</span>
+                                                                                            }
+                                                                                            {e?.is_tranding === 1 &&
+                                                                                                <span className="product__badge_tranding">Tranding</span>
+                                                                                            }
+                                                                                            {/* <ul className="product__card--action d-flex align-items-center justify-content-center">    
+                                                                                                    <li className="product__card--action__list">
+                                                                                                        <a
+                                                                                                            className="product__card--action__btn"
+                                                                                                            title="Wishlist"
+                                                                                                            href="wishlist.html"
+                                                                                                        >
+                                                                                                            <svg
+                                                                                                                className="product__card--action__btn--svg"
+                                                                                                                width={18}
+                                                                                                                height={18}
+                                                                                                                viewBox="0 0 16 13"
+                                                                                                                fill="none"
+                                                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                                            >
+                                                                                                                <path
+                                                                                                                    d="M13.5379 1.52734C11.9519 0.1875 9.51832 0.378906 8.01442 1.9375C6.48317 0.378906 4.04957 0.1875 2.46364 1.52734C0.412855 3.25 0.713636 6.06641 2.1902 7.57031L6.97536 12.4648C7.24879 12.7383 7.60426 12.9023 8.01442 12.9023C8.39723 12.9023 8.7527 12.7383 9.02614 12.4648L13.8386 7.57031C15.2879 6.06641 15.5886 3.25 13.5379 1.52734ZM12.8816 6.64062L8.09645 11.5352C8.04176 11.5898 7.98707 11.5898 7.90504 11.5352L3.11989 6.64062C2.10817 5.62891 1.91676 3.71484 3.31129 2.53906C4.3777 1.63672 6.01832 1.77344 7.05739 2.8125L8.01442 3.79688L8.97145 2.8125C9.98317 1.77344 11.6238 1.63672 12.6902 2.51172C14.0847 3.71484 13.8933 5.62891 12.8816 6.64062Z"
+                                                                                                                    fill="currentColor"
+                                                                                                                />
+                                                                                                            </svg>
+                                                                                                            <span className="visually-hidden">
+                                                                                                                Wishlist
+                                                                                                            </span>
+                                                                                                        </a>
+                                                                                                    </li>
+                                                                                                </ul> */}
+                                                                                        </div>
+                                                                                        <div className="product__card--content product__list--content">
+                                                                                            <h3 className="product__card--title">
+                                                                                                <a href="/">
+                                                                                                    {e?.name}
+                                                                                                </a>
+                                                                                            </h3>
+                                                                                            <ul className="rating product__card--rating d-flex">
+                                                                                                <li className="rating__list">
+                                                                                                    <span className="rating__icon">
+                                                                                                        {
+                                                                                                            e?.average_rating === 0 &&
+                                                                                                            <>
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                            </>
+                                                                                                        }
+                                                                                                        {
+                                                                                                            e?.average_rating === 1 &&
+                                                                                                            <>
+                                                                                                                <AiFillStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                            </>
+                                                                                                        }
+                                                                                                        {
+                                                                                                            e?.average_rating === 2 &&
+                                                                                                            <>
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                            </>
+                                                                                                        }
+                                                                                                        {
+                                                                                                            e?.average_rating === 3 &&
+                                                                                                            <>
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                            </>
+                                                                                                        }
+                                                                                                        {
+                                                                                                            e?.average_rating === 4 &&
+                                                                                                            <>
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiOutlineStar />
+                                                                                                            </>
+                                                                                                        }
+                                                                                                        {
+                                                                                                            e?.average_rating === 5 &&
+                                                                                                            <>
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                                <AiFillStar />
+                                                                                                            </>
+                                                                                                        }
+                                                                                                    </span>
+                                                                                                </li>
+
+                                                                                                <li>
+                                                                                                    <span className="rating__review--text">
+                                                                                                        ({e?.review_count})Review
+                                                                                                    </span>
+                                                                                                </li>
+                                                                                            </ul>
+                                                                                            <div className="product__list--price">
+                                                                                                {e?.selling_price && <span className="current__price" style={{ paddingRight: "5px" }}>{e?.selling_price}/-</span>}
+                                                                                                <span className=" old__price">{e?.original_price}/-</span>
+                                                                                                {e?.discount && <span className="product-discount">({e?.discount}% OFF)</span>}
+                                                                                            </div>
+                                                                                            {
+                                                                                                e?.out_of_stock === 1 ?
+                                                                                                    <a
+                                                                                                        className="product__card--btn primary__btn"
+                                                                                                        href={`/productsdetail/${e?.id}`}
+                                                                                                    >
+                                                                                                        Out Of Stock
+                                                                                                    </a> :
+                                                                                                    <a
+                                                                                                        className="product__card--btn primary__btn"
+                                                                                                        href={`/productsdetail/${e?.id}`}
+                                                                                                    >
+                                                                                                        View to Details
+                                                                                                    </a>
+                                                                                            }
+                                                                                        </div>
                                                                                     </div>
-                                                                                </>
+                                                                                </div>
                                                                             )
                                                                         })
                                                                     }

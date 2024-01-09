@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ShippingAddress from "../Subpages/ShippingAddress";
 import { useDispatch, useSelector } from "react-redux";
-import { CartList, OrderComplete, OrderList } from "../Services/apiServices";
+import { CartList, MakeOrderId, OrderComplete } from "../Services/apiServices";
 import { addLoginCart } from "../store/reducers/ProductSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
@@ -53,7 +53,6 @@ const Review = () => {
   }, []);
 
   const handleCompleteOrder = (data) => {
-    console.log(data, "razopy");
     const payload = {
       coupon_code: coupon_value?.coupon,
       coupon_value: coupon_value?.coupon_value,
@@ -68,19 +67,15 @@ const Review = () => {
       address_id: 1,
       products: JSON.stringify(productsArray),
     };
-    console.log(payload);
 
     OrderComplete(payload).then((res) => {
       if (res?.success) {
-        console.log("hello");
         localStorage.removeItem("rzp_device_id");
         localStorage.removeItem("rzp_checkout_anon_id");
         navigate("/");
       }
     });
   };
-
-  console.log("sss", selected_value_address);
 
   const handleOpenRazorpay = (data) => {
     const options = {
@@ -126,15 +121,15 @@ const Review = () => {
           countTotal(login_cart) -
             countTotal(login_cart) * (coupon_code?.coupon_discount / 100)
             ? countTotal(login_cart) -
-                (
-                  countTotal(login_cart) *
-                  (coupon_code?.coupon_discount / 100)
-                ).toFixed(2)
+            (
+              countTotal(login_cart) *
+              (coupon_code?.coupon_discount / 100)
+            ).toFixed(2)
             : countTotal(login_cart)
         ) * 100,
     };
     console.log(data);
-    OrderList(data).then((res) => {
+    MakeOrderId(data).then((res) => {
       if (res?.success) {
         console.log(res.data);
         setOrderId(res.data.id);
@@ -439,11 +434,11 @@ const Review = () => {
                         </td>
                         <td className="checkout__total--calculated__text text-right">
                           {countTotal(login_cart) *
-                          (coupon_code?.coupon_discount / 100)
+                            (coupon_code?.coupon_discount / 100)
                             ? (
-                                countTotal(login_cart) *
-                                (coupon_code?.coupon_discount / 100)
-                              ).toFixed(2)
+                              countTotal(login_cart) *
+                              (coupon_code?.coupon_discount / 100)
+                            ).toFixed(2)
                             : 0}
                           /-
                         </td>
@@ -456,13 +451,13 @@ const Review = () => {
                         </td>
                         <td className="checkout__total--footer__amount checkout__total--footer__list text-right">
                           {countTotal(login_cart) -
-                          countTotal(login_cart) *
+                            countTotal(login_cart) *
                             (coupon_code?.coupon_discount / 100)
                             ? countTotal(login_cart) -
-                              (
-                                countTotal(login_cart) *
-                                (coupon_code?.coupon_discount / 100)
-                              ).toFixed(2)
+                            (
+                              countTotal(login_cart) *
+                              (coupon_code?.coupon_discount / 100)
+                            ).toFixed(2)
                             : countTotal(login_cart)}
                           /-
                         </td>
@@ -504,6 +499,7 @@ const Review = () => {
           </div>
         </div>
       </div>
+      
       <ShippingAddress />
     </main>
   );

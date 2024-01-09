@@ -13,7 +13,7 @@ const BrandsWeTrust = () => {
   const [brands, setBrands] = useState([]);
   const { id } = useParams();
 
-  
+
 
   useEffect(() => {
     Brands()
@@ -28,7 +28,7 @@ const BrandsWeTrust = () => {
 
   var settings = {
     dots: false,
-    arrows:false,
+    arrows: false,
     infinite: true,
     speed: 500,
     autoplay: true,
@@ -65,33 +65,24 @@ const BrandsWeTrust = () => {
     ],
   };
   return (
-    <div className="container my-5" style={{position:"relative"}}>
-       <HeadingSection title="Brands we Trust" link="/brands"/>
-      {/* <div className="section__heading border-bottom mb-30 d-flex flex-wrap justify-content-between">
-        <h2 className="section__heading--maintitle">
-        Brands we  <span> Trust</span>
-        </h2>
-        <div>
-          <Link to="/brands">VIEW ALL</Link>
-        </div>
-      </div> */}
+    <div className="container my-5" style={{ position: "relative" }}>
+      <HeadingSection title="Brands we Trust" link="/brands" />
       <Slider {...settings}>
-        {brands?.map((brand) => {
-          // console.log("bb",brand);
+        {brands?.map((brand, index) => {
           return (
-            <>
-              <div style={{ display: "flex", alignItems: "center" }}>
+            <div key={index}>
+              <div style={{ display: "flex", alignItems: "center" }} >
                 <a href={`/brands/${brand?.id}`}>
-                <img
-                  src={brand?.image}
-                  width={150}
-                  height={200}
-                  alt={brand?.id * 2}
-                  className="center-img"
-                />
+                  <img
+                    src={brand?.image}
+                    width={150}
+                    height={200}
+                    alt={brand?.id * 2}
+                    className="center-img"
+                  />
                 </a>
               </div>
-            </>
+            </div>
           );
         })}
       </Slider>
