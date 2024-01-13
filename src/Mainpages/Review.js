@@ -35,6 +35,8 @@ const Review = () => {
   const [currency, setCurrency] = useState("");
   const [razorpayPaymentId, setRazorpayPaymentId] = useState("");
   const [razorpaySignatureId, setRazorpaySignatureId] = useState("");
+  const [isInsuranceOpen, setInsuranceOpen] = useState(false);
+  const [Insuranceval, setInsuranceval] = useState('');
   const [email, setEmail] = useState("");
   const countTotal = (items) =>
     items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
@@ -139,6 +141,20 @@ const Review = () => {
       }
     });
   };
+
+  const handlePersonal = () => {
+    setInsuranceOpen(false)
+  }
+
+  const handleInsurance = () => {
+    setInsuranceOpen(true)
+  }
+
+  const handleChangeInsurance = (e) => {
+    console.log(e.target.value);
+    setInsuranceval(e.target.value)
+  }
+
 
   return (
     <main className="margin_top_all">
@@ -359,6 +375,33 @@ const Review = () => {
                     </div>
                   </div>
                 </div>
+                <div class="checkout__checkbox">
+                  <input class="checkout__checkbox--input" type="radio" name='personal' onClick={handlePersonal} />
+                  <span class="checkout__checkbox--checkmark"></span>
+                  <label class="checkout__checkbox--label" >
+                    Personal Use</label>
+                </div>
+                <div class="checkout__checkbox mb-4">
+                  <input class="checkout__checkbox--input" type="radio" name='personal' onClick={handleInsurance} />
+                  <span class="checkout__checkbox--checkmark"></span>
+                  <label class="checkout__checkbox--label" >
+                    Insurance</label>
+                  {
+                    isInsuranceOpen &&
+                    <>
+                      <div className='select search__filter--widths mb-3 mt-3'>
+                        <select name="" id="" className="search__filter--select__field" onChange={handleChangeInsurance}>
+                          <option value="TVS">TVS</option>
+                          <option value="honda">Honda</option>
+                          <option value="hero">Hero</option>
+                          <option value="bajaj">Bajaj</option>
+                          <option value="ktm">KTM</option>
+                        </select>
+                      </div>
+                      <input className='policy_input' type="text" placeholder='Policy Number' />
+                    </>
+                  }
+                </div>
                 <div className="checkout__content--step__footer d-flex align-items-center">
                   <Link className="previous__link--content" to="/checkout">
                     <IoIosArrowBack /> Return to Information
@@ -499,7 +542,7 @@ const Review = () => {
           </div>
         </div>
       </div>
-      
+
       <ShippingAddress />
     </main>
   );

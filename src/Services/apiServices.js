@@ -32,7 +32,7 @@ export const Categories = async () => {
 }
 
 export const SingleProductDetails = async (id) => {
-    const response = await axios.get(`${BASE_URL}/api/product/${id}`);
+    const response = await axios.get(`${BASE_URL}/api/product/${id}`, { headers: authHeader() });
     if (response?.status) {
         return response.data;
     } else {
@@ -234,7 +234,6 @@ export const WishListLogin = async () => {
 
 export const WishListLoginDelete = async (data) => {
     const response = await axios.post(`${BASE_URL}/api/add-remove-watchlist`, data, { headers: authHeader() });
-    console.log(response);
     if (response?.data?.success) {
         return response.data;
     } else {

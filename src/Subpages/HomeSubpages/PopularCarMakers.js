@@ -32,15 +32,15 @@ const PopularCarMakers = () => {
                   style={{ position: "relative" }}
                 >
                   <div className="car-maker-item">
-                    <Link to={`/vehicles/${e?.name}/${e?.id}`}>
-                      <img
-                        src={e?.logo}
-                        alt="car-logo"
-                        width={50}
-                        height={50}
-                      />
-                      <div className="pt-2">{e?.name.toUpperCase()}</div>
-                    </Link>
+                    {/* <Link to={`/vehicles/${e?.name}/${e?.id}`}> */}
+                    <img
+                      src={e?.logo}
+                      alt="car-logo"
+                      width={50}
+                      height={50}
+                    />
+                    <div className="pt-2">{e?.name.toUpperCase()}</div>
+                    {/* </Link> */}
                   </div>
                 </div>
               )

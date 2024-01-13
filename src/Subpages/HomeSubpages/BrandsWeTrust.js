@@ -72,7 +72,7 @@ const BrandsWeTrust = () => {
           return (
             <div key={index}>
               <div style={{ display: "flex", alignItems: "center" }} >
-                <a href={`/brands/${brand?.id}`}>
+                {/* <a href={`/brands/${brand?.id}`}> */}
                   <img
                     src={brand?.image}
                     width={150}
@@ -80,7 +80,7 @@ const BrandsWeTrust = () => {
                     alt={brand?.id * 2}
                     className="center-img"
                   />
-                </a>
+                {/* </a> */}
               </div>
             </div>
           );

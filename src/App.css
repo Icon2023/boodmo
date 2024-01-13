@@ -714,22 +714,6 @@ hr {
     border: 0
 }
 
-.catalog_btn {
-    background-color: #ed1d24;
-    border: 0;
-    color: white;
-    margin-top: 5px;
-    padding: 0 2rem;
-    height: 4rem;
-    width: 180px;
-    border-radius: 5px;
-}
-
-/* .cat_top {
-    display: flex;
-    justify-content: end;
-    margin-right: 80px;
-} */
 
 .primary__btn:hover {
     background: var(--primary-color);
@@ -1817,7 +1801,7 @@ select {
 
 .header__sticky {
     position: fixed;
-    top: 4%;
+    top: 3.5%;
     width: 100%;
     background: var(--body-background-color);
     left: 0;
@@ -1846,7 +1830,7 @@ select {
 }
 
 .header__topbar {
-    padding: 8px 0
+    padding: 5px 0;
 }
 
 /* ==================================================================================================================
@@ -1947,7 +1931,7 @@ select {
 }
 
 .header__top--right {
-    gap: 2rem
+    /* gap: 2rem; */
 }
 
 @media only screen and (max-width:575px) {
@@ -1957,7 +1941,7 @@ select {
         -webkit-box-pack: center;
         -ms-flex-pack: center;
         justify-content: center;
-        padding: .5rem 0
+        /* padding: 0 1.5rem; */
     }
 }
 
@@ -2030,7 +2014,7 @@ select {
 }
 
 .main__logo--img {
-    max-width: 145px;
+    width: 145px;
     display: block
 }
 
@@ -4361,7 +4345,8 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .slider__thumbnail--img__style5 {
     width: 100%;
     -o-object-fit: cover;
-    object-fit: cover
+    object-fit: cover;
+    margin-top: 80px;
 }
 
 @media only screen and (min-width:1366px) and (max-width:1599px) {
@@ -5005,7 +4990,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 }
 
 .load_btn button {
-    margin-top: 20px;
+    margin-bottom: 20px;
     text-align: center;
     background-color: #ed1d24;
     color: white;
@@ -13604,9 +13589,17 @@ details>summary::-webkit-details-marker {
     /* Color for the selected value */
 }
 
+.policy_input {
+    width: 350px;
+    height: 40px;
+    border-radius: 5px;
+    padding-left: 12px;
+    text-transform: uppercase;
+    border: 1px solid rgb(169, 166, 166);
+}
 
 .margin_top_all {
-    margin-top: 85px;
+    margin-top: 115px;
 }
 
 .swiper {

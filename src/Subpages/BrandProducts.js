@@ -22,9 +22,6 @@ const BrandProductsView = () => {
 
   const [brands, setBrands] = useState([]);
 
-
-
-
   const { add_product, category_list, filter_multi } = useSelector((state) => ({ ...state.products }));
   const { cate_id, subcategory } = useParams();
 
@@ -42,7 +39,6 @@ const BrandProductsView = () => {
   const [selectedValues, setSelectedValues] = useState([]);
   const [isLoadingImage, setIsLoadingImage] = useState(true);
   const [selectedBrands, setSelectedBrands] = useState([]);
-
 
 
 

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Drawer from 'react-modern-drawer';
 import { Link, useNavigate } from 'react-router-dom'
 import { add_search, removeAllItemWishlist, removeAllLoginCart } from '../store/reducers/ProductSlice'
-import {  Product, SearchProduct, searchProducts } from '../Services/apiServices'
+import { Product, SearchProduct, searchProducts } from '../Services/apiServices'
 import Drawers from '@mui/material/Drawer';
 
 const Header = () => {
@@ -23,33 +23,6 @@ const Header = () => {
     const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchClicked, setSearchClicked] = useState(false);
-  
-    const handleSearch = async () => {
-        try {
-          setLoading(true);
-          setSearchClicked(true); // Set searchClicked to true when the search button is clicked
-          const data = { search: searchTerm };
-          const response = await Product(data);
-    
-          if (response) {
-            const filteredResult = response.data.filter(
-              (item) =>
-                item.name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-    
-            setFilteredData(filteredResult);
-          }
-        } catch (error) {
-          console.error('Error:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-    const handleToggleDrawer = () => {
-      setOpen(!open);
-    };
-
     const [search, setSearch] = useState('');
 
     useEffect(() => {
@@ -69,13 +42,39 @@ const Header = () => {
 
     }, [])
 
-    useEffect(()=>{
-        SearchProduct().then((res)=> {
-        if (res.success) {
-            // console.log("dh",res);
-        }
+    useEffect(() => {
+        SearchProduct().then((res) => {
+            if (res.success) {
+                // console.log("dh",res);
+            }
         })
-    },[])
+    }, [])
+
+    // const handleSearch = async () => {
+    //     try {
+    //         setLoading(true);
+    //         setSearchClicked(true); // Set searchClicked to true when the search button is clicked
+    //         const data = { search: searchTerm };
+    //         const response = await Product(data);
+
+    //         if (response) {
+    //             const filteredResult = response.data.filter(
+    //                 (item) =>
+    //                     item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    //             );
+
+    //             setFilteredData(filteredResult);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    const handleToggleDrawer = () => {
+        setOpen(!open);
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('USER')
@@ -95,103 +94,101 @@ const Header = () => {
         setSearch(e.target.value)
     }
 
-    // const handleSearch = () => {
-    //     if (search.length > 0) {
-    //         navigate(`/search/${search}`)
-    //         window.location.reload();
-    //     }
-    // };
+    const handleSearch = () => {
+        if (search.length > 0) {
+            navigate(`/search/${search}`)
+        } else {
+            alert("Please type part number")
+        }
+    };
     return (
         <>
-        <Drawers
-        anchor="top"
-        open={open}
-        onClose={handleToggleDrawer}
-      >
-        <div className="predictive__search--box active">
-        <div className="predictive__search--box__inner">
-            <h2 className="predictive__search--title">Search Products</h2>
-            <form className="predictive__search--form" action="#">
-            <label>
-                <input
-                className="predictive__search--input"
-                placeholder="Search Here"
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                />
-            </label>
-            <button
-                className="predictive__search--button text-white"
-                aria-label="search button"
-                onClick={handleSearch}
-                disabled={loading}
+            <Drawers
+                anchor="top"
+                open={open}
+                onClose={handleToggleDrawer}
             >
-                <svg
-                className="product__items--action__btn--svg"
-                xmlns="http://www.w3.org/2000/svg"
-                width="30.51"
-                height="25.443"
-                viewBox="0 0 512 512"
-                >
-                <path
-                    d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeMiterlimit={10}
-                    strokeWidth={32}
-                />
-                <path
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeMiterlimit={10}
-                    strokeWidth={32}
-                    d="M338.29 338.29L448 448"
-                />
-                </svg>
-            </button>
-            </form>
-        </div>
-        <ul>
-        {/* Display filtered data or no results message */}
-      {loading && <p>Loading...</p>}
-      {!loading && filteredData.length === 0 && (
-        <p className='text-center p-4'>No products found for the given search term.</p>
-      )}
-        {!loading &&
-        filteredData.length > 0 &&
-        filteredData.map((item) => (
-          <div key={item.id}>
-            <p>{item.name}</p>
-            {/* Add more product details as needed */}
-          </div>
-        ))}
-            </ul>
-        <button
-            className="predictive__search--close__btn"
-            aria-label="search close"
-            onClick={handleToggleDrawer}
-        >
-            <svg
-            className="predictive__search--close__icon"
-            xmlns="http://www.w3.org/2000/svg"
-            width="40.51"
-            height="30.443"
-            viewBox="0 0 512 512"
-            >
-            <path
-                fill="currentColor"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={32}
-                d="M368 368L144 144M368 144L144 368"
-            />
-            </svg>
-        </button>
-        </div>
-      </Drawers>
+                <div className="predictive__search--box active">
+                    <div className="predictive__search--box__inner">
+                        <h2 className="predictive__search--title">Search Products</h2>
+                        <form className="predictive__search--form">
+                            <label>
+                                <input
+                                    className="predictive__search--input"
+                                    placeholder="Search Here"
+                                    type="text"
+                                    value={search}
+                                    onChange={handleSearchClick}
+                                />
+                            </label>
+                            <button
+                                className="predictive__search--button text-white"
+                                aria-label="search button"
+                                onClick={handleSearch}
+                                disabled={loading}
+                            >
+                                <svg
+                                    className="product__items--action__btn--svg"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="30.51"
+                                    height="25.443"
+                                    viewBox="0 0 512 512"
+                                >
+                                    <path
+                                        d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeMiterlimit={10}
+                                        strokeWidth={32}
+                                    />
+                                    <path
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeMiterlimit={10}
+                                        strokeWidth={32}
+                                        d="M338.29 338.29L448 448"
+                                    />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                    <ul>
+                        {/* Display filtered data or no results message */}
+                        {!loading &&
+                            filteredData.length > 0 &&
+                            filteredData.map((item) => (
+                                <div key={item.id}>
+                                    <p>{item.name}</p>
+                                    {/* Add more product details as needed */}
+                                </div>
+                            ))}
+                    </ul>
+                    <button
+                        className="predictive__search--close__btn"
+                        aria-label="search close"
+                        onClick={handleToggleDrawer}
+                    >
+                        <svg
+                            className="predictive__search--close__icon"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="40.51"
+                            height="30.443"
+                            viewBox="0 0 512 512"
+                        >
+                            <path
+                                fill="currentColor"
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={32}
+                                d="M368 368L144 144M368 144L144 368"
+                            />
+                        </svg>
+                    </button>
+                </div>
+            </Drawers>
+
             <header className="header__section">
                 <div className="header__topbar bg__primary">
                     <div className="container-fluid">
@@ -311,7 +308,7 @@ const Header = () => {
                                     <a className="main__logo--link" href="/">
                                         <img
                                             className="main__logo--img"
-                                            src="assets/img/logo/nav-log.webp"
+                                            src="assets/img/logo/logo.png"
                                             alt="logo-img"
                                         />
                                     </a>
@@ -379,6 +376,22 @@ const Header = () => {
                                                             : ""
                                                     }
                                                 </li>
+                                                <li className="header__sub--menu__items">
+                                                    <Link
+                                                        to="/brands"
+                                                        className="header__sub--menu__link"
+                                                    >
+                                                        Brands
+                                                    </Link>
+                                                </li>
+                                                <li className="header__sub--menu__items">
+                                                    <Link
+                                                        to="/vehicles"
+                                                        className="header__sub--menu__link"
+                                                    >
+                                                        Vehicle
+                                                    </Link>
+                                                </li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -393,7 +406,7 @@ const Header = () => {
                                         >
                                             <span className="visually-hidden">Search</span>
                                             {/* <input type='text' placeholder='Search Here...' className='search_box' value={search} onChange={handleSearchClick} /> */}
-                                            <AiOutlineSearch style={{ fontSize: "28px" }} onClick={handleToggleDrawer}  />
+                                            <AiOutlineSearch style={{ fontSize: "28px" }} onClick={handleToggleDrawer} />
                                         </p>
                                     </li>
                                     <li className="header__account--items d-none d-lg-block">
@@ -457,7 +470,6 @@ const Header = () => {
                     </div>
                 } */}
 
-
                 {/* Start Offcanvas stikcy toolbar */}
                 <div className="offcanvas__stikcy--toolbar">
                     <ul className="d-flex justify-content-between">
@@ -469,20 +481,20 @@ const Header = () => {
                             </a>
                         </li>
                         <li className="offcanvas__stikcy--toolbar__list">
-                            <a className="offcanvas__stikcy--toolbar__btn" href="/">
-                                <BsShop style={{ fontSize: "20px" }} />
-                                <span className="offcanvas__stikcy--toolbar__label">Shop</span>
-                            </a>
+                            {/* <a className="offcanvas__stikcy--toolbar__btn" href="/">
+                            </a> */}
+                            <BsShop style={{ fontSize: "20px" }} />
+                            <span className="offcanvas__stikcy--toolbar__label">Shop</span>
                         </li>
                         <li className="offcanvas__stikcy--toolbar__list ">
-                            <a
+                            {/* <a
                                 className="offcanvas__stikcy--toolbar__btn search__open--btn"
                                 href="/"
                                 data-offcanvas=""
                             >
-                                <AiOutlineSearch style={{ fontSize: "22px" }}  />
-                                <span className="offcanvas__stikcy--toolbar__label">Search</span>
-                            </a>
+                            </a> */}
+                            <AiOutlineSearch style={{ fontSize: "22px" }} onClick={handleToggleDrawer} />
+                            <span className="offcanvas__stikcy--toolbar__label">Search</span>
                         </li>
                         <li className="offcanvas__stikcy--toolbar__list">
                             <Link className="offcanvas__stikcy--toolbar__btn" to="/wishlist">
@@ -573,7 +585,7 @@ const Header = () => {
                             <div className="offcanvas__logo">
                                 <a className="offcanvas__logo_link" href="/">
                                     <img
-                                        src="assets/img/logo/nav-log.webp"
+                                        src="assets/img/logo/logo.png"
                                         alt="Grocee Logo"
                                         width={158}
                                         height={36}
@@ -589,12 +601,12 @@ const Header = () => {
                                         </Link>
                                     </li>
                                     <li className="offcanvas__menu_li">
-                                        <Link className="offcanvas__menu_item" to="/shop">
+                                        <Link className="offcanvas__menu_item" to="/">
                                             Shop
                                         </Link>
                                     </li>
                                     <li className="offcanvas__menu_li">
-                                        <Link className="offcanvas__menu_item" to="/my-account">
+                                        <Link className="offcanvas__menu_item" to="/">
                                             My Account
                                         </Link>
                                     </li>

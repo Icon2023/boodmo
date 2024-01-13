@@ -17,9 +17,8 @@ import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 import "../../node_modules/react-responsive-carousel/lib/styles/carousel.min.css";
 import Rating from '@mui/material/Rating';
 import Lightbox from 'react-image-lightbox';
-import '../../node_modules/react-image-lightbox/style.css';
-import { GoSearch } from "react-icons/go";
 import { FiSearch } from "react-icons/fi";
+import '../../node_modules/react-image-lightbox/style.css';
 
 
 
@@ -35,27 +34,6 @@ const SingleProductsDetails = () => {
     const { add_Details, add_wish, addto_cart, login_cart } = useSelector((state) => ({ ...state.products }));
     const [lightboxIsOpen, setLightboxIsOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [currentImageSetIndex, setCurrentImageSetIndex] = useState(0);
-  
-    const openLightbox = (index) => {
-        setCurrentImageIndex(index);
-        setLightboxIsOpen(true);
-        document.body.style.overflow = 'hidden';
-      };
-    
-      const closeLightbox = () => {
-        setLightboxIsOpen(false);
-        document.body.style.overflow = 'auto';
-      };
-
-      const gotoPrevious = () => {
-        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + add_Details?.images?.length) % add_Details?.images?.length);
-      };
-    
-      const gotoNext = () => {
-        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % add_Details?.images?.length);
-      };
-
 
     useEffect(() => {
         SingleProductDetails(id).then((res) => {
@@ -66,18 +44,18 @@ const SingleProductsDetails = () => {
     }, [])
 
     var productwishIdsArray = [];
-    add_wish.forEach(function (obj) {
+    add_wish.forEach(function (obj){
         productwishIdsArray.push(obj.product_id);
     })
 
     var productIdsArray = [];
     addto_cart.forEach(function (obj) {
-        productIdsArray.push(obj.proId);
+        productIdsArray.push(obj.part_no);
     })
 
     var productLoginIdsArray = [];
     login_cart.forEach(function (obj) {
-        productLoginIdsArray.push(obj.product_id);
+        productLoginIdsArray.push(obj?.product?.part_no);
     })
 
     const handleReviewClick = () => {
@@ -95,7 +73,14 @@ const SingleProductsDetails = () => {
                 // dispatch(addToWishlist(res.data))
             }
         })
-    }
+    };
+
+    const removeElement = (id) => {
+        dispatch(removeProductWishlist(id));
+        WishListLoginDelete({ product_id: id }).then((res) => {
+            // console.log(res);
+        })
+    };
 
     const handleAddcart = () => {
         if (user?.success !== true) {
@@ -105,6 +90,7 @@ const SingleProductsDetails = () => {
                 qty: 1,
                 name: add_Details?.name,
                 image: add_Details?.images[0].image,
+                part_no: add_Details?.part_no
             }
             dispatch(addToCart(data))
         } else {
@@ -112,6 +98,7 @@ const SingleProductsDetails = () => {
                 product_id: add_Details?.id,
                 price: add_Details?.original_price,
                 qty: 1,
+                part_no: add_Details?.part_no
             }
             Add_Tocart_Login(data).then((res) => {
                 navigate('/cart')
@@ -127,13 +114,15 @@ const SingleProductsDetails = () => {
                 qty: 1,
                 name: add_Details?.name,
                 image: add_Details?.images[0].image,
+                part_no: add_Details?.part_no
             }
             dispatch(addToCart(data))
         } else {
             let data = {
                 product_id: add_Details?.id,
                 price: add_Details?.original_price,
-                qty: 1
+                qty: 1,
+                part_no: add_Details?.part_no
             }
             Add_Tocart_Login(data).then((res) => {
                 navigate('/checkout')
@@ -141,13 +130,6 @@ const SingleProductsDetails = () => {
         }
 
     }
-
-    const removeElement = (id) => {
-        dispatch(removeProductWishlist(id));
-        WishListLoginDelete({ product_id: id }).then((res) => {
-            console.log(res);
-        })
-    };
 
     const handleSubmitReview = (event) => {
         event.preventDefault();
@@ -165,6 +147,27 @@ const SingleProductsDetails = () => {
             }
         })
     }
+
+    const openLightbox = (index) => {
+        setCurrentImageIndex(index);
+        setLightboxIsOpen(true);
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeLightbox = () => {
+        setLightboxIsOpen(false);
+        document.body.style.overflow = 'auto';
+    };
+
+    const gotoPrevious = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + add_Details?.images?.length) % add_Details?.images?.length);
+    };
+
+    const gotoNext = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % add_Details?.images?.length);
+    };
+
+
 
     return (
         <>
@@ -194,12 +197,12 @@ const SingleProductsDetails = () => {
 
                 {lightboxIsOpen && (
                     <Lightbox
-                    mainSrc={add_Details?.images?.[currentImageIndex]?.image}
-                    onCloseRequest={closeLightbox}
-                    nextSrc={add_Details?.images?.[(currentImageIndex + 1) % add_Details?.images?.length]?.image}
-                    prevSrc={add_Details?.images?.[(currentImageIndex - 1 + add_Details?.images?.length) % add_Details?.images?.length]?.image}
-                    onMovePrevRequest={gotoPrevious}
-                    onMoveNextRequest={gotoNext}
+                        mainSrc={add_Details?.images?.[currentImageIndex]?.image}
+                        onCloseRequest={closeLightbox}
+                        nextSrc={add_Details?.images?.[(currentImageIndex + 1) % add_Details?.images?.length]?.image}
+                        prevSrc={add_Details?.images?.[(currentImageIndex - 1 + add_Details?.images?.length) % add_Details?.images?.length]?.image}
+                        onMovePrevRequest={gotoPrevious}
+                        onMoveNextRequest={gotoNext}
                     />
                 )}
 
@@ -208,8 +211,8 @@ const SingleProductsDetails = () => {
                         <div className="row">
                             <div className="col-md-6">
                                 <Carousel
-                                selectedItem={currentImageIndex}
-                                // onClickItem={(index) => openLightbox(index)}
+                                    selectedItem={currentImageIndex}
+                                    // onClickItem={(index) => openLightbox(index)}
                                     showThumbs={true}
                                     showStatus={false}
                                     infiniteLoop={true}
@@ -226,22 +229,22 @@ const SingleProductsDetails = () => {
                                         </button>
                                     )}
                                 >
-                                {Array.isArray(add_Details?.images) &&
+                                    {Array.isArray(add_Details?.images) &&
                                         add_Details.images.map((image, index) => (
-                                        <div key={index} style={{ position: 'relative', textAlign: 'center' }}>
-                                            <img src={image.image} alt={`Product Image ${index + 1}`} />
-                                            <FiSearch 
-                                             onClick={() => openLightbox(index)}
-                                             style={{
-                                                position: 'absolute',
-                                                bottom: '10px',
-                                                right: '10px',
-                                                border: 'none',
-                                                cursor: 'pointer',
-                                                color:"#ED1D24"
-                                            }} size={36} />
-                                        </div>
-                                ))}
+                                            <div key={index} style={{ position: 'relative', textAlign: 'center' }}>
+                                                <img src={image.image} alt={`Product Image ${index + 1}`} />
+                                                <FiSearch
+                                                    onClick={() => openLightbox(index)}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        bottom: '10px',
+                                                        right: '10px',
+                                                        border: 'none',
+                                                        cursor: 'pointer',
+                                                        color: "#ED1D24"
+                                                    }} size={36} />
+                                            </div>
+                                        ))}
                                 </Carousel>
                             </div>
                             <div className="col-md-6">
@@ -333,88 +336,6 @@ const SingleProductsDetails = () => {
                                         {add_Details?.short_desc}
                                     </p>
                                     <div className="product__variant">
-                                        <div className="product__variant--list mb-10">
-                                            <fieldset className="variant__input--fieldset">
-                                                <legend className="product__variant--title mb-8">
-                                                    Color :
-                                                </legend>
-                                                <div className="variant__color d-flex">
-                                                    <div className="variant__color--list">
-                                                        <input
-                                                            id="color-red5"
-                                                            name="color"
-                                                            type="radio"
-                                                            defaultChecked=""
-                                                        />
-                                                        <label
-                                                            className="variant__color--value red"
-                                                            htmlFor="color-red5"
-                                                            title="Red"
-                                                        >
-                                                            <img
-                                                                className="variant__color--value__img"
-                                                                src="assets/img/product/small-product/product1.webp"
-                                                                alt="variant-color-img"
-                                                            />
-                                                        </label>
-                                                    </div>
-                                                    <div className="variant__color--list">
-                                                        <input
-                                                            id="color-red6"
-                                                            name="color"
-                                                            type="radio"
-                                                        />
-                                                        <label
-                                                            className="variant__color--value red"
-                                                            htmlFor="color-red6"
-                                                            title="Black"
-                                                        >
-                                                            <img
-                                                                className="variant__color--value__img"
-                                                                src="assets/img/product/small-product/product2.webp"
-                                                                alt="variant-color-img"
-                                                            />
-                                                        </label>
-                                                    </div>
-                                                    <div className="variant__color--list">
-                                                        <input
-                                                            id="color-red7"
-                                                            name="color"
-                                                            type="radio"
-                                                        />
-                                                        <label
-                                                            className="variant__color--value red"
-                                                            htmlFor="color-red7"
-                                                            title="Pink"
-                                                        >
-                                                            <img
-                                                                className="variant__color--value__img"
-                                                                src="assets/img/product/small-product/product3.webp"
-                                                                alt="variant-color-img"
-                                                            />
-                                                        </label>
-                                                    </div>
-                                                    <div className="variant__color--list">
-                                                        <input
-                                                            id="color-red8"
-                                                            name="color"
-                                                            type="radio"
-                                                        />
-                                                        <label
-                                                            className="variant__color--value red"
-                                                            htmlFor="color-red8"
-                                                            title="Orange"
-                                                        >
-                                                            <img
-                                                                className="variant__color--value__img"
-                                                                src="assets/img/product/small-product/product4.webp"
-                                                                alt="variant-color-img"
-                                                            />
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </fieldset>
-                                        </div>
                                         <div className="product__variant--list quantity d-flex align-items-center mb-20">
                                             {
                                                 add_Details?.out_of_stock === 1 ?
@@ -429,7 +350,7 @@ const SingleProductsDetails = () => {
                                                             user?.success !== true ?
                                                                 <>
                                                                     {
-                                                                        productIdsArray.includes(parseInt(id)) ?
+                                                                        productIdsArray.includes(id) ?
                                                                             <Link to={'/cart'} >
                                                                                 <button className="addto_cart_btn">
                                                                                     View Cart
@@ -447,7 +368,7 @@ const SingleProductsDetails = () => {
                                                                 :
                                                                 <>
                                                                     {
-                                                                        productLoginIdsArray.includes(parseInt(id)) ?
+                                                                        productLoginIdsArray.includes(id) ?
                                                                             <Link to={'/cart'} >
                                                                                 <button className="addto_cart_btn">
                                                                                     View Cart
@@ -472,7 +393,7 @@ const SingleProductsDetails = () => {
                                                         user?.success !== true ?
                                                             <>
                                                                 {
-                                                                    productIdsArray.includes(parseInt(id)) ?
+                                                                    productIdsArray.includes(id) ?
                                                                         <Link to={'/checkout'} >
                                                                             <button className="buy_btn">
                                                                                 Buy Now
@@ -486,7 +407,7 @@ const SingleProductsDetails = () => {
                                                             :
                                                             <>
                                                                 {
-                                                                    productLoginIdsArray.includes(parseInt(id)) ?
+                                                                    productLoginIdsArray.includes(id) ?
                                                                         <Link to={'/checkout'} >
                                                                             <button className="buy_btn">
                                                                                 Buy Now
@@ -500,15 +421,13 @@ const SingleProductsDetails = () => {
                                                     }
                                                 </>
                                             }
-
-
                                         </div>
                                         <div className="product__variant--list mb-15">
                                             {
                                                 user?.success === true ?
                                                     <>
                                                         {
-                                                            productwishIdsArray.includes(parseInt(id)) ?
+                                                            productwishIdsArray.includes(add_Details?.id) ?
                                                                 <div className='mb-4'>
                                                                     <BsHeartFill style={{ cursor: "pointer", fontSize: "20px" }}
                                                                         onClick={() => removeElement(add_Details?.id)} />

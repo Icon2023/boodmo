@@ -61,7 +61,7 @@ function App() {
           <Route path='/about-us' element={<About />} />
           <Route path='/contact-us' element={<Contact />} />
           <Route path='/thank-you' element={<ThankYou />} />
-          <Route path='*' element={<Page404 />} />  
+          <Route path='*' element={<Page404 />} />
         </Routes>
       </main>
       <Footer />

@@ -21,7 +21,6 @@ const ProductsView = () => {
     const dispatch = useDispatch();
     const { add_product, category_list, filter_multi } = useSelector((state) => ({ ...state.products }));
     const { cate_id, subcategory } = useParams();
-
     const [gridOpen, setGridOpen] = useState(true);
     const [trifOpen, setTrifOpen] = useState(true);
     const [expanded, setExpanded] = useState(false);
@@ -48,6 +47,10 @@ const ProductsView = () => {
     const [carModefication, setCarModefication] = useState([]);
     const [carValModefication, setValModefication] = useState("");
 
+    const [displayedBrands, setDisplayedBrands] = useState([]);
+    const [visibleItemCount, setVisibleItemCount] = useState(5);
+
+
     useEffect(() => {
         CarCompines().then((res) => {
             setCarName(res?.data);
@@ -55,6 +58,7 @@ const ProductsView = () => {
 
         Brands().then((res) => {
             setBrands(res?.data);
+            setDisplayedBrands(res?.data.slice(0, visibleItemCount));
         })
 
         dispatch(removeFilter())
@@ -238,6 +242,19 @@ const ProductsView = () => {
         })
     }
 
+    const handleLoadMore = () => {
+        // Increase the visible item count
+        // setVisibleItemCount(prevCount => prevCount + 10);
+        setVisibleItemCount(brands.length);
+        // Update displayed data with additional items
+        // setDisplayedBrands(brands.slice(0, visibleItemCount + 10));
+        setDisplayedBrands(brands);
+    };
+    // Check if all data has been displayed
+    // const allDataDisplayed = visibleItemCount >= brands.length;
+    // Calculate the remaining count of items to load
+    const remainingItemCount = brands.length - visibleItemCount;
+
     return (
         <div>
             <main className="margin_top_all">
@@ -277,14 +294,14 @@ const ProductsView = () => {
                                         <form onSubmit={handleSubmit}>
                                             <div>
                                                 <h3 className='mt-4'>Origin</h3>
-                                                <div className='d-flex'>
+                                                <div className='d-flex align-items-center'>
                                                     <input
                                                         type='radio'
                                                         value=""
                                                     />&nbsp;&nbsp;
                                                     <p className='mt-1'>Aftermarket &nbsp;(18700)</p>
                                                 </div>
-                                                <div className='d-flex'>
+                                                <div className='d-flex align-items-center'>
                                                     <input
                                                         type='radio'
                                                         value=""
@@ -352,60 +369,37 @@ const ProductsView = () => {
                                             <div className='mt-4'>
                                                 <h3>Brand</h3>
                                                 {
-                                                    isMore ?
-                                                        <>
-                                                            {
-                                                                brands?.map((e, index) => {
-                                                                    console.log(e);
-                                                                    return (
-                                                                        <div className='d-flex' key={index}>
-                                                                            <input
-                                                                                type='radio'
-                                                                                name='brand'
-                                                                                value={e?.id}
-                                                                                onChange={handleChecked}
-                                                                            />
-                                                                            &nbsp;&nbsp;
-                                                                            <p className='mt-1'>{e?.name}&nbsp;({e?.product_count})</p>
-                                                                        </div>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </>
-                                                        :
-                                                        <>
-                                                            <div className='d-flex'>
-                                                                <input
-                                                                    type='radio'
-                                                                    name='brand'
-                                                                    value={brands[0]?.id}
-                                                                    onChange={handleChecked}
-                                                                />&nbsp;&nbsp;
-                                                                <p className='mt-1'>{brands[0]?.name}&nbsp;({brands[0]?.product_count})</p>
+                                                    displayedBrands?.map((e, index) => {
+                                                        return (
+                                                            <div key={index} style={{ maxHeight: "100px", overflowY: "auto" }}>
+                                                                <div className='d-flex align-items-center'>
+                                                                    <input
+                                                                        type='radio'
+                                                                        name='brand'
+                                                                        value={e?.id}
+                                                                        onChange={handleChecked}
+                                                                    />
+                                                                    &nbsp;&nbsp;
+                                                                    <p className='mt-1'>{e?.name}&nbsp;({e?.product_count})</p>
+                                                                </div>
                                                             </div>
-                                                            <div className='d-flex'>
-                                                                <input
-                                                                    type='radio'
-                                                                    name='brand'
-                                                                    value={brands[1]?.id}
-                                                                    onChange={handleChecked}
-                                                                />&nbsp;&nbsp;
-                                                                <p className='mt-1'>{brands[1]?.name}&nbsp;({brands[1]?.product_count})</p>
-                                                            </div>
-                                                            <div className='d-flex'>
-                                                                <input
-                                                                    type='radio'
-                                                                    name='brand'
-                                                                    value={brands[2]?.id}
-                                                                    onChange={handleChecked}
-                                                                />&nbsp;&nbsp;
-                                                                <p className='mt-1'>{brands[2]?.name}&nbsp;({brands[2]?.product_count})</p>
-                                                            </div>
-                                                        </>
+                                                        )
+                                                    })
                                                 }
                                                 {
-                                                    isMore == false ? <a onClick={handleLoad} style={{ fontWeight: "bold" }}>+{brands?.length} More</a> : <a onClick={handleLoad} style={{ fontWeight: "bold" }}>Less</a>
-                                                }
+                                                    remainingItemCount > 0 && (
+                                                        <span onClick={handleLoadMore} style={{
+                                                            marginTop: "10px",
+                                                            backgroundColor: "#f1696d",
+                                                            color: "white",
+                                                            border: 0,
+                                                            cursor: "pointer",
+                                                            borderRadius: "5px",
+                                                            padding: "5px"
+                                                        }}>
+                                                            +{remainingItemCount} More
+                                                        </span>
+                                                    )}
                                             </div>
                                             <div className='mt-4'>
                                                 <h3>Price</h3>
@@ -553,7 +547,7 @@ const ProductsView = () => {
                                                                                         <div className="product__card--thumbnail">
                                                                                             <a
                                                                                                 className="product__card--thumbnail__link display-block"
-                                                                                                href={`/productsdetail/${e?.id}`}
+                                                                                                href={`/productsdetail/${e?.part_no}`}
                                                                                             >
                                                                                                 {
                                                                                                     isLoadingImage ? <>
@@ -708,7 +702,7 @@ const ProductsView = () => {
                                                                                                         </a> :
                                                                                                         <a
                                                                                                             className="product__card--btn primary__btn"
-                                                                                                            href={`/productsdetail/${e?.id}`}
+                                                                                                            href={`/productsdetail/${e?.part_no}`}
                                                                                                         >
                                                                                                             View to Details
                                                                                                         </a>
@@ -737,7 +731,7 @@ const ProductsView = () => {
                                                                                         <div className="product__card--thumbnail product__list--thumbnail">
                                                                                             <a
                                                                                                 className="product__card--thumbnail__link display-block"
-                                                                                                href={`/productsdetail/${e?.id}`}
+                                                                                                href={`/productsdetail/${e?.part_no}`}
                                                                                             >
                                                                                                 {
                                                                                                     isLoadingImage ?
@@ -892,7 +886,7 @@ const ProductsView = () => {
                                                                                                     </a> :
                                                                                                     <a
                                                                                                         className="product__card--btn primary__btn"
-                                                                                                        href={`/productsdetail/${e?.id}`}
+                                                                                                        href={`/productsdetail/${e?.part_no}`}
                                                                                                     >
                                                                                                         View to Details
                                                                                                     </a>
@@ -950,55 +944,37 @@ const ProductsView = () => {
                         <div>
                             <h3>Brand</h3>
                             {
-                                isMore ?
-                                    <>
-                                        {
-                                            brands?.map((e, index) => {
-                                                return (
-                                                    <div className='d-flex' key={index}>
-                                                        <input
-                                                            type='checkbox'
-                                                            value={e?.id}
-                                                            onChange={handleChecked}
-                                                        />
-                                                        &nbsp;&nbsp;
-                                                        <p className='mt-1'>{e?.name}&nbsp;({e?.product_count})</p>
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                    </>
-                                    :
-                                    <>
-                                        <div className='d-flex'>
-                                            <input
-                                                type='checkbox'
-                                                value={brands[0]?.id}
-                                                onChange={handleChecked}
-                                            />&nbsp;&nbsp;
-                                            <p className='mt-1'>{brands[0]?.name}&nbsp;({brands[0]?.product_count})</p>
+                                displayedBrands?.map((e, index) => {
+                                    return (
+                                        <div key={index} style={{ maxHeight: "100px", overflowY: "auto" }}>
+                                            <div className='d-flex align-items-center'>
+                                                <input
+                                                    type='radio'
+                                                    name='brand'
+                                                    value={e?.id}
+                                                    onChange={handleChecked}
+                                                />
+                                                &nbsp;&nbsp;
+                                                <p className='mt-1'>{e?.name}&nbsp;({e?.product_count})</p>
+                                            </div>
                                         </div>
-                                        <div className='d-flex'>
-                                            <input
-                                                type='checkbox'
-                                                value={brands[1]?.id}
-                                                onChange={handleChecked}
-                                            />&nbsp;&nbsp;
-                                            <p className='mt-1'>{brands[1]?.name}&nbsp;({brands[1]?.product_count})</p>
-                                        </div>
-                                        <div className='d-flex'>
-                                            <input
-                                                type='checkbox'
-                                                value={brands[2]?.id}
-                                                onChange={handleChecked}
-                                            />&nbsp;&nbsp;
-                                            <p className='mt-1'>{brands[2]?.name}&nbsp;({brands[2]?.product_count})</p>
-                                        </div>
-                                    </>
+                                    )
+                                })
                             }
                             {
-                                isMore == false ? <a onClick={handleLoad} style={{ fontWeight: "bold" }}>+{brands?.length} More</a> : <a onClick={handleLoad} style={{ fontWeight: "bold" }}>Less</a>
-                            }
+                                remainingItemCount > 0 && (
+                                    <span onClick={handleLoadMore} style={{
+                                        marginTop: "10px",
+                                        backgroundColor: "#f1696d",
+                                        color: "white",
+                                        border: 0,
+                                        cursor: "pointer",
+                                        borderRadius: "5px",
+                                        padding: "5px"
+                                    }}>
+                                        +{remainingItemCount} More
+                                    </span>
+                                )}
                         </div>
                         <form onSubmit={handleSubmit}>
                             <h3 className='mt-4'>Price</h3>

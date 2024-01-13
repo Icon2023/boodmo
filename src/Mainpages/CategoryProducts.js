@@ -28,6 +28,7 @@ const CategoryProducts = () => {
             if (res.success) {
                 setIsLoadingImage(false);
                 dispatch(addSingleCategory(res?.data));
+                console.log(res?.data);
             }
         }).catch((e) => {
             console.log(e);
@@ -142,45 +143,59 @@ const CategoryProducts = () => {
                                         </div>
                                         <ul className="categories__shop--inner">
                                             {
-                                                single_category?.map((e, index) => {
-                                                    return (
-                                                        <li className="categories__shop--card" key={index}>
-                                                            <a
-                                                                className="categories__shop--card__link"
-                                                                href={`/shop/${id}/${e?.id}`}
-                                                            >
-                                                                <div className="categories__thumbnail mb-15">
-                                                                    {
-                                                                        isLoadingImage ?
-                                                                            <>
-                                                                                <img
-                                                                                    // src={"https://via.placeholder.com/300x200/f0f0f0"}
-                                                                                    src={Placeholder_view}
-                                                                                    width={300}
-                                                                                    height={200}
-                                                                                    alt="categories-img-placeholder"
-                                                                                />
-                                                                            </> :
-                                                                            <>
-                                                                                <img
-                                                                                    className="categories__thumbnail--img"
-                                                                                    src={e?.image}
-                                                                                    alt="categories-img"
-                                                                                />
-                                                                            </>
-                                                                    }
+                                                single_category.length > 0 ?
+                                                    <>
+                                                        {
+                                                            single_category?.map((e, index) => {
+                                                                return (
+                                                                    <li className="categories__shop--card" key={index}>
+                                                                        <a
+                                                                            className="categories__shop--card__link"
+                                                                            href={`/shop/${id}/${e?.id}`}
+                                                                        >
+                                                                            <div className="categories__thumbnail mb-15">
+                                                                                {
+                                                                                    isLoadingImage ?
+                                                                                        <>
+                                                                                            <img
+                                                                                                // src={"https://via.placeholder.com/300x200/f0f0f0"}
+                                                                                                src={Placeholder_view}
+                                                                                                width={300}
+                                                                                                height={200}
+                                                                                                alt="categories-img-placeholder"
+                                                                                            />
+                                                                                        </> :
+                                                                                        <>
+                                                                                            <img
+                                                                                                className="categories__thumbnail--img"
+                                                                                                src={e?.image}
+                                                                                                alt="categories-img"
+                                                                                            />
+                                                                                        </>
+                                                                                }
 
 
-                                                                </div>
-                                                                <div className="categories__content">
-                                                                    <h2 className="categories__content--title">{e?.name}</h2>
-                                                                    {/* <span className="categories__content--subtitle">(20 Items)</span> */}
-                                                                </div>
+                                                                            </div>
+                                                                            <div className="categories__content">
+                                                                                <h2 className="categories__content--title">{e?.name}</h2>
+                                                                                {/* <span className="categories__content--subtitle">(20 Items)</span> */}
+                                                                            </div>
+                                                                        </a>
+                                                                    </li>
+                                                                )
+                                                            })
+                                                        }
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <li className="categories__shop--cards">
+                                                            <a className="categories__shop--card__link">
+                                                                <p>Comming Soon</p>
                                                             </a>
                                                         </li>
-                                                    )
-                                                })
+                                                    </>
                                             }
+
                                         </ul>
                                     </div>
                                 </div>

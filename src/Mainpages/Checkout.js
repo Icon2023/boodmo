@@ -27,8 +27,8 @@ const Checkout = () => {
     const [mobile, setMobile] = useState('');
     const [add_title, setAdd_title] = useState('');
     const [selectedValue, setSelectedValue] = useState("");
-    const countTotal = (items) => items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
 
+    const countTotal = (items) => items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
     const coupon_value = ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2)
 
     useEffect(() => {
@@ -92,26 +92,6 @@ const Checkout = () => {
         })
     }
 
-    // const handleSubmit = (e) => {
-    //     e.preventDefault()
-    //     // let data = {
-    //     //     first_name: fname,
-    //     //     last_name: lname,
-    //     //     company_name: companyName,
-    //     //     address: address,
-    //     //     state: state,
-    //     //     city: city,
-    //     //     zip: pincode,
-    //     //     country: country,
-    //     // }
-    //     let data = {
-    //         coupon,
-    //         coupon_value
-    //     }
-    //     dispatch(coupon_Pricevalue(data))
-    //     navigate('/review')
-    // }
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -169,6 +149,7 @@ const Checkout = () => {
     };
 
 
+
     return (
         <>
             <main className="margin_top_all">
@@ -197,26 +178,6 @@ const Checkout = () => {
                         <div className="row">
                             <div className="col-lg-7 col-md-6">
                                 <div className="main checkout__mian">
-                                    {/* <div className="checkout__content--step section__contact--information">
-                                        <div className="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
-                                            <h2 className="section__header--title h3">
-                                                Contact information
-                                            </h2>
-                                        </div>
-                                        <div className="customer__information">
-                                            <div className="checkout__email--phone mb-12">
-                                                <label>
-                                                    <input
-                                                        className="checkout__input--field border-radius-5"
-                                                        placeholder="Email or mobile phone mumber"
-                                                        type="text"
-                                                        value={email}
-                                                        disabled
-                                                    />
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div> */}
                                     <div className="checkout__content--step section__contact--information">
                                         <div className="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
                                             <h2 className="section__header--title h3">
@@ -294,10 +255,13 @@ const Checkout = () => {
                                             })
                                         }
                                     </div>
+
                                     {add_ship?.map((e) => {
                                         if (e.id == selectedValue) {
                                         }
                                     })}
+
+
                                     {
                                         add_ship.length > 0 &&
                                         <button onClick={addressSave} className="primary__btn border-radius-5 w-auto">
@@ -511,6 +475,7 @@ const Checkout = () => {
                                     }
                                 </div>
                             </div>
+
                             <div className="col-lg-5 col-md-6">
                                 <aside className="checkout__sidebar sidebar border-radius-10">
                                     <h2 className="checkout__order--summary__title text-center mb-15">
@@ -645,7 +610,7 @@ const Checkout = () => {
                         </div>
                     </div>
                 </div>
-                <ShippingAddress />
+                {/* <ShippingAddress /> */}
             </main>
         </>
     )

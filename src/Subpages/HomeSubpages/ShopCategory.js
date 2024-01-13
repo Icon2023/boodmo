@@ -31,7 +31,7 @@ const ShopCategory = () => {
                             Shop by <span>Categories</span>
                         </h2>
                     </div>
-                    <div className="categories__inner--style3 d-flex mb-5">
+                    <div className="categories__inner--style3 d-flex mb-4">
                         {
                             isOpen ?
                                 <>

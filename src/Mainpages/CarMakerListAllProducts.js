@@ -9,7 +9,7 @@ const CarMakerListAllProducts = () => {
 
     useEffect(() => {
         CarModel(id).then((res) => {
-            console.log(res?.data);
+            // console.log(res?.data);
             setMakeList(res?.data);
         });
     }, [])

@@ -92,7 +92,6 @@ const HomeSilder = () => {
     let val = e.target.value;
     CarModefication({ carValName, carValYear, val }).then((res) => {
       setCarModei(res?.data);
-      // console.log(res?.data);
     });
   };
 
@@ -166,11 +165,7 @@ const HomeSilder = () => {
                 </div> */}
               </div>
               <div className="search__filter--inner style5">
-                <form
-                  className="search__filter--form__style2 d-flex"
-                  onSubmit={handleClickOpen}
-                >
-                  {/* <form className="search__filter--form__style2 d-flex" onSubmit={handleOpens} > */}
+                <div className="search__filter--form__style2 d-flex">
                   <div className="search__filter--select select search__filter--width">
                     <select
                       className="search__filter--select__field"
@@ -244,21 +239,28 @@ const HomeSilder = () => {
                     </select>
                   </div>
                   <div className="search__filter--width">
-                    <button className="search__filter--btn primary__btn">
+                    <button className="search__filter--btn primary__btn" onClick={handleClickOpen}>
                       Search Parts
                     </button>
                   </div>
-                  {
+                  {/* {
                     carModei.length > 0 ?
                       <div className="cat_top">
-                        <a href="https://oriparts.com/" target="_blank">
+                        <a href="https://oriparts.com/?back_url_pn=https://bood.hypehy.com/" target="_blank">
                           <button className="catalog_btn">
                             OEM CATALOG
                           </button>
                         </a>
                       </div> : null
-                  }
-                </form>
+                  } */}
+                  <div className="search__filter--width">
+                    <a href="https://oriparts.com/?back_url_pn=https://autoholic.hypehy.com/" target="_blank">
+                      <button className="search__filter--btn primary__btn">
+                        OEM CATALOG
+                      </button>
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

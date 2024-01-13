@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { CarCompanies } from "../Services/apiServices";
 import { Link, useLocation } from "react-router-dom";
 import HeadingSection from "../Utils/HeadingSection";
-import "./car_makers.css";
 import { ScrollToTop } from "../Utils/ScrollToTop";
+import "./car_makers.css";
 
 const CarMakers = () => {
 
@@ -18,7 +18,7 @@ const CarMakers = () => {
     CarCompanies()
       .then((res) => {
         setCarCompany(res?.data);
-        console.log(res?.data);
+        // console.log(res?.data);
       })
       .catch((err) => {
         console.log(err);
@@ -48,7 +48,10 @@ const CarMakers = () => {
     if (!groupedElements[firstLetter]) {
       groupedElements[firstLetter] = [];
     }
-    groupedElements[firstLetter].push(element.name);
+    groupedElements[firstLetter].push({
+      name:element.name,
+      id:element.id
+    });
   });
 
   // Get unique first letters from the elements array
@@ -94,11 +97,11 @@ const CarMakers = () => {
                   <p className="makers-list__group__name">{letter}</p>
                   <ul className="makers-list__group__list">
                     {groupedElements[letter].map((element, index) => (
-                      <div className="makers-list__group__list__item">
+                      <div className="makers-list__group__list__item" key={index}>
                         <Link to={`/vehicles/${element?.name}/${element?.id}`} className="car-maker-item">
                           
                         {/* <a href="#" className="car-maker-item" key={index}> */}
-                          {element.toUpperCase()}
+                          {element.name.toUpperCase()}
                         </Link>
                         {/* </a> */}
                       </div>

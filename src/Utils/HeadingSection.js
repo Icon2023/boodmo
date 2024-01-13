@@ -12,14 +12,14 @@ const HeadingSection = ({ isInput, title, link, onChange, value }) => {
         {isInput ? <input type="text" style={{
           border: "1px solid #E5E5E5", borderRadius: "0.5rem",
           padding: "0.5rem 1.5rem",
-          marginBottom: "1.5rem"
+          marginBottom: "0",
+          marginTop:"20px"
         }} placeholder="Search Car Makes" value={value} onChange={onChange} /> :
           <Link to={link}>VIEW ALL</Link>
         }
         {/* {isInput ? <input type="text" placeholder="Search Car Makes" value={value} onChange={onChange} defaultValue="" /> :
         <Link to={link}>VIEW ALL</Link>
         } */}
-
       </div>
     </div>
   );
