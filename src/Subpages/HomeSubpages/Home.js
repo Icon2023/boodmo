@@ -4,6 +4,7 @@ import ShopCategory from "./ShopCategory";
 import Banner from "./Banner";
 import PopularCarMakers from "./PopularCarMakers";
 import BrandsWeTrust from "./BrandsWeTrust";
+import AfterMarketProducts from "./AfterMarketProducts";
 
 const Home = () => {
   return (
@@ -16,6 +17,9 @@ const Home = () => {
 
       {/* Start categories section */}
       <ShopCategory />
+
+      {/* Start Aftermarkrt section */}
+      <AfterMarketProducts />
 
       {/* start Popular Car Makers */}
       <PopularCarMakers />

@@ -231,7 +231,7 @@ const Header = () => {
                                 </li>
                             </ul>
                             <div className="header__top--right d-flex align-items-center">
-                                <ul className="header__top--link d-flex align-items-center">
+                                <ul className="social__share style5 d-flex">
                                     <li className="header__link--menu">
                                         <Link
                                             className="header__link--menu__text text-white"
@@ -241,8 +241,6 @@ const Header = () => {
                                             Wishlist
                                         </Link>
                                     </li>
-                                </ul>
-                                <ul className="social__share style5 d-flex">
                                     <li className="social__share--list">
                                         <a
                                             className="social__share--icon text-white"

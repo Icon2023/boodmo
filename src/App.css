@@ -1879,7 +1879,7 @@ select {
 ========================================================================================================================== */
 @media only screen and (min-width:768px) {
     .header__topbar {
-        padding: 10px 0
+        /* padding: 10px 0 */
     }
 }
 
@@ -11934,7 +11934,8 @@ details>summary::-webkit-details-marker {
     cursor: pointer;
     border-radius: 5px;
     padding: 8px 10px;
-    margin-top: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 @media only screen and (min-width:1199px) {
@@ -13562,9 +13563,6 @@ details>summary::-webkit-details-marker {
 
 
 /* radio  */
-
-
-
 /* CSS for RadioTileExample */
 .radio-tile {
     border: 1px solid #ccc;
@@ -13583,16 +13581,14 @@ details>summary::-webkit-details-marker {
 }
 
 .selected-option {
-    /* margin-top: 10px; */
     font-weight: bold;
     color: #ED1D24;
-    /* Color for the selected value */
 }
 
 .policy_input {
     width: 350px;
     height: 40px;
-    border-radius: 5px;
+    border-radius: 3px;
     padding-left: 12px;
     text-transform: uppercase;
     border: 1px solid rgb(169, 166, 166);
@@ -13602,26 +13598,13 @@ details>summary::-webkit-details-marker {
     margin-top: 115px;
 }
 
-.swiper {
-    width: 100%;
-    padding-top: 50px;
-    padding-bottom: 50px;
-}
-
-.swiper-slide {
-    background-position: center;
-    background-size: cover;
-    width: 300px;
-    height: 300px;
-}
-
-.swiper-slide img {
-    display: block;
-    width: 100%;
+.swiper-slides {
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 10px;
 }
 
 
-/*  */
 .input-groups label {
     font-size: 2.8rem;
 }
@@ -13640,4 +13623,119 @@ input[type="radio"]:checked {
     background-color: #000;
     padding: 4px;
     border: 2px solid #000;
+}
+
+/* address  */
+
+.address-list {
+    margin-bottom: 10px;
+
+}
+
+.address-list__item {
+    margin-bottom: 20px;
+    /* margin: auto 0%; */
+    margin-top: 20px;
+}
+
+/* .address-item .selected { */
+.address-list .selected {
+    /* border-color: #12477a; */
+    border-color: #FF0000;
+    border: 2px solid;
+}
+
+.address-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 170px;
+    padding: 15px;
+    border: 2px solid transparent;
+    box-shadow: 0 3px 10px #ebebeb;
+    border-radius: 5px;
+}
+
+.address-item__title {
+    margin-bottom: 5px;
+    font-size: 18px;
+    color: #12477a;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.address-item__user {
+    margin-bottom: 5px;
+    color: #000;
+    word-break: break-word;
+    font-size: 16px;
+}
+
+.address-item__address {
+    margin-bottom: 15px;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.address-item__action {
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid rgba(192, 204, 230, .36);
+}
+
+.address-item__action__text {
+    display: block;
+    min-width: 112px;
+    min-height: 36px;
+    padding: 10px;
+    border: 1px solid transparent;
+    font-size: 12px;
+    /* color: #12477a; */
+    color: #FF0000;
+    text-align: center;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+
+@media (min-width: 770px) {
+    .address-list__item {
+        width: calc(33.3333% - 16px);
+    }
+}
+
+@media (min-width: 482px) {
+    .address-list {
+        display: flex;
+        flex-flow: row wrap;
+        /* margin-right: -8px;
+        margin-left: -8px; */
+        gap: 12px;
+    }
+
+    .address-list__item {
+        width: calc(50% - 16px);
+        /* margin-right: 8px;
+        margin-left: 8px; */
+    }
+}
+
+@media (min-width: 642px) {
+    .address-item {
+        padding: 20px 18px;
+    }
+
+    .address-item__body {
+        padding-right: 25px;
+    }
+
+    .address-item__title {
+        font-size: 20px;
+    }
+
+    .address-item__address {
+        margin-bottom: 10px;
+        font-size: 12px;
+    }
 }

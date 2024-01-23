@@ -117,7 +117,6 @@ const Cart = () => {
                                                             >
                                                                 <button
                                                                     className="cart__remove--btn"
-                                                                    aria-label="search button"
                                                                     onClick={() =>
                                                                         removeElement(e?.proId)
                                                                     }
@@ -186,19 +185,14 @@ const Cart = () => {
                                                                     className="d-md-flex align-items-start"
                                                                     style={{ minWidth: "300px", gap: "16px" }}
                                                                 >
-                                                                    <button
-                                                                        className="cart__remove--btn"
-                                                                        aria-label="search button"
-                                                                        onClick={() => removeLoginElement(e?.id)}
-                                                                    >
+                                                                    <button className="cart__remove--btn" onClick={() => removeLoginElement(e?.id)}>
                                                                         <AiOutlineClose />
                                                                     </button>
                                                                     <img
                                                                         className="border-radius-5"
                                                                         src={e?.product?.images[0].image}
                                                                         style={{ width: "100px", height: "auto" }}
-                                                                        alt="cart-product"
-                                                                    />
+                                                                        alt="cart-product" />
                                                                     <aside>
                                                                         <h3 className="">
                                                                             <a
@@ -278,9 +272,9 @@ const Cart = () => {
 
                                                     </td>
                                                     <td className="text-center">
-                                                        <p>₹ {countTotal(addto_cart)}</p>
+                                                        <p>₹ {countTotal(addto_cart)}/-</p>
                                                         <p>₹ 100/-</p>
-                                                        <p>₹ {countTotal(addto_cart) + 100}</p>
+                                                        <p>₹ {countTotal(addto_cart) + 100}/-</p>
                                                     </td>
                                                 </tr>
                                             </>
@@ -294,9 +288,9 @@ const Cart = () => {
 
                                                     </td>
                                                     <td className="text-center">
-                                                        <p>₹ {countTotal(login_cart)}</p>
+                                                        <p>₹ {countTotal(login_cart)}/-</p>
                                                         <p>₹ 100/-</p>
-                                                        <p>₹ {countTotal(login_cart) + 100}</p>
+                                                        <p>₹ {countTotal(login_cart) + 100}/-</p>
                                                     </td>
                                                 </tr>
                                             </>

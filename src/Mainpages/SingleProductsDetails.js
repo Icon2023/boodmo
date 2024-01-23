@@ -44,7 +44,7 @@ const SingleProductsDetails = () => {
     }, [])
 
     var productwishIdsArray = [];
-    add_wish.forEach(function (obj){
+    add_wish.forEach(function (obj) {
         productwishIdsArray.push(obj.product_id);
     })
 
@@ -717,38 +717,6 @@ const SingleProductsDetails = () => {
                                                                 })
                                                             }
                                                         </div>
-                                                        {/* <div
-                                                            id="writereview"
-                                                            className="reviews__comment--reply__area"
-                                                        >
-                                                            <form onSubmit={handleSubmitReview}>
-                                                                <h3 className="reviews__comment--reply__title mb-15">
-                                                                    Add a review
-                                                                </h3>
-                                                                <div className="reviews__ratting mb-20">
-                                                                    <ul className="rating d-flex">
-                                                                        <Rating name="size-large" defaultValue={rating} onChange={(e) => setRating(e.target.value)} size="large" style={{ color: "red" }} />
-                                                                    </ul>
-                                                                </div>
-                                                                <div className="row">
-                                                                    <div className="col-12 mb-10">
-                                                                        <textarea
-                                                                            className="reviews__comment--reply__textarea"
-                                                                            placeholder="Your Reviews...."
-                                                                            value={reviewText}
-                                                                            onChange={(e) => setReviewText(e.target.value)}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                                <button
-                                                                    className="primary__btn text-white"
-                                                                    data-hover="Submit"
-                                                                    type="submit"
-                                                                >
-                                                                    SUBMIT
-                                                                </button>
-                                                            </form>
-                                                        </div> */}
                                                     </div>
                                                 </> :
                                                 <>
@@ -757,23 +725,23 @@ const SingleProductsDetails = () => {
                                                             <ul className="additional__info_list">
                                                                 <li className="additional__info_list--item">
                                                                     <span className="info__list--item-head">
-                                                                        <strong>Color</strong>
+                                                                        <strong>Part Number</strong>
                                                                     </span>
                                                                     <span className="info__list--item-content">
-                                                                        Black, white, blue, red, gray
+                                                                        {add_Details?.part_no}
                                                                     </span>
                                                                 </li>
                                                                 <li className="additional__info_list--item">
                                                                     <span className="info__list--item-head">
-                                                                        <strong>Weight</strong>
+                                                                        <strong>Manufacturer</strong>
                                                                     </span>
-                                                                    <span className="info__list--item-content">2kg</span>
+                                                                    <span className="info__list--item-content">{add_Details?.manufacturer}</span>
                                                                 </li>
                                                                 <li className="additional__info_list--item">
                                                                     <span className="info__list--item-head">
                                                                         <strong>Brand</strong>
                                                                     </span>
-                                                                    <span className="info__list--item-content">Gadget</span>
+                                                                    <span className="info__list--item-content">{add_Details?.brand?.name}</span>
                                                                 </li>
                                                                 <li className="additional__info_list--item">
                                                                     <span className="info__list--item-head">
@@ -788,7 +756,7 @@ const SingleProductsDetails = () => {
                                                                         <strong>Battery</strong>
                                                                     </span>
                                                                     <span className="info__list--item-content">
-                                                                        10000 mA
+                                                                        10000 mAh
                                                                     </span>
                                                                 </li>
                                                             </ul>

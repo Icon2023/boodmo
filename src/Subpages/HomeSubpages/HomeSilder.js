@@ -97,7 +97,11 @@ const HomeSilder = () => {
 
   const handleClickOpen = (e) => {
     e.preventDefault();
-    setOpen(true);
+    if (!carValModei) {
+    } else {
+      setOpen(true);
+      console.log(cateId);
+    }
   };
 
   const handleClose = () => {

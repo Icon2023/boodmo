@@ -14,9 +14,10 @@ export const productsSlice = createSlice({
     coupon_code: "",
     login_cart: [],
     add_ship: [],
-    selected_value_address:[],
-    coupon_value:"",
-    serach_bar:[]
+    selected_value_address: [],
+    coupon_value: "",
+    serach_bar: [],
+    insurance_name: []
   },
 
   reducers: {
@@ -35,7 +36,7 @@ export const productsSlice = createSlice({
     addSingleCategory: (state, { payload }) => {
       state.single_category = payload;
     },
-    selectedValueAddress : (state,{payload})=>{
+    selectedValueAddress: (state, { payload }) => {
       state.selected_value_address = payload;
     },
 
@@ -126,7 +127,7 @@ export const productsSlice = createSlice({
     remove_coupon_code: (state) => {
       state.coupon_code = ""
     },
-    coupon_Pricevalue:(state , { payload }) =>{
+    coupon_Pricevalue: (state, { payload }) => {
       state.coupon_value = payload
     },
 
@@ -142,6 +143,12 @@ export const productsSlice = createSlice({
 
     add_search: (state, { payload }) => {
       state.serach_bar = payload
+    },
+    
+    // ============================================== Insurance ======================================================================
+    // ================================================================================================================================
+    add_insurance_companyname: (state, { payload }) => {
+      state.insurance_name = payload
     },
 
   }
@@ -172,7 +179,8 @@ export const {
   removeAddress,
   selectedValueAddress,
   coupon_Pricevalue,
-  add_search
+  add_search,
+  add_insurance_companyname
 
 } = productsSlice.actions;
 

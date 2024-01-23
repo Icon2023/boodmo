@@ -109,10 +109,11 @@ const MyAddress = () => {
                                             <>
                                                 <div className='ship_multiple_box mt-5' key={index}>
                                                     <div className='d-flex justify-content-between'>
-                                                        <h3>{e?.name}</h3>
+                                                        <h3>Name:{e?.first_name}</h3>
                                                         <AiOutlineClose style={{ cursor: "pointer" }} onClick={() => handleAddressRemove(e?.id)} />
                                                     </div>
-                                                    <p>{e?.address}  - {e?.mobile}</p>
+                                                    <p>Address
+                                                        : {e?.address}  - {e?.mobile}</p>
                                                     <p>{e?.city},{e?.state},{e?.country}</p>
                                                 </div>
                                             </>

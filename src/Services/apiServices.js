@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./apiHeader";
 
-// const BASE_URL = "http://192.168.100.51:8002"
+// const BASE_URL = "http://192.168.100.51:8000"
 const BASE_URL = "https://adminbood.hypehy.com"
 
 export const Product = async (data) => {
@@ -176,7 +176,7 @@ export const AddReviewList = async (data) => {
 }
 
 export const GetAddressUser = async () => {
-    const response = await axios.get(`${BASE_URL}/api/address`, { headers: authHeader() });
+    const response = await axios.get(`${BASE_URL}/api/get-all-address`, { headers: authHeader() });
     if (response?.data?.success) {
         return response.data;
     } else {
@@ -186,7 +186,7 @@ export const GetAddressUser = async () => {
 
 
 export const AddAddressUser = async (data) => {
-    const response = await axios.post(`${BASE_URL}/api/addresses`, data, { headers: authHeader() });
+    const response = await axios.post(`${BASE_URL}/api/add-address`, data, { headers: authHeader() });
     if (response?.data?.success) {
         return response.data;
     } else {
@@ -304,5 +304,15 @@ export const searchProducts = async (searchTerm) => {
     } catch (error) {
         console.error("Error:", error);
         return null;
+    }
+}
+
+
+export const InsuranceCompanyList = async () => {
+    const response = await axios.get(`${BASE_URL}/api/insurance`);
+    if (response?.status) {
+        return response.data;
+    } else {
+        console.log("error");
     }
 }

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ShippingAddress from "../Subpages/ShippingAddress";
 import { useDispatch, useSelector } from "react-redux";
-import { CartList, MakeOrderId, OrderComplete } from "../Services/apiServices";
-import { addLoginCart } from "../store/reducers/ProductSlice";
+import { CartList, InsuranceCompanyList, MakeOrderId, OrderComplete } from "../Services/apiServices";
+import { addLoginCart, add_insurance_companyname } from "../store/reducers/ProductSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 
@@ -15,6 +15,7 @@ const Review = () => {
     add_ship,
     selected_value_address,
     coupon_value,
+    insurance_name
   } = useSelector((state) => ({ ...state.products }));
 
   const productsArray = [];
@@ -25,6 +26,7 @@ const Review = () => {
       qty: obj?.qty,
       image: obj?.product?.images[0]?.image,
       name: obj?.product?.name,
+      pn: obj?.product?.part_no
     };
     productsArray.push(payload);
   });
@@ -35,9 +37,16 @@ const Review = () => {
   const [currency, setCurrency] = useState("");
   const [razorpayPaymentId, setRazorpayPaymentId] = useState("");
   const [razorpaySignatureId, setRazorpaySignatureId] = useState("");
+  const [email, setEmail] = useState("");
+
   const [isInsuranceOpen, setInsuranceOpen] = useState(false);
   const [Insuranceval, setInsuranceval] = useState('');
-  const [email, setEmail] = useState("");
+  const [policyNumber, setpolicyNumber] = useState('');
+  const [personal, setPersonal] = useState('');
+  const [Insurance, setInsurance] = useState('');
+  const [type, setType] = useState('');
+
+
   const countTotal = (items) =>
     items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
 
@@ -52,6 +61,12 @@ const Review = () => {
     } else {
       setEmail(user?.data?.email);
     }
+
+    InsuranceCompanyList().then((res) => {
+      if (res.success) {
+        dispatch(add_insurance_companyname(res?.data))
+      }
+    })
   }, []);
 
   const handleCompleteOrder = (data) => {
@@ -115,46 +130,69 @@ const Review = () => {
     rzp.open();
   };
 
+  // const handleSubmit = () => {
+  //   let data = {
+  //     currency: "INR",
+  //     amount:
+  //       parseInt(
+  //         countTotal(login_cart) -
+  //           countTotal(login_cart) * (coupon_code?.coupon_discount / 100)
+  //           ? countTotal(login_cart) -
+  //           (
+  //             countTotal(login_cart) *
+  //             (coupon_code?.coupon_discount / 100)
+  //           ).toFixed(2)
+  //           : countTotal(login_cart)
+  //       ) * 100,
+  //   };
+  //   MakeOrderId(data).then((res) => {
+  //     if (res?.success) {
+  //       console.log(res.data);
+  //       setOrderId(res.data.id);
+  //       setReceipt(res.data.receipt);
+  //       setCurrency(res.data.currency);
+  //       handleOpenRazorpay(res.data);
+  //     }
+  //   });
+  // };
+
   const handleSubmit = () => {
-    let data = {
-      currency: "INR",
-      amount:
-        parseInt(
-          countTotal(login_cart) -
-            countTotal(login_cart) * (coupon_code?.coupon_discount / 100)
-            ? countTotal(login_cart) -
-            (
-              countTotal(login_cart) *
-              (coupon_code?.coupon_discount / 100)
-            ).toFixed(2)
-            : countTotal(login_cart)
-        ) * 100,
-    };
-    console.log(data);
-    MakeOrderId(data).then((res) => {
-      if (res?.success) {
-        console.log(res.data);
-        setOrderId(res.data.id);
-        setReceipt(res.data.receipt);
-        setCurrency(res.data.currency);
-        handleOpenRazorpay(res.data);
+    if (!type) {
+      alert("please Select Type")
+    } else {
+      let data = {
+        use_for: type,
+        insurance_id: parseInt(Insuranceval),
+        policy_number: policyNumber,
+        total_amount: countTotal(login_cart),
+        currency: 'INR',
+        products: JSON.stringify(productsArray),
+        address_id: selected_value_address.id
       }
-    });
-  };
-
-  const handlePersonal = () => {
-    setInsuranceOpen(false)
+      OrderComplete(data).then((res) => {
+        if (res?.success) {
+          console.log(res);
+          navigate("/thank-you");
+        }
+      });
+    }
   }
 
-  const handleInsurance = () => {
+  const handleChange = (e) => {
+    setPersonal(e.target.value);
+    setType('personal')
+    setInsuranceOpen(false);
+    setpolicyNumber('');
+    setInsuranceval('')
+
+  }
+
+  const handleChange1 = (e) => {
+    setInsurance(e.target.value);
+    setType('insurance')
     setInsuranceOpen(true)
-  }
 
-  const handleChangeInsurance = (e) => {
-    console.log(e.target.value);
-    setInsuranceval(e.target.value)
   }
-
 
   return (
     <main className="margin_top_all">
@@ -179,369 +217,409 @@ const Review = () => {
       </section>
 
       {/* Start checkout page area */}
-      <div className="checkout__page--area section--padding">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-7 col-md-6">
-              <div className="main checkout__mian">
-                <div className="checkout__content--step section__contact--information">
-                  <div className="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
-                    <h2 className="section__header--title h3">
-                      Contact information
-                    </h2>
-                  </div>
-                  <div className="customer__information">
-                    <div className="checkout__email--phone mb-12">
-                      <label>
-                        <input
-                          className="checkout__input--field border-radius-5"
-                          placeholder="Email or mobile phone mumber"
-                          type="text"
-                          value={email}
-                          disabled
-                        />
-                      </label>
+      {login_cart?.length >= 1 ?
+        <div className="checkout__page--area section--padding">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-7 col-md-6">
+                <div className="main checkout__mian">
+                  <div className="checkout__content--step section__contact--information">
+                    <div className="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
+                      <h2 className="section__header--title h3">
+                        Contact information
+                      </h2>
                     </div>
-                  </div>
-                </div>
-                <div className="checkout__content--step section__shipping--address">
-                  <div className="section__header mb-25">
-                    <h2 className="section__header--title h3">
-                      Billing Details
-                    </h2>
-                  </div>
-                  <div className="section__shipping--address__content">
-                    <div className="row">
-                      <div className="col-lg-6 col-md-6 col-sm-6 mb-20">
-                        <div className="checkout__input--list ">
-                          <label
-                            className="checkout__input--label"
-                            htmlFor="input1"
-                          >
-                            First Name
-                            <span className="checkout__input--label__star">
-                              *
-                            </span>
-                          </label>
+                    <div className="customer__information">
+                      <div className="checkout__email--phone mb-12">
+                        <label>
                           <input
                             className="checkout__input--field border-radius-5"
-                            placeholder="First name"
+                            placeholder="Email or mobile phone mumber"
                             type="text"
-                            value={selected_value_address?.first_name}
+                            value={email}
                             disabled
                           />
-                        </div>
-                      </div>
-                      <div className="col-lg-6 col-md-6 col-sm-6 mb-20">
-                        <div className="checkout__input--list">
-                          <label
-                            className="checkout__input--label"
-                            htmlFor="input2"
-                          >
-                            Last Name
-                            <span className="checkout__input--label__star">
-                              *
-                            </span>
-                          </label>
-                          <input
-                            className="checkout__input--field border-radius-5"
-                            placeholder="Last name"
-                            type="text"
-                            value={selected_value_address?.last_name}
-                            disabled
-                          />
-                        </div>
-                      </div>
-                      <div className="col-12 mb-20">
-                        <div className="checkout__input--list">
-                          <label
-                            className="checkout__input--label"
-                            htmlFor="input3"
-                          >
-                            Company Name
-                            <span className="checkout__input--label__star">
-                              *
-                            </span>
-                          </label>
-                          <input
-                            className="checkout__input--field border-radius-5"
-                            placeholder="Company (optional)"
-                            type="text"
-                            value={selected_value_address?.company_name}
-                            disabled
-                          />
-                        </div>
-                      </div>
-                      <div className="col-12 mb-20">
-                        <div className="checkout__input--list">
-                          <label
-                            className="checkout__input--label"
-                            htmlFor="input4"
-                          >
-                            Address
-                            <span className="checkout__input--label__star">
-                              *
-                            </span>
-                          </label>
-                          <input
-                            className="checkout__input--field border-radius-5"
-                            placeholder="Address"
-                            type="text"
-                            value={selected_value_address?.address}
-                            disabled
-                          />
-                        </div>
-                      </div>
-                      <div className="col-lg-6 mb-20">
-                        <div className="checkout__input--list">
-                          <label
-                            className="checkout__input--label"
-                            htmlFor="input5"
-                          >
-                            City
-                            <span className="checkout__input--label__star">
-                              *
-                            </span>
-                          </label>
-                          <input
-                            className="checkout__input--field border-radius-5"
-                            placeholder="City"
-                            type="text"
-                            value={selected_value_address?.city}
-                            disabled
-                          />
-                        </div>
-                      </div>
-                      <div className="col-lg-6 mb-20">
-                        <div className="checkout__input--list">
-                          <label
-                            className="checkout__input--label"
-                            htmlFor="input5"
-                          >
-                            State
-                            <span className="checkout__input--label__star">
-                              *
-                            </span>
-                          </label>
-                          <input
-                            className="checkout__input--field border-radius-5"
-                            placeholder="State"
-                            type="text"
-                            value={selected_value_address?.state}
-                            disabled
-                          />
-                        </div>
-                      </div>
-                      <div className="col-lg-6 mb-20">
-                        <div className="checkout__input--list">
-                          <label
-                            className="checkout__input--label"
-                            htmlFor="input6"
-                          >
-                            Country/region
-                            <span className="checkout__input--label__star">
-                              *
-                            </span>
-                          </label>
-                          <input
-                            className="checkout__input--field border-radius-5"
-                            placeholder="country"
-                            type="text"
-                            value={selected_value_address?.country}
-                            disabled
-                          />
-                        </div>
-                      </div>
-                      <div className="col-lg-6 mb-20">
-                        <div className="checkout__input--list">
-                          <label
-                            className="checkout__input--label"
-                            htmlFor="input6"
-                          >
-                            Pin Code
-                            <span className="checkout__input--label__star">
-                              *
-                            </span>
-                          </label>
-                          <input
-                            className="checkout__input--field border-radius-5"
-                            placeholder="Pin code"
-                            type="number"
-                            value={selected_value_address?.pincode}
-                            disabled
-                          />
-                        </div>
+                        </label>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="checkout__checkbox">
-                  <input class="checkout__checkbox--input" type="radio" name='personal' onClick={handlePersonal} />
-                  <span class="checkout__checkbox--checkmark"></span>
-                  <label class="checkout__checkbox--label" >
-                    Personal Use</label>
-                </div>
-                <div class="checkout__checkbox mb-4">
-                  <input class="checkout__checkbox--input" type="radio" name='personal' onClick={handleInsurance} />
-                  <span class="checkout__checkbox--checkmark"></span>
-                  <label class="checkout__checkbox--label" >
-                    Insurance</label>
-                  {
-                    isInsuranceOpen &&
-                    <>
-                      <div className='select search__filter--widths mb-3 mt-3'>
-                        <select name="" id="" className="search__filter--select__field" onChange={handleChangeInsurance}>
-                          <option value="TVS">TVS</option>
-                          <option value="honda">Honda</option>
-                          <option value="hero">Hero</option>
-                          <option value="bajaj">Bajaj</option>
-                          <option value="ktm">KTM</option>
-                        </select>
+                  <div className="checkout__content--step section__shipping--address">
+                    <div className="section__header mb-25">
+                      <h2 className="section__header--title h3">
+                        Billing Details
+                      </h2>
+                    </div>
+                    <div className="section__shipping--address__content">
+                      <div className="row">
+                        <div className="col-lg-6 col-md-6 col-sm-6 mb-20">
+                          <div className="checkout__input--list ">
+                            <label
+                              className="checkout__input--label"
+                              htmlFor="input1"
+                            >
+                              First Name
+                              <span className="checkout__input--label__star">
+                                *
+                              </span>
+                            </label>
+                            <input
+                              className="checkout__input--field border-radius-5"
+                              placeholder="First name"
+                              type="text"
+                              value={selected_value_address?.first_name}
+                              disabled
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6 col-md-6 col-sm-6 mb-20">
+                          <div className="checkout__input--list">
+                            <label
+                              className="checkout__input--label"
+                              htmlFor="input2"
+                            >
+                              Last Name
+                              <span className="checkout__input--label__star">
+                                *
+                              </span>
+                            </label>
+                            <input
+                              className="checkout__input--field border-radius-5"
+                              placeholder="Last name"
+                              type="text"
+                              value={selected_value_address?.last_name}
+                              disabled
+                            />
+                          </div>
+                        </div>
+                        <div className="col-12 mb-20">
+                          <div className="checkout__input--list">
+                            <label
+                              className="checkout__input--label"
+                              htmlFor="input3"
+                            >
+                              Company Name
+                              <span className="checkout__input--label__star">
+                                *
+                              </span>
+                            </label>
+                            <input
+                              className="checkout__input--field border-radius-5"
+                              placeholder="Company (optional)"
+                              type="text"
+                              value={selected_value_address?.company_name}
+                              disabled
+                            />
+                          </div>
+                        </div>
+                        <div className="col-12 mb-20">
+                          <div className="checkout__input--list">
+                            <label
+                              className="checkout__input--label"
+                              htmlFor="input4"
+                            >
+                              Address
+                              <span className="checkout__input--label__star">
+                                *
+                              </span>
+                            </label>
+                            <input
+                              className="checkout__input--field border-radius-5"
+                              placeholder="Address"
+                              type="text"
+                              value={selected_value_address?.address}
+                              disabled
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6 mb-20">
+                          <div className="checkout__input--list">
+                            <label
+                              className="checkout__input--label"
+                              htmlFor="input5"
+                            >
+                              City
+                              <span className="checkout__input--label__star">
+                                *
+                              </span>
+                            </label>
+                            <input
+                              className="checkout__input--field border-radius-5"
+                              placeholder="City"
+                              type="text"
+                              value={selected_value_address?.city}
+                              disabled
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6 mb-20">
+                          <div className="checkout__input--list">
+                            <label
+                              className="checkout__input--label"
+                              htmlFor="input5"
+                            >
+                              State
+                              <span className="checkout__input--label__star">
+                                *
+                              </span>
+                            </label>
+                            <input
+                              className="checkout__input--field border-radius-5"
+                              placeholder="State"
+                              type="text"
+                              value={selected_value_address?.state}
+                              disabled
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6 mb-20">
+                          <div className="checkout__input--list">
+                            <label
+                              className="checkout__input--label"
+                              htmlFor="input6"
+                            >
+                              Country/region
+                              <span className="checkout__input--label__star">
+                                *
+                              </span>
+                            </label>
+                            <input
+                              className="checkout__input--field border-radius-5"
+                              placeholder="country"
+                              type="text"
+                              value={selected_value_address?.country}
+                              disabled
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6 mb-20">
+                          <div className="checkout__input--list">
+                            <label
+                              className="checkout__input--label"
+                              htmlFor="input6"
+                            >
+                              Pin Code
+                              <span className="checkout__input--label__star">
+                                *
+                              </span>
+                            </label>
+                            <input
+                              className="checkout__input--field border-radius-5"
+                              placeholder="Pin code"
+                              type="number"
+                              value={selected_value_address?.pincode}
+                              disabled
+                            />
+                          </div>
+                        </div>
                       </div>
-                      <input className='policy_input' type="text" placeholder='Policy Number' />
-                    </>
-                  }
-                </div>
-                <div className="checkout__content--step__footer d-flex align-items-center">
-                  <Link className="previous__link--content" to="/checkout">
-                    <IoIosArrowBack /> Return to Information
-                  </Link>
-                  &nbsp;&nbsp;
-                  <button
-                    className="continue__shipping--btn primary__btn border-radius-5"
-                    id="rzp-button1"
-                    onClick={handleSubmit}
-                  >
-                    Continue To Payment
-                  </button>
+                    </div>
+                  </div>
+
+
+                  <div class="checkout__checkbox">
+                    <input class="checkout__checkbox--input" type="radio" name='personal' value={personal} onClick={handleChange} />
+                    <span class="checkout__checkbox--checkmark"></span>
+                    <label class="checkout__checkbox--label" >
+                      Personal Use</label>
+                  </div>
+                  <div class="checkout__checkbox mb-4">
+                    <input class="checkout__checkbox--input" type="radio" name='personal' value={Insurance} onClick={handleChange1} />
+                    <span class="checkout__checkbox--checkmark"></span>
+                    <label class="checkout__checkbox--label" >
+                      Insurance
+                    </label>
+                    {
+                      isInsuranceOpen &&
+                      <div className="mt-3">
+                        <label
+                          className="checkout__input--label"
+                          htmlFor="input1"
+                        >
+                          Insurance Company Name
+                          <span className="checkout__input--label__star">
+                            *
+                          </span>
+                        </label>
+                        <div className=''>
+                          <select className="search__filter--select__field" onChange={(e) => setInsuranceval(e.target.value)}>
+                            <option value={0}>Select Insurance Company</option>
+                            {
+                              insurance_name && insurance_name?.map((e, index) => {
+                                return (
+                                  <option value={e?.id} key={index}>{e?.name}</option>
+                                )
+                              })
+                            }
+                          </select>
+                        </div>
+                        <label
+                          className="checkout__input--label mt-3"
+                          htmlFor="input1"
+                        >
+                          Claim Number
+                          <span className="checkout__input--label__star">
+                            *
+                          </span>
+                        </label>
+                        <div>
+                          <input className='policy_input' type="text" placeholder='Claim Number' value={policyNumber} onChange={(e) => setpolicyNumber(e.target.value)} />
+                        </div>
+                      </div>
+                    }
+                  </div>
+
+                  <div className="checkout__content--step__footer d-flex align-items-center">
+                    <Link className="previous__link--content" to="/checkout">
+                      <IoIosArrowBack /> Return to Information
+                    </Link>
+                    <button
+                      className="continue__shipping--btn primary__btn border-radius-5 ms-5"
+                      id="rzp-button1"
+                      onClick={handleSubmit}
+                    >
+                      Continue To Payment
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-lg-5 col-md-6">
-              <aside className="checkout__sidebar sidebar border-radius-10">
-                <h2 className="checkout__order--summary__title text-center mb-15">
-                  Your Order Summary
-                </h2>
-                <div className="cart__table checkout__product--table">
-                  <table className="cart__table--inner">
-                    <tbody className="cart__table--body">
-                      {login_cart?.map((e, index) => {
-                        return (
-                          <tr className="cart__table--body__items" key={index}>
-                            <td className="cart__table--body__list">
-                              <div className="product__image two  d-flex align-items-center">
-                                <div className="product__thumbnail border-radius-5">
-                                  <a className="display-block">
-                                    <img
-                                      className="display-block border-radius-5"
-                                      src={e?.product?.images[0].image}
-                                      alt="cart-product"
-                                    />
-                                  </a>
-                                  <span className="product__thumbnail--quantity">
-                                    {e?.qty}
-                                  </span>
+              <div className="col-lg-5 col-md-6">
+                <aside className="checkout__sidebar sidebar border-radius-10">
+                  <h2 className="checkout__order--summary__title text-center mb-15">
+                    Your Order Summary
+                  </h2>
+                  <div className="cart__table checkout__product--table">
+                    <table className="cart__table--inner">
+                      <tbody className="cart__table--body">
+                        {login_cart?.map((e, index) => {
+                          return (
+                            <tr className="cart__table--body__items" key={index}>
+                              <td className="cart__table--body__list">
+                                <div className="product__image two  d-flex align-items-center">
+                                  <div className="product__thumbnail border-radius-5">
+                                    <a className="display-block">
+                                      <img
+                                        className="display-block border-radius-5"
+                                        src={e?.product?.images[0].image}
+                                        alt="cart-product"
+                                      />
+                                    </a>
+                                    <span className="product__thumbnail--quantity">
+                                      {e?.qty}
+                                    </span>
+                                  </div>
+                                  <div className="product__description">
+                                    <h4 className="product__description--name">
+                                      <p>{e?.product?.name}</p>
+                                    </h4>
+                                  </div>
                                 </div>
-                                <div className="product__description">
-                                  <h4 className="product__description--name">
-                                    <p>{e?.product?.name}</p>
-                                  </h4>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="cart__table--body__list">
-                              <span className="cart__price">
-                                {e?.price * e?.qty}/-
-                              </span>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-                <div className="checkout__total">
-                  <table className="checkout__total--table">
-                    <tbody className="checkout__total--body">
-                      <tr className="checkout__total--items">
-                        <td className="checkout__total--title text-left">
-                          Subtotal
-                        </td>
-                        <td className="checkout__total--amount text-right">
-                          <h4>{countTotal(login_cart)}/-</h4>
-                        </td>
-                      </tr>
-                      <tr className="checkout__total--items">
-                        <td className="checkout__total--title text-left">
-                          Discount ( {add_ship?.coupon} Appied )
-                        </td>
-                        <td className="checkout__total--calculated__text text-right">
-                          {countTotal(login_cart) *
-                            (coupon_code?.coupon_discount / 100)
-                            ? (
+                              </td>
+                              <td className="cart__table--body__list">
+                                <span className="cart__price">
+                                  {e?.price * e?.qty}/-
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="checkout__total">
+                    <table className="checkout__total--table">
+                      <tbody className="checkout__total--body">
+                        <tr className="checkout__total--items">
+                          <td className="checkout__total--title text-left">
+                            Subtotal
+                          </td>
+                          <td className="checkout__total--amount text-right">
+                            <h4>{countTotal(login_cart)}/-</h4>
+                          </td>
+                        </tr>
+                        <tr className="checkout__total--items">
+                          <td className="checkout__total--title text-left">
+                            Discount ( {add_ship?.coupon} Appied )
+                          </td>
+                          <td className="checkout__total--calculated__text text-right">
+                            {countTotal(login_cart) *
+                              (coupon_code?.coupon_discount / 100)
+                              ? (
+                                countTotal(login_cart) *
+                                (coupon_code?.coupon_discount / 100)
+                              ).toFixed(2)
+                              : 0}
+                            /-
+                          </td>
+                        </tr>
+                      </tbody>
+                      <tfoot className="checkout__total--footer">
+                        <tr className="checkout__total--footer__items">
+                          <td className="checkout__total--footer__title checkout__total--footer__list text-left">
+                            Total
+                          </td>
+                          <td className="checkout__total--footer__amount checkout__total--footer__list text-right">
+                            {countTotal(login_cart) -
                               countTotal(login_cart) *
                               (coupon_code?.coupon_discount / 100)
-                            ).toFixed(2)
-                            : 0}
-                          /-
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tfoot className="checkout__total--footer">
-                      <tr className="checkout__total--footer__items">
-                        <td className="checkout__total--footer__title checkout__total--footer__list text-left">
-                          Total
-                        </td>
-                        <td className="checkout__total--footer__amount checkout__total--footer__list text-right">
-                          {countTotal(login_cart) -
-                            countTotal(login_cart) *
-                            (coupon_code?.coupon_discount / 100)
-                            ? countTotal(login_cart) -
-                            (
-                              countTotal(login_cart) *
-                              (coupon_code?.coupon_discount / 100)
-                            ).toFixed(2)
-                            : countTotal(login_cart)}
-                          /-
-                        </td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-                <div className="payment__history mb-30">
-                  <h3 className="payment__history--title mb-20">Payment</h3>
-                  <ul className="payment__history--inner d-flex">
-                    <li className="payment__history--list">
-                      <button
-                        className="payment__history--link primary__btn"
-                        type="submit"
-                      >
-                        Credit Card
-                      </button>
-                    </li>
-                    <li className="payment__history--list">
-                      <button
-                        className="payment__history--link primary__btn"
-                        type="submit"
-                      >
-                        Bank Transfer
-                      </button>
-                    </li>
-                    <li className="payment__history--list">
-                      <button
-                        className="payment__history--link primary__btn"
-                        type="submit"
-                      >
-                        Paypal
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </aside>
+                              ? countTotal(login_cart) -
+                              (
+                                countTotal(login_cart) *
+                                (coupon_code?.coupon_discount / 100)
+                              ).toFixed(2)
+                              : countTotal(login_cart)}
+                            /-
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <div className="payment__history mb-30">
+                    <h3 className="payment__history--title mb-20">Payment</h3>
+                    <ul className="payment__history--inner d-flex">
+                      <li className="payment__history--list">
+                        <button
+                          className="payment__history--link primary__btn"
+                          type="submit"
+                        >
+                          Credit Card
+                        </button>
+                      </li>
+                      <li className="payment__history--list">
+                        <button
+                          className="payment__history--link primary__btn"
+                          type="submit"
+                        >
+                          Bank Transfer
+                        </button>
+                      </li>
+                      <li className="payment__history--list">
+                        <button
+                          className="payment__history--link primary__btn"
+                          type="submit"
+                        >
+                          Paypal
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </aside>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        :
+        <>
+          <img
+            style={{
+              marginLeft: "auto",
+              marginRight: "auto",
+              display: "block",
+            }}
+            src="https://nmkonline.com/images/pages/tumbleweed.gif"
+            alt=""
+          />
+        </>
+      }
 
       <ShippingAddress />
     </main>
