@@ -94,11 +94,10 @@ const Header = () => {
         setSearch(e.target.value)
     }
 
-    const handleSearch = () => {
+    const handleSearch = (e) => {
+        e.preventDefault()
         if (search.length > 0) {
             navigate(`/search/${search}`)
-        } else {
-            alert("Please type part number")
         }
     };
     return (
@@ -247,7 +246,7 @@ const Header = () => {
                                             target="_blank"
                                             href="https://www.facebook.com/"
                                         >
-                                            <BiLogoFacebook style={{ fontSize: "20px" }} />
+                                            <BiLogoFacebook style={{ fontSize: "20px", color: "white" }} />
                                         </a>
                                     </li>
                                     <li className="social__share--list">
@@ -256,7 +255,7 @@ const Header = () => {
                                             target="_blank"
                                             href="https://twitter.com/"
                                         >
-                                            <BiLogoTwitter style={{ fontSize: "20px" }} />
+                                            <BiLogoTwitter style={{ fontSize: "20px", color: "white" }} />
                                         </a>
                                     </li>
                                     <li className="social__share--list">
@@ -265,7 +264,7 @@ const Header = () => {
                                             target="_blank"
                                             href="https://www.instagram.com/"
                                         >
-                                            <BiLogoInstagramAlt style={{ fontSize: "20px" }} />
+                                            <BiLogoInstagramAlt style={{ fontSize: "20px", color: "white" }} />
                                         </a>
                                     </li>
                                     <li className="social__share--list">
@@ -274,7 +273,7 @@ const Header = () => {
                                             target="_blank"
                                             href="https://www.youtube.com/"
                                         >
-                                            <BiLogoYoutube style={{ fontSize: "20px" }} />
+                                            <BiLogoYoutube style={{ fontSize: "20px", color: "white" }} />
                                         </a>
                                     </li>
                                     <li className="social__share--list">
@@ -283,7 +282,7 @@ const Header = () => {
                                             target="_blank"
                                             href="https://www.pinterest.com/"
                                         >
-                                            <BiLogoPinterest style={{ fontSize: "20px" }} />
+                                            <BiLogoPinterest style={{ fontSize: "20px", color: "white" }} />
                                         </a>
                                     </li>
                                 </ul>
@@ -306,7 +305,7 @@ const Header = () => {
                                     <a className="main__logo--link" href="/">
                                         <img
                                             className="main__logo--img"
-                                            src="assets/img/logo/logo.png"
+                                            src="assets/img/logo/logonew.png"
                                             alt="logo-img"
                                         />
                                     </a>
@@ -321,8 +320,23 @@ const Header = () => {
                                             </a>
                                         </li>
                                         <li className="header__menu--items">
-                                            <a className="header__menu--link" href="/">
-                                                Accesories
+                                            <a className="header__menu--link" href="/tools-equiments">
+                                                Tools & Equiments
+                                            </a>
+                                        </li>
+                                        <li className="header__menu--items">
+                                            <a className="header__menu--link" href="/market-place">
+                                                MarketPlace
+                                            </a>
+                                        </li>
+                                        <li className="header__menu--items">
+                                            <a className="header__menu--link" href="/car-exchange">
+                                                Car Exchange
+                                            </a>
+                                        </li>
+                                        <li className="header__menu--items">
+                                            <a className="header__menu--link" href="/car-insurance">
+                                                Car Insurance
                                             </a>
                                         </li>
                                         <li className="header__menu--items">
@@ -398,26 +412,13 @@ const Header = () => {
                             <div className="header__account">
                                 <ul className="header__account--wrapper d-flex align-items-center">
                                     <li className="header__account--items  header__account--search__items d-sm-2-none">
-                                        <p
-                                            className=""
-                                            style={{ cursor: "pointer" }}
-                                        >
+                                        <p style={{ cursor: "pointer" }}>
                                             <span className="visually-hidden">Search</span>
                                             {/* <input type='text' placeholder='Search Here...' className='search_box' value={search} onChange={handleSearchClick} /> */}
                                             <AiOutlineSearch style={{ fontSize: "28px" }} onClick={handleToggleDrawer} />
                                         </p>
                                     </li>
-                                    <li className="header__account--items d-none d-lg-block">
-                                        {
-                                            user?.success !== true ?
-                                                <a className="header__account--btn" href="/login">
-                                                    <IoMdContact style={{ fontSize: "28px" }} />
-                                                </a>
-                                                : <a className="header__account--btn" onClick={handleLogout}>
-                                                    <AiOutlineLogout style={{ fontSize: "28px", color: "red" }} />
-                                                </a>
-                                        }
-                                    </li>
+
                                     <li className="header__account--items d-none d-lg-block">
                                         <Link className="header__account--btn" to="/wishlist">
                                             <AiOutlineHeart style={{ fontSize: "28px" }} />
@@ -426,7 +427,7 @@ const Header = () => {
                                             }
                                         </Link>
                                     </li>
-                                    <li className="header__account--items header__minicart--items m-3">
+                                    <li className="header__account--items d-none d-lg-block">
                                         <a
                                             className="header__account--btn minicart__open--btn"
                                             href="/cart"
@@ -446,6 +447,17 @@ const Header = () => {
                                                     </>
                                             }
                                         </a>
+                                    </li>
+                                    <li className="header__account--items d-none d-lg-block">
+                                        {
+                                            user?.success !== true ?
+                                                <a className="header__account--btn" href="/login">
+                                                    <IoMdContact style={{ fontSize: "28px" }} />
+                                                </a>
+                                                : <a className="header__account--btn" onClick={handleLogout}>
+                                                    <AiOutlineLogout style={{ fontSize: "28px", color: "#363062" }} />
+                                                </a>
+                                        }
                                     </li>
                                 </ul>
                             </div>
@@ -583,7 +595,7 @@ const Header = () => {
                             <div className="offcanvas__logo">
                                 <a className="offcanvas__logo_link" href="/">
                                     <img
-                                        src="assets/img/logo/logo.png"
+                                        src="assets/img/logo/logonew.png"
                                         alt="Grocee Logo"
                                         width={158}
                                         height={36}

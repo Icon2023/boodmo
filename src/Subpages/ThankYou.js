@@ -29,7 +29,7 @@ const ThankYou = () => {
       <Header />
       <div
         className="thank_you shadow-lg p-3 mb-5 bg-white rounded"
-        style={{ maxWidth: "100%" }}
+        style={{ maxWidth: "100%", marginTop:"100px" }}
       >
         <div>
           <img src={Prio} alt="payment" className="mb-4" />

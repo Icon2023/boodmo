@@ -10,8 +10,8 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
-  const [emailNumber, setEmailNumber] = useState('dev@gmail.com')
-  const [password, setPassword] = useState('123456')
+  const [emailNumber, setEmailNumber] = useState('')
+  const [password, setPassword] = useState('')
   const [passwordShown, setPasswordShown] = useState(false);
 
   const { addto_cart } = useSelector((state) => ({ ...state.products }));

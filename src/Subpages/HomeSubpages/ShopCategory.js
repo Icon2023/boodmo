@@ -10,6 +10,8 @@ const ShopCategory = () => {
     const [displayedCategory, setDisplayedCategory] = useState([]);
     const [visibleItemCount, setVisibleItemCount] = useState(5);
 
+    const remainingItemCount = category_list.length - visibleItemCount;
+
     useEffect(() => {
         Categories().then((res) => {
             if (res?.success) {
@@ -21,17 +23,10 @@ const ShopCategory = () => {
         })
     }, [])
 
-    const remainingItemCount = category_list.length - visibleItemCount;
-
     const handleLoadMore = () => {
         setVisibleItemCount(category_list.length);
         setDisplayedCategory(category_list);
     };
-
-    // const handleHideMore = () => {
-    //     window.location.reload();
-    // }
-
 
     return (
         <>
@@ -44,7 +39,7 @@ const ShopCategory = () => {
                     </div>
                     <div className="categories__inner--style3 d-flex mb-4">
                         {
-                            displayedCategory?.map((e, index) => {
+                            displayedCategory?.map((e,index) => {
                                 return (
                                     <div className="categories__card--style3 text-center" key={index}>
                                         <a className="categories__card--link" href={`/shop/${e?.id}`}>
@@ -53,6 +48,7 @@ const ShopCategory = () => {
                                                     className="categories__thumbnail--img"
                                                     src={e?.image}
                                                     alt="categories-img"
+                                                    style={{width:"75px"}}
                                                 />
                                             </div>
                                             <div className="categories__content style3">
@@ -68,9 +64,6 @@ const ShopCategory = () => {
                         {
                             remainingItemCount > 0 && <button onClick={handleLoadMore}>Load More</button>
                         }
-                        {/* {
-                            !remainingItemCount && <button onClick={handleHideMore}>Hide More</button>
-                        } */}
                     </div>
                 </div>
             </section>

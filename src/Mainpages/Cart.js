@@ -92,10 +92,10 @@ const Cart = () => {
                 </section>
                 {/* cart section start */}
                 <section className="container">
-                    <div className="table-responsive">
+                    <div className="table-responsive mt-5">
                         {addto_cart?.length >= 1 || login_cart?.length >= 1 ? (
                             <>
-                                <h2 className="cart__title mb-30 ">Shopping Cart</h2>
+                                {/* <h2 className="cart__title mb-30 ">Shopping Cart</h2> */}
                                 <table className="table table-bordered table-hover">
                                     <thead className="table-dark">
                                         <tr className="text-center">

@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addSingleCategory } from '../store/reducers/ProductSlice'
 import Drawer from 'react-modern-drawer';
+import coming from '../images/comingsoon-removebg-preview.png'
+
 
 //matrial ui 
 import Accordion from '@mui/material/Accordion';
@@ -11,8 +13,6 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ShippingAddress from '../Subpages/ShippingAddress'
-// import categoryPlaceholder from "../images/categoryPlaceholder.svg";
-// import Placeholder from "../images/Placeholder.svg";
 import Placeholder_view from "../images/Placeholder_view_vector.svg";
 
 const CategoryProducts = () => {
@@ -28,7 +28,6 @@ const CategoryProducts = () => {
             if (res.success) {
                 setIsLoadingImage(false);
                 dispatch(addSingleCategory(res?.data));
-                console.log(res?.data);
             }
         }).catch((e) => {
             console.log(e);
@@ -188,14 +187,11 @@ const CategoryProducts = () => {
                                                     </>
                                                     :
                                                     <>
-                                                        <li className="categories__shop--cards">
-                                                            <a className="categories__shop--card__link">
-                                                                <p>Comming Soon</p>
-                                                            </a>
-                                                        </li>
+                                                        <div style={{ marginTop: "100px", textAlign: "center" }}>
+                                                            <img src={coming} alt="" srcset="" style={{ width: "50%", borderRadius: "10px" }} />
+                                                        </div>
                                                     </>
                                             }
-
                                         </ul>
                                     </div>
                                 </div>

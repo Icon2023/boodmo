@@ -2,7 +2,8 @@
 
 :root {
     --primary-color: #212121;
-    --secondary-color: #ED1D24;
+    --secondary-color: #363062;
+    /* --secondary-color: #ED1D24; */
     --foreground-color: #121416;
     --foreground-sub-color: #898686;
     --body-text-color: #000000;
@@ -263,7 +264,7 @@ img {
     border-radius: 5px;
     width: auto;
     padding-left: 10px;
-    border: 1px solid #ed1d24;
+    border: 1px solid #363062;
 }
 
 .search_model {
@@ -273,7 +274,7 @@ img {
 }
 
 .search_model button {
-    background-color: #ed1d24;
+    background-color: #363062;
     color: white;
     border: 0;
     padding: 7px 18px;
@@ -1927,7 +1928,7 @@ select {
 }
 
 .header__info--link.text-white:hover {
-    color: var(--secondary-color) !important
+    /* color: var(--secondary-color) !important */
 }
 
 .header__top--right {
@@ -1986,7 +1987,7 @@ select {
 }
 
 .header__link--menu__text.text-white:hover {
-    color: var(--secondary-color) !important
+    /* color: var(--secondary-color) !important */
 }
 
 .main__header {
@@ -4346,7 +4347,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     width: 100%;
     -o-object-fit: cover;
     object-fit: cover;
-    margin-top: 80px;
+    margin-top: 40px;
 }
 
 @media only screen and (min-width:1366px) and (max-width:1599px) {
@@ -4992,7 +4993,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 .load_btn button {
     margin-bottom: 20px;
     text-align: center;
-    background-color: #ed1d24;
+    background-color: #363062;
     color: white;
     border: 0;
     border-radius: 5px;
@@ -5004,7 +5005,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 }
 
 .checkout_btn {
-    background-color: #ed1d24;
+    background-color: #363062;
     color: white;
     border: 0;
     border-radius: 5px;
@@ -5012,7 +5013,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 }
 
 .addto_cart_btn {
-    background-color: #ed1d24;
+    background-color: #363062;
     color: white;
     border: 0;
     border-radius: 5px;
@@ -5021,15 +5022,15 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 
 .buy_btn {
     background-color: white;
-    color: #ed1d24;
-    border: 1px solid #ed1d24;
+    color: #363062;
+    border: 1px solid #363062;
     border-radius: 5px;
     padding: 5px 50px;
     margin-left: 10px;
 }
 
 .buy_btn:hover {
-    background-color: #ed1d24;
+    background-color: #363062;
     color: white;
     transition: 0.5s;
 }
@@ -6264,8 +6265,8 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     top: 50%;
     -webkit-transform: translatey(-50%);
     transform: translatey(-50%);
-    background: -webkit-gradient(linear, left top, right top, from(#ff5e03), to(#ed1d24));
-    background: linear-gradient(to right, #ff5e03, #ed1d24);
+    background: -webkit-gradient(linear, left top, right top, from(#ff5e03), to(#363062));
+    background: linear-gradient(to right, #ff5e03, #363062);
     padding: 3.5rem 2.5rem;
     border-radius: 5px
 }
@@ -7250,8 +7251,8 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 }
 
 .newsletter__subscribe--button:hover {
-    background: var(--body-background-color);
-    color: var(--foreground-color)
+    /* background: var(--body-background-color); */
+    /* color: var(--foreground-color) */
 }
 
 @media only screen and (min-width:576px) {
@@ -8905,13 +8906,13 @@ input.quickview__value--number {
 .form_filter input {
     width: 100px;
     border-radius: 5px;
-    border: 1px solid #ED1D24;
+    border: 1px solid #363062;
     padding-left: 10px;
 }
 
 .form_filter_btn button {
     margin-top: 20px;
-    background-color: #ed1d24;
+    background-color: #363062;
     color: white;
     border: 0;
     border-radius: 5px;
@@ -11471,12 +11472,12 @@ details>summary::-webkit-details-marker {
     top: 4px;
     opacity: 0;
     cursor: pointer;
-    z-index: 999
+    z-index: 999;
 }
 
 .checkout__checkbox--input:checked~.checkout__checkbox--checkmark {
     background-color: var(--secondary-color);
-    border: 1px solid var(--secondary-color)
+    border: 1px solid var(--secondary-color);
 }
 
 .checkout__checkbox--input:checked~.checkout__checkbox--checkmark::before {
@@ -11484,8 +11485,8 @@ details>summary::-webkit-details-marker {
 }
 
 .checkout__checkbox--label {
-    padding-left: 3rem;
-    cursor: pointer
+    padding-left: 2.3rem;
+    cursor: pointer;
 }
 
 .checkout__checkbox--checkmark {
@@ -11929,13 +11930,13 @@ details>summary::-webkit-details-marker {
 }
 
 .Add_ship h3 {
-    background-color: red;
+    background-color: #363062;
     color: white;
     cursor: pointer;
     border-radius: 5px;
     padding: 8px 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 15px;
+    width: 200px;
 }
 
 @media only screen and (min-width:1199px) {
@@ -13308,7 +13309,7 @@ details>summary::-webkit-details-marker {
 }
 
 .vehicle_btn button {
-    background-color: #ed1d24;
+    background-color: #363062;
     border: 0;
     padding: 3px 10px;
     border-radius: 5px;
@@ -13414,7 +13415,7 @@ details>summary::-webkit-details-marker {
 }
 
 .searchster-categories-grid__item:hover {
-    border: 1px solid #ED1D24;
+    border: 1px solid #363062;
 }
 
 @media (min-width: 770px) {
@@ -13571,7 +13572,7 @@ details>summary::-webkit-details-marker {
 }
 
 .radio-tile.checked {
-    border: 2px solid #ED1D24;
+    border: 2px solid #363062;
     border-radius: 10px;
 }
 
@@ -13582,16 +13583,33 @@ details>summary::-webkit-details-marker {
 
 .selected-option {
     font-weight: bold;
-    color: #ED1D24;
+    color: #363062;
 }
 
 .policy_input {
-    width: 350px;
+    width: 100%;
     height: 40px;
     border-radius: 3px;
     padding-left: 12px;
     text-transform: uppercase;
     border: 1px solid rgb(169, 166, 166);
+}
+
+.personal_btn {
+    background-color: white;
+    color: #363062;
+    border: 1px solid #363062;
+    border-radius: 5px;
+    height: 45px;
+    width: 350px;
+}
+
+.selected_btn {
+    background-color: #363062;
+    color: white;
+    border-radius: 5px;
+    height: 45px;
+    width: 350px;
 }
 
 .margin_top_all {
@@ -13625,7 +13643,7 @@ input[type="radio"]:checked {
     border: 2px solid #000;
 }
 
-/* address  */
+/* address ==========================================================================================================================  */
 
 .address-list {
     margin-bottom: 10px;
@@ -13634,15 +13652,13 @@ input[type="radio"]:checked {
 
 .address-list__item {
     margin-bottom: 20px;
-    /* margin: auto 0%; */
     margin-top: 20px;
 }
 
-/* .address-item .selected { */
 .address-list .selected {
-    /* border-color: #12477a; */
-    border-color: #FF0000;
-    border: 2px solid;
+    border: 2px solid #363062 !important;
+    margin-top: 20px !important;
+    border-radius: 5px;
 }
 
 .address-item {
@@ -13691,8 +13707,7 @@ input[type="radio"]:checked {
     padding: 10px;
     border: 1px solid transparent;
     font-size: 12px;
-    /* color: #12477a; */
-    color: #FF0000;
+    color: #363062;
     text-align: center;
     line-height: 1.2;
     text-transform: uppercase;

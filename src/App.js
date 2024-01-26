@@ -27,15 +27,20 @@ import Contact from './Mainpages/contact';
 import BrandProductsView from './Subpages/BrandProducts';
 import CarMakerListAllProducts from './Mainpages/CarMakerListAllProducts';
 import SearchBar from './Mainpages/SearchBar';
+import ToolEquimdent from './Mainpages/ToolEquimdent';
+import CarExchange from './Mainpages/CarExchange';
+import CarInsurance from './Mainpages/CarInsurance';
 import 'react-modern-drawer/dist/index.css';
 import "../node_modules/slick-carousel/slick/slick-theme.css";
 import "../node_modules/slick-carousel/slick/slick.css";
+import MarketPlace from './Mainpages/MarketPlace';
 
 
 function App() {
   return (
     <>
-      <ScrollToTop smooth color="#ED1D24" />
+      <ScrollToTop smooth color="#363062" />
+      <Header />
       <Header />
       <main style={{ minHeight: "70vh" }}>
         <Routes>
@@ -51,6 +56,10 @@ function App() {
           <Route path='/my-orders' element={<ProtectedRouteWishlist><MyOrders /></ProtectedRouteWishlist>} />
           <Route path='/my-address' element={<ProtectedRouteWishlist><MyAddress /></ProtectedRouteWishlist>} />
 
+          <Route path='/tools-equiments' element={<ToolEquimdent />} />
+          <Route path='/car-exchange' element={<CarExchange />} />
+          <Route path='/car-insurance' element={<CarInsurance />} />
+          <Route path='/market-place' element={<MarketPlace />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/login' element={<ProtectedRouteLogin><Login /></ProtectedRouteLogin>} />
           <Route path='/vehicles' element={<CarMakers />} />

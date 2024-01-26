@@ -101,13 +101,16 @@ const MyAddress = () => {
                     <div className="my__account--section__inner border-radius-10 d-flex">
                         <div className="account__wrapper">
                             <h2 className="section__header--title h3">My Shipping Details</h2>
+                            <div className='Add_ship'>
+                                <h3 onClick={handleOpenNewAddress}><AiOutlinePlus style={{ fontSize: "24px" }} /> Add New Address</h3>
+                            </div>
                             <div className='d-flex' style={{ gap: "20px", flexWrap: "wrap" }}>
                                 {
                                     add_ship &&
                                     add_ship?.map((e, index) => {
                                         return (
                                             <>
-                                                <div className='ship_multiple_box mt-5' key={index}>
+                                                <div className='ship_multiple_box mt-3' key={index}>
                                                     <div className='d-flex justify-content-between'>
                                                         <h3>Name:{e?.first_name}</h3>
                                                         <AiOutlineClose style={{ cursor: "pointer" }} onClick={() => handleAddressRemove(e?.id)} />
@@ -121,9 +124,6 @@ const MyAddress = () => {
                                     })
 
                                 }
-                                <div className='Add_ship'>
-                                    <h3 className='text-center' onClick={handleOpenNewAddress}><AiOutlinePlus className='mb-1' style={{ fontSize: "24px" }} /> Add New Address</h3>
-                                </div>
                             </div>
                             {
                                 isOpen ?

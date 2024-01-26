@@ -54,8 +54,8 @@ const WishList = () => {
                     <div className="table-responsive">
                         {add_wish?.length >= 1 ? (
                             <>
-                                <h2 className="cart__title mb-30 ">Wishlist</h2>
-                                <table className="table table-bordered table-hover">
+                                {/* <h2 className="cart__title mb-30 ">Wishlist</h2> */}
+                                <table className="table table-bordered table-hover mt-5">
                                     <thead className="table-dark">
                                         <tr className="text-center">
                                             <th>PRODUCT</th>

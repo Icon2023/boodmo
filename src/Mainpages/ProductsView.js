@@ -9,7 +9,6 @@ import { AiFillStar, AiOutlineFilter, AiOutlineStar } from "react-icons/ai";
 import Drawer from 'react-modern-drawer';
 import Placeholder_view from "../images/Placeholder_view_vector.svg";
 
-
 //matrial ui 
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -158,23 +157,21 @@ const ProductsView = () => {
         setIsOpen((prevState) => !prevState)
     }
 
-    const handleLoad = () => {
-        isMore === true ? setIsMore(false) : setIsMore(true)
-    }
-
     const handleReset = () => {
         window.location.reload();
         dispatch(removeFilter())
     }
 
     const sortClick = (val1) => {
+        console.log(val1);
         let data = {
             category: cate_id,
             sub_category: subcategory,
             sort_by: val1.split(",")[0],
             sort_action: val1.split(",")[1],
-            brand: selectedValues.join(',')
+            // brand: selectedValues.join(',')
         }
+
         Product(data).then((res) => {
             if (res.success) {
                 dispatch(addProducts(res?.data))
@@ -243,16 +240,12 @@ const ProductsView = () => {
     }
 
     const handleLoadMore = () => {
-        // Increase the visible item count
         // setVisibleItemCount(prevCount => prevCount + 10);
         setVisibleItemCount(brands.length);
-        // Update displayed data with additional items
         // setDisplayedBrands(brands.slice(0, visibleItemCount + 10));
         setDisplayedBrands(brands);
     };
-    // Check if all data has been displayed
     // const allDataDisplayed = visibleItemCount >= brands.length;
-    // Calculate the remaining count of items to load
     const remainingItemCount = brands.length - visibleItemCount;
 
     return (
@@ -934,10 +927,11 @@ const ProductsView = () => {
                     onClose={toggleDrawer}
                     direction='left'
                     className='bla bla bla'
+                    style={{ overflowY: "scroll" }}
                 >
-                    <div className="single__widget price__filter widget__bg" style={{ height: "100vh", overflowY: "scroll" }}>
+                    <div className="single__widget price__filter widget__bg" >
                         <div className='d-flex'>
-                            <h2 className="">Filters</h2>
+                            <h2>Filters</h2>
                             <a onClick={handleReset} className="ms-5 mt-1" style={{ textDecoration: "underline", color: "red" }}>Reset</a>
                         </div>
                         <hr />
@@ -976,7 +970,7 @@ const ProductsView = () => {
                                     </span>
                                 )}
                         </div>
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit} style={{ marginBottom: "100px" }}>
                             <h3 className='mt-4'>Price</h3>
                             <div className='form_filter'>
                                 <label>

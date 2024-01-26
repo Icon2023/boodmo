@@ -74,17 +74,20 @@ const Checkout = () => {
     }
 
     const handleCouponApply = () => {
-        GetCouponCode(coupon).then((res) => {
-            if (res?.success) {
-                dispatch(add_coupon_code(res?.data))
-                setInvaildCoupon('')
-                setIsOpenDiscount(true)
-            } else {
-                dispatch(remove_coupon_code())
-                setInvaildCoupon(res?.message)
-                setIsOpenDiscount(false)
-            }
-        })
+        if (!coupon) {
+        } else {
+            GetCouponCode(coupon).then((res) => {
+                if (res?.success) {
+                    dispatch(add_coupon_code(res?.data))
+                    setInvaildCoupon('')
+                    setIsOpenDiscount(true)
+                } else {
+                    dispatch(remove_coupon_code())
+                    setInvaildCoupon(res?.message)
+                    setIsOpenDiscount(false)
+                }
+            })
+        }
     }
 
     const GetAddress = () => {
@@ -223,7 +226,7 @@ const Checkout = () => {
                                             </h3>
                                         </div>
 
-                                        <article className='address-list'>
+                                        <div className='address-list'>
                                             {add_ship?.map((e, index) => {
                                                 return (
                                                     <div key={index} className={`address-list__item ${selectedAddress === e?.id ? 'selected' : ''}`}>
@@ -248,7 +251,7 @@ const Checkout = () => {
                                                     </div>
                                                 );
                                             })}
-                                        </article>
+                                        </div>
 
                                         {
                                             add_ship.length > 0 &&

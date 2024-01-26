@@ -5,6 +5,7 @@ import { CartList, InsuranceCompanyList, MakeOrderId, OrderComplete } from "../S
 import { addLoginCart, add_insurance_companyname } from "../store/reducers/ProductSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
+import { AiOutlineClose } from "react-icons/ai";
 
 const Review = () => {
   const dispatch = useDispatch();
@@ -42,10 +43,7 @@ const Review = () => {
   const [isInsuranceOpen, setInsuranceOpen] = useState(false);
   const [Insuranceval, setInsuranceval] = useState('');
   const [policyNumber, setpolicyNumber] = useState('');
-  const [personal, setPersonal] = useState('');
-  const [Insurance, setInsurance] = useState('');
   const [type, setType] = useState('');
-
 
   const countTotal = (items) =>
     items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
@@ -157,8 +155,8 @@ const Review = () => {
   // };
 
   const handleSubmit = () => {
-    if (!type) {
-      alert("please Select Type")
+    if (!type && !Insuranceval && !policyNumber) {
+      alert("Please select Type")
     } else {
       let data = {
         use_for: type,
@@ -169,9 +167,9 @@ const Review = () => {
         products: JSON.stringify(productsArray),
         address_id: selected_value_address.id
       }
+      console.log(data);
       OrderComplete(data).then((res) => {
         if (res?.success) {
-          console.log(res);
           navigate("/thank-you");
         }
       });
@@ -179,7 +177,6 @@ const Review = () => {
   }
 
   const handleChange = (e) => {
-    setPersonal(e.target.value);
     setType('personal')
     setInsuranceOpen(false);
     setpolicyNumber('');
@@ -188,7 +185,6 @@ const Review = () => {
   }
 
   const handleChange1 = (e) => {
-    setInsurance(e.target.value);
     setType('insurance')
     setInsuranceOpen(true)
 
@@ -226,7 +222,7 @@ const Review = () => {
                   <div className="checkout__content--step section__contact--information">
                     <div className="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
                       <h2 className="section__header--title h3">
-                        Contact information
+                        Billing Details
                       </h2>
                     </div>
                     <div className="customer__information">
@@ -244,12 +240,61 @@ const Review = () => {
                     </div>
                   </div>
                   <div className="checkout__content--step section__shipping--address">
-                    <div className="section__header mb-25">
-                      <h2 className="section__header--title h3">
-                        Billing Details
-                      </h2>
+                    <label
+                      className="checkout__input--label"
+                      htmlFor="input1"
+                    >
+                      Select Type
+                      <span className="checkout__input--label__star">
+                        *
+                      </span>
+                    </label>
+                    <div className="d-flex justify-content-center gap-3">
+                      <button className={`${type == 'personal' ? 'selected_btn' : "personal_btn"}  `} onClick={handleChange}>Personal Use</button>
+                      <button className={`${type == 'insurance' ? 'selected_btn' : "personal_btn"}  `} onClick={handleChange1}>Insurance</button>
                     </div>
-                    <div className="section__shipping--address__content">
+
+                    {
+                      isInsuranceOpen &&
+                      <div className="mt-3">
+                        <label
+                          className="checkout__input--label"
+                          htmlFor="input1"
+                        >
+                          Insurance Company Name
+                          <span className="checkout__input--label__star">
+                            *
+                          </span>
+                        </label>
+                        <div>
+                          <select className="search__filter--select__field" onChange={(e) => setInsuranceval(e.target.value)}>
+                            <option value={0}>Select Insurance Company</option>
+                            {
+                              insurance_name && insurance_name?.map((e, index) => {
+                                return (
+                                  <option value={e?.id} key={index}>{e?.name}</option>
+                                )
+                              })
+                            }
+                          </select>
+                        </div>
+                        <label
+                          className="checkout__input--label mt-3"
+                          htmlFor="input1"
+                        >
+                          Claim Number
+                          <span className="checkout__input--label__star">
+                            *
+                          </span>
+                        </label>
+                        <div>
+                          <input className='policy_input' type="text" placeholder='Claim Number' value={policyNumber} onChange={(e) => setpolicyNumber(e.target.value)} />
+                        </div>
+                      </div>
+                    }
+                    <br />
+                    <hr />
+                    <div className="section__shipping--address__content mt-4">
                       <div className="row">
                         <div className="col-lg-6 col-md-6 col-sm-6 mb-20">
                           <div className="checkout__input--list ">
@@ -413,59 +458,6 @@ const Review = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
-
-
-                  <div class="checkout__checkbox">
-                    <input class="checkout__checkbox--input" type="radio" name='personal' value={personal} onClick={handleChange} />
-                    <span class="checkout__checkbox--checkmark"></span>
-                    <label class="checkout__checkbox--label" >
-                      Personal Use</label>
-                  </div>
-                  <div class="checkout__checkbox mb-4">
-                    <input class="checkout__checkbox--input" type="radio" name='personal' value={Insurance} onClick={handleChange1} />
-                    <span class="checkout__checkbox--checkmark"></span>
-                    <label class="checkout__checkbox--label" >
-                      Insurance
-                    </label>
-                    {
-                      isInsuranceOpen &&
-                      <div className="mt-3">
-                        <label
-                          className="checkout__input--label"
-                          htmlFor="input1"
-                        >
-                          Insurance Company Name
-                          <span className="checkout__input--label__star">
-                            *
-                          </span>
-                        </label>
-                        <div className=''>
-                          <select className="search__filter--select__field" onChange={(e) => setInsuranceval(e.target.value)}>
-                            <option value={0}>Select Insurance Company</option>
-                            {
-                              insurance_name && insurance_name?.map((e, index) => {
-                                return (
-                                  <option value={e?.id} key={index}>{e?.name}</option>
-                                )
-                              })
-                            }
-                          </select>
-                        </div>
-                        <label
-                          className="checkout__input--label mt-3"
-                          htmlFor="input1"
-                        >
-                          Claim Number
-                          <span className="checkout__input--label__star">
-                            *
-                          </span>
-                        </label>
-                        <div>
-                          <input className='policy_input' type="text" placeholder='Claim Number' value={policyNumber} onChange={(e) => setpolicyNumber(e.target.value)} />
-                        </div>
-                      </div>
-                    }
                   </div>
 
                   <div className="checkout__content--step__footer d-flex align-items-center">

@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./apiHeader";
 
-// const BASE_URL = "http://192.168.100.51:8000"
+// const BASE_URL = "http://192.168.100.123:8000"                                        
 const BASE_URL = "https://adminbood.hypehy.com"
 
 export const Product = async (data) => {
