@@ -1,6 +1,6 @@
 import React from 'react'
 import './App.css'
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Header from './Mainpages/Header';
 import Home from './Subpages/HomeSubpages/Home';
 import Footer from './Mainpages/Footer';
@@ -30,13 +30,14 @@ import SearchBar from './Mainpages/SearchBar';
 import ToolEquimdent from './Mainpages/ToolEquimdent';
 import CarExchange from './Mainpages/CarExchange';
 import CarInsurance from './Mainpages/CarInsurance';
+import MarketPlace from './Mainpages/MarketPlace';
 import 'react-modern-drawer/dist/index.css';
 import "../node_modules/slick-carousel/slick/slick-theme.css";
 import "../node_modules/slick-carousel/slick/slick.css";
-import MarketPlace from './Mainpages/MarketPlace';
 
 
 function App() {
+
   return (
     <>
       <ScrollToTop smooth color="#363062" />
@@ -74,6 +75,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
+
     </>
   )
 }
