@@ -34,14 +34,17 @@ import MarketPlace from './Mainpages/MarketPlace';
 import 'react-modern-drawer/dist/index.css';
 import "../node_modules/slick-carousel/slick/slick-theme.css";
 import "../node_modules/slick-carousel/slick/slick.css";
+import MarketAutoDetails from './Mainpages/MarketAutoDetails';
+import MarketCarDetails from './Mainpages/MarketCarDetails';
 
 
 function App() {
+  const location = useLocation();
+  let pathName = location.pathname;
 
   return (
     <>
       <ScrollToTop smooth color="#363062" />
-      <Header />
       <Header />
       <main style={{ minHeight: "70vh" }}>
         <Routes>
@@ -61,6 +64,10 @@ function App() {
           <Route path='/car-exchange' element={<CarExchange />} />
           <Route path='/car-insurance' element={<CarInsurance />} />
           <Route path='/market-place' element={<MarketPlace />} />
+          <Route path='/market-places/auto/:id' element={<MarketAutoDetails />} />
+          <Route path='/market-places/car/:id' element={<MarketCarDetails />} />
+
+
           <Route path='/cart' element={<Cart />} />
           <Route path='/login' element={<ProtectedRouteLogin><Login /></ProtectedRouteLogin>} />
           <Route path='/vehicles' element={<CarMakers />} />
@@ -75,7 +82,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
-
+  
     </>
   )
 }

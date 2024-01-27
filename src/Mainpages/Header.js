@@ -315,27 +315,32 @@ const Header = () => {
                                 <nav className="header__menu--navigation">
                                     <ul className="header__menu--wrapper d-flex">
                                         <li className="header__menu--items">
-                                            <a className="header__menu--link" href="/">
+                                            <a href="/" className={`header__menu--link ${window.location.pathname == "/" ? "active" : ""
+                                                }`}>
                                                 Home
                                             </a>
                                         </li>
                                         <li className="header__menu--items">
-                                            <a className="header__menu--link" href="/tools-equiments">
+                                            <a className={`header__menu--link ${window.location.pathname == "/tools-equiments" ? "active" : ""
+                                                }`} href="/tools-equiments">
                                                 Tools & Equiments
                                             </a>
                                         </li>
                                         <li className="header__menu--items">
-                                            <a className="header__menu--link" href="/market-place">
+                                            <a className={`header__menu--link ${window.location.pathname == "/market-place" ? "active" : ""
+                                                }`} href="/market-place">
                                                 MarketPlace
                                             </a>
                                         </li>
                                         <li className="header__menu--items">
-                                            <a className="header__menu--link" href="/car-exchange">
+                                            <a className={`header__menu--link ${window.location.pathname == "/car-exchange" ? "active" : ""
+                                                }`} href="/car-exchange">
                                                 Car Exchange
                                             </a>
                                         </li>
                                         <li className="header__menu--items">
-                                            <a className="header__menu--link" href="/car-insurance">
+                                            <a className={`header__menu--link ${window.location.pathname == "/car-insurance" ? "active" : ""
+                                                }`} href="/car-insurance">
                                                 Car Insurance
                                             </a>
                                         </li>
