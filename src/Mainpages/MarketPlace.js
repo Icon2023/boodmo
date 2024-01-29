@@ -73,11 +73,31 @@ const MarketPlace = () => {
                     </div>
                     <div className="auto_part_btn">
                         <MdAutoMode style={{ fontSize: "28px" }} />
-                        <p style={{ fontSize: "20px", paddingLeft: "8px" }}>Vehicles</p>
+                        <p style={{ fontSize: "20px", paddingLeft: "8px" }}>Coming Soon</p>
                     </div>
                     <div className="auto_part_btn">
                         <MdElectricBike style={{ fontSize: "28px" }} />
-                        <p style={{ fontSize: "20px", paddingLeft: "8px" }}>Bike</p>
+                        <p style={{ fontSize: "20px", paddingLeft: "8px" }}>Coming Soon</p>
+                    </div>
+                    <div className="new_add_products">
+                        <p style={{ textAlign: "center", color: "#363062", fontWeight: "bold" }}>+ Create a new listing</p>
+                    </div>
+                    <hr />
+                    <h3>Filter</h3>
+                    <p>Surat within 65 kms</p>
+                    <hr />
+                    <h3>Sub Category</h3>
+                    <div className="auto_part_btn">
+                        <MdAutoMode style={{ fontSize: "28px" }} />
+                        <p style={{ fontSize: "20px", paddingLeft: "8px" }}>Coming Soon</p>
+                    </div>
+                    <div className="auto_part_btn">
+                        <MdElectricBike style={{ fontSize: "28px" }} />
+                        <p style={{ fontSize: "20px", paddingLeft: "8px" }}>Coming Soon</p>
+                    </div>
+                    <div className="auto_part_btn">
+                        <MdElectricBike style={{ fontSize: "28px" }} />
+                        <p style={{ fontSize: "20px", paddingLeft: "8px" }}>Coming Soon</p>
                     </div>
                 </div>
                 <div className="main">
@@ -94,35 +114,41 @@ const MarketPlace = () => {
 
                         </div>
                     </aside>
-                    <h2>Our Products</h2>
+                    <h2  style={{color:"#363062"}} className="mt-3">Our Products</h2>
                     {
                         gridOpen ?
-                            <div className="row">
+                            <div className="row card_hover" >
                                 {
                                     Products?.autopart?.map((e, index) => {
                                         return (
-                                            <div className="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 px-2" key={index}>
+                                            <a href={`market-places/auto/${e?.id}`} className="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 px-2" key={index}>
                                                 <div className="pro_card">
-                                                    <img src={e.image} />
+                                                    <a href={`market-places/auto/${e?.id}`}>
+                                                        <img src={e.image} />
+                                                    </a>
                                                     <hr />
-                                                    <h2 className="ps-3 categories__content--title" >{e.title}</h2>
-                                                    <p className="ps-3 categories__content--subtitle"> {e.desc}</p>
+                                                    <h2 className="ps-3 categories__content--title" >
+                                                        {e.title}
+                                                    </h2>
+                                                    <p className="ps-3 categories__content--subtitle">
+                                                        {e.desc}
+                                                    </p>
                                                     <button>
                                                         <a href={`market-places/auto/${e?.id}`} style={{ color: "white" }}>
                                                             Buy Now
                                                         </a>
                                                     </button>
                                                 </div>
-                                            </div>
+                                            </a>
                                         );
                                     })
                                 }
                             </div> :
-                            <div className="row">
+                            <div className="row card_hover">
                                 {
                                     Products?.car?.map((e, index) => {
                                         return (
-                                            <div className="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 px-2" key={index}>
+                                            <a href={`market-places/car/${e?.id}`} className="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 px-2" key={index}>
                                                 <div className="pro_card">
                                                     <img src={e.image} />
                                                     <hr />
@@ -134,7 +160,7 @@ const MarketPlace = () => {
                                                         </a>
                                                     </button>
                                                 </div>
-                                            </div>
+                                            </a>
                                         );
                                     })
                                 }
@@ -142,7 +168,7 @@ const MarketPlace = () => {
                             </div>
                     }
                 </div>
-            </div>
+            </div >
         </>
     );
 };

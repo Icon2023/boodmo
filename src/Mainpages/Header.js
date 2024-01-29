@@ -5,7 +5,7 @@ import { BiLogoFacebook, BiLogoInstagramAlt, BiLogoPinterest, BiLogoTwitter, BiL
 import { BsShop } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 import Drawer from 'react-modern-drawer';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { add_search, removeAllItemWishlist, removeAllLoginCart } from '../store/reducers/ProductSlice'
 import { Product, SearchProduct, searchProducts } from '../Services/apiServices'
 import Drawers from '@mui/material/Drawer';
@@ -13,6 +13,8 @@ import Drawers from '@mui/material/Drawer';
 const Header = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
+    let pathName = location.pathname;
     const { add_wish, addto_cart, login_cart, serach_bar } = useSelector((state) => ({ ...state.products }));
     const user = JSON.parse(localStorage.getItem('USER'));
     const [isOpen, setIsOpen] = useState(false);
@@ -327,7 +329,7 @@ const Header = () => {
                                             </a>
                                         </li>
                                         <li className="header__menu--items">
-                                            <a className={`header__menu--link ${window.location.pathname == "/market-place" ? "active" : ""
+                                            <a className={`header__menu--link ${window.location.pathname == "/market-place" || pathName.startsWith('/market-places/auto') || pathName.startsWith('/market-places/car') ? "active" : ""
                                                 }`} href="/market-place">
                                                 MarketPlace
                                             </a>
@@ -416,7 +418,7 @@ const Header = () => {
                             </div>
                             <div className="header__account">
                                 <ul className="header__account--wrapper d-flex align-items-center">
-                                    <li className="header__account--items  header__account--search__items d-sm-2-none">
+                                    <li className="header__account--items  header__account--search__items">
                                         <p style={{ cursor: "pointer" }}>
                                             <span className="visually-hidden">Search</span>
                                             {/* <input type='text' placeholder='Search Here...' className='search_box' value={search} onChange={handleSearchClick} /> */}
@@ -487,7 +489,7 @@ const Header = () => {
 
                 {/* Start Offcanvas stikcy toolbar */}
                 <div className="offcanvas__stikcy--toolbar">
-                    <ul className="d-flex justify-content-between">
+                    <ul className="d-flex justify-content-between text-center">
                         <li className="offcanvas__stikcy--toolbar__list">
                             <a className="offcanvas__stikcy--toolbar__btn" href="/">
 
@@ -496,10 +498,10 @@ const Header = () => {
                             </a>
                         </li>
                         <li className="offcanvas__stikcy--toolbar__list">
-                            {/* <a className="offcanvas__stikcy--toolbar__btn" href="/">
-                            </a> */}
-                            <BsShop style={{ fontSize: "20px" }} />
-                            <span className="offcanvas__stikcy--toolbar__label">Shop</span>
+                            <a className="offcanvas__stikcy--toolbar__btn" href="/market-place">
+                                <BsShop style={{ fontSize: "20px" }} />
+                                <span className="offcanvas__stikcy--toolbar__label">Market Place</span>
+                            </a>
                         </li>
                         <li className="offcanvas__stikcy--toolbar__list ">
                             {/* <a
@@ -616,8 +618,8 @@ const Header = () => {
                                         </Link>
                                     </li>
                                     <li className="offcanvas__menu_li">
-                                        <Link className="offcanvas__menu_item" to="/">
-                                            Shop
+                                        <Link className="offcanvas__menu_item" to="/market-place">
+                                            Market Place
                                         </Link>
                                     </li>
                                     <li className="offcanvas__menu_li">

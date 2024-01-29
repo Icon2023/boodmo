@@ -524,7 +524,7 @@ hr {
 
 @media only screen and (max-width:575px) {
     .d-sm-2-none {
-        display: none
+        display: none;
     }
 
     .d-sm-2-block {
@@ -4347,7 +4347,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     width: 100%;
     -o-object-fit: cover;
     object-fit: cover;
-    margin-top: 40px;
+    margin-top: 60px;
 }
 
 @media only screen and (min-width:1366px) and (max-width:1599px) {
@@ -4743,7 +4743,6 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     line-height: 2rem;
     font-weight: 600;
     margin-bottom: .5rem;
-    white-space: nowrap;
 }
 
 @media only screen and (min-width:1200px) {
@@ -13825,12 +13824,13 @@ input[type="radio"]:checked {
     text-overflow: ellipsis;
     white-space: nowrap;
     color: #6c757d;
-    ;
+
 }
 
 .pro_card img {
     border-radius: 10px;
     height: 200px;
+    width: 100%;
     object-fit: cover;
 }
 
@@ -13865,22 +13865,37 @@ input[type="radio"]:checked {
 
 }
 
-.market_side_img img {
-    height: 90vh;
-    width: 100%;
+.market_side_img {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
+.market_side_img img {
+    width: 100%;
+    opacity: 0.1;
+    object-fit: cover;
+}
+
+.center_mainimg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+}
+
+.center_mainimg img {
+    opacity: 1;
+    object-fit: contain;
+    border-radius: 15px !important;
+}
 
 .prodetails_sidebar {
     width: 100%;
-    height: 85vh;
+    height: 86vh;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     padding: 5px 18px;
     margin-top: 90px;
-}
-
-.sidebar_icon {
-    margin-top: 20px;
 }
 
 .send_meg button {
@@ -13890,6 +13905,32 @@ input[type="radio"]:checked {
     width: 100%;
     height: 40px;
     border-radius: 5px;
+}
+
+.new_add_products {
+    background-color: #e4e6eb;
+    border-radius: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+
+.card_hover a:hover img {
+    transition: transform 1s cubic-bezier(0.25, 0.04, 0, 0.93);
+    transform: translate3d(0, 0, 0) scale(0.9);
+}
+
+.back_icon {
+    position: absolute;
+    top: 10%;
+    left: 2%;
+    background-color: white;
+    color: #363062;
+    border-radius: 50px;
+    width: 42px;
+    height: 42px;
+    font-size: 40px;
 }
 
 @media (max-width: 991px) {
@@ -13905,9 +13946,23 @@ input[type="radio"]:checked {
         width: 100% !important;
     }
 
+    .back_icon {
+        top: 22%;
+    }
+
     .mobile_sidebar {
         display: block !important;
         margin-bottom: 12px;
+    }
+
+    .prodetails_sidebar {
+        height: 110vh;
+    }
+}
+
+@media (max-width: 768px) {
+    .prodetails_sidebar {
+        margin-top: 0;
     }
 }
 

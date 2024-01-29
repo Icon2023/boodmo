@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import Products from '../Products.json';
-import { IoSettingsSharp } from 'react-icons/io5';
-import { CgMenuGridO } from 'react-icons/cg';
-import { FaBell } from 'react-icons/fa';
 import { IoIosContact } from "react-icons/io";
-import { AiFillMessage } from 'react-icons/ai'; 
-
-
+import { AiFillMessage } from 'react-icons/ai';
+import { IoChevronBackSharp } from 'react-icons/io5';
 
 const MarketAutoDetails = () => {
     const { id } = useParams();
@@ -20,24 +16,24 @@ const MarketAutoDetails = () => {
 
 
     return (
-        <div>
+        <>
             <div className='row'>
                 <div className='col-md-9'>
                     <div className='mt-5 market_side_img'>
                         <img src={pro?.image} />
+                        <div className='back_icon'>
+                            <a href="/market-place" rel="noopener noreferrer">
+                                <IoChevronBackSharp style={{ color: "#363062" , marginTop:"1px" }} />
+                            </a>
+                        </div>
+                        <div class="center_mainimg">
+                            <img src={pro?.image} alt="" />
+                        </div>
                     </div>
                 </div>
                 <div className='col-md-3'>
                     <div className='prodetails_sidebar'>
-                        <div className="d-flex justify-content-end align-items-center sidebar_icon">
-                            <AiFillMessage style={{ fontSize: "28px", marginLeft: "10px" }} />
-                            <IoSettingsSharp style={{ fontSize: "28px", marginLeft: "10px" }} />
-                            <CgMenuGridO style={{ fontSize: "28px", marginLeft: "10px" }} />
-                            <FaBell style={{ fontSize: "28px", marginLeft: "10px" }} />
-                            <IoIosContact style={{ fontSize: "30px", marginLeft: "10px" }} />
-                        </div>
-                        <hr />
-                        <div>
+                        <div className='mt-3'>
                             <h2>{pro?.title}</h2>
                             <p>₹ 6,50,000/-</p>
                             <p className="categories__content--subtitle">{pro.desc}</p>
@@ -45,7 +41,7 @@ const MarketAutoDetails = () => {
                         </div>
                         <hr />
                         <div>
-                            <img src="https://external.famd1-1.fna.fbcdn.net/static_map.php?region=IN&v=2049&theme=default&ccb=4-4&size=328x120&language=gu_IN&scale=1&zoom=11&center=21.167907714844%2C72.833862304688&circle=weight%3A2%7Ccolor%3A0x4D6AA47f%7Cfillcolor%3A0x4D6AA41c%7C21.167907714844%2C72.833862304688%7C2k&_nc_client_id=marketplace_post_permalink&_nc_client_caller=MarketplaceStaticMap.react" style={{ borderRadius: "10px", width: "100%" }} alt="" srcset="" />
+                            <iframe width="100%" height="120" src="https://maps.google.com/maps?width=100%&amp;height=600&amp;hl=en&amp;coord=52.70967533219885, -8.020019531250002&amp;q=1%20Grafton%20Street%2C%20Dublin%2C%20Ireland&amp;ie=UTF8&amp;t=&amp;z=14&amp;iwloc=B&amp;output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
                             <h4>Surat, GJ</h4>
                             <p>Location is approximate</p>
                         </div>
@@ -63,14 +59,12 @@ const MarketAutoDetails = () => {
                         </div>
                         <div className='mt-3 send_meg'>
                             <input type="text" style={{ width: "100%", borderRadius: "5px" }} placeholder='Hi , Is this available ?' disabled />
-                            <button className='mt-3'>Send Message</button>
+                            <button className='mt-3'>Send Whatsapp</button>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-        </div>
+        </>
     )
 }
 

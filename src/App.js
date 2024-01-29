@@ -81,8 +81,14 @@ function App() {
           <Route path='*' element={<Page404 />} />
         </Routes>
       </main>
-      <Footer />
-  
+      {
+        pathName.startsWith('/market-places/auto') || pathName.startsWith('/market-places/car')
+          ?
+          " "
+          :
+          <Footer />
+      }
+
     </>
   )
 }
