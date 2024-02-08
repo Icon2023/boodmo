@@ -9,20 +9,24 @@ const MyAddress = () => {
     const dispatch = useDispatch();
     const { add_ship } = useSelector((state) => ({ ...state.products }));
     const [isOpen, setIsOpen] = useState(false);
-    const [fname, setFname] = useState('');
-    const [lname, setLname] = useState('');
-    const [mobile, setMobile] = useState('');
-    const [address, setAddress] = useState('');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-    const [country, setCountry] = useState('');
-    const [pincode, setPincode] = useState('');
-    const [add_title, setAdd_title] = useState('');
+
+    const [formValues, setFormValues] = useState({
+        fname: '',
+        lname: '',
+        mobile: '',
+        address: '',
+        city: '',
+        state: '',
+        country: '',
+        pincode: '',
+        add_title: '',
+    });
+    const [errors, setErrors] = useState('');
+
 
     useEffect(() => {
         GetAddress();
     }, [])
-
 
     const GetAddress = () => {
         GetAddressUser().then((res) => {
@@ -34,34 +38,95 @@ const MyAddress = () => {
         })
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        let data = {
-            first_name: fname,
-            last_name: lname,
-            mobile: mobile,
-            address: address,
-            pincode: pincode,
-            state: state,
-            city: city,
-            country: city,
-            address_title: add_title,
-            country: country
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!formValues.fname) {
+            newErrors.fname = 'Name is required';
         }
-        AddAddressUser(data).then((res) => {
-            GetAddress();
-            setIsOpen(false)
-            setFname('')
-            setLname('')
-            setMobile('')
-            setAddress('')
-            setCity('')
-            setState('')
-            setCountry('')
-            setPincode('')
-            setAdd_title('')
-        })
+
+        if (!formValues.lname) {
+            newErrors.lname = 'Lastname is required';
+        }
+
+        if (!formValues.mobile) {
+            newErrors.mobile = 'Mobile is required';
+        }
+
+        if (!formValues.address) {
+            newErrors.address = 'Address is required';
+        }
+
+        if (!formValues.pincode) {
+            newErrors.pincode = 'Pincode is required';
+        }
+
+        if (!formValues.state) {
+            newErrors.state = 'State is required';
+        }
+
+        if (!formValues.city) {
+            newErrors.city = 'City is required';
+        }
+
+        if (!formValues.add_title) {
+            newErrors.add_title = 'Add title is required';
+        }
+
+        if (!formValues.country) {
+            newErrors.country = 'Country is required';
+        }
+        setErrors(newErrors);
+
+        // Return true if there are no errors, indicating a valid form
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const isValid = validateForm();
+        if (isValid) {
+            let data = {
+                first_name: formValues.fname,
+                last_name: formValues.lname,
+                mobile: formValues.mobile,
+                address: formValues.address,
+                pincode: formValues.pincode,
+                state: formValues.state,
+                city: formValues.city,
+                address_title: formValues.add_title,
+                country: formValues.country
+            }
+            AddAddressUser(data).then((res) => {
+                GetAddress();
+                setIsOpen(false)
+            })
+            setFormValues({
+                fname: '',
+                lname: '',
+                companyName: '',
+                mobile: '',
+                address: '',
+                city: '',
+                state: '',
+                country: '',
+                pincode: '',
+                add_title: ''
+            })
+        } else {
+            console.log("hello");
+        }
+
     }
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormValues((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+        setErrors("")
+    };
 
     const handleOpenNewAddress = () => {
         isOpen === false ? setIsOpen(true) : setIsOpen(false)
@@ -129,206 +194,242 @@ const MyAddress = () => {
                                 isOpen ?
                                     <div className='row'>
                                         <div className="col-lg-12 col-md-12">
-                                            <div className="main checkout__mian">
-                                                <form onSubmit={handleSubmit}>
-                                                    <div className="checkout__content--step section__shipping--address">
-                                                        <div className="section__header mb-25">
-                                                        </div>
-                                                        <div className="section__shipping--address__content">
-                                                            <div className="row">
-                                                                <div className="col-lg-6 col-md-6 col-sm-6 mb-20">
-                                                                    <div className="checkout__input--list">
-                                                                        <label
-                                                                            className="checkout__input--label mb-3"
-                                                                            htmlFor="input1"
-                                                                        >
-                                                                            First Name
-                                                                            <span className="checkout__input--label__star">
-                                                                                *
-                                                                            </span>
-                                                                        </label>
+                                            <form onSubmit={handleSubmit}>
+                                                <div className="checkout__content--step section__shipping--address">
+                                                    <div className="section__header mb-25">
+                                                    </div>
+                                                    <div className="section__shipping--address__content">
+                                                        <div className="row">
+                                                            <div className="col-lg-6 col-md-6 col-sm-6 mb-0">
+                                                                <div className={`checkout__input--list`}>
+                                                                    <label
+                                                                        className="checkout__input--label mb-0  "
+                                                                        htmlFor="input1"
+                                                                    >
+                                                                        First Name
+                                                                        <span className="checkout__input--label__star">
+                                                                            *
+                                                                        </span>
+                                                                    </label>
+                                                                    <div className={`${errors.fname ? 'error' : ''}`}>
                                                                         <input
                                                                             className="checkout__input--field border-radius-5"
                                                                             placeholder="First name"
                                                                             type="text"
-                                                                            value={fname}
-                                                                            onChange={(e) => setFname(e.target.value)}
+                                                                            name="fname"
+                                                                            value={formValues.fname}
+                                                                            onChange={handleChange}
                                                                         />
                                                                     </div>
+                                                                    {/* {errors.fname && <span className="error">{errors.fname}</span>} */}
                                                                 </div>
-                                                                <div className="col-lg-6 col-md-6 col-sm-6 mb-10">
-                                                                    <div className="checkout__input--list">
-                                                                        <label
-                                                                            className="checkout__input--label mb-3"
-                                                                            htmlFor="input2"
-                                                                        >
-                                                                            Last Name
-                                                                            <span className="checkout__input--label__star">
-                                                                                *
-                                                                            </span>
-                                                                        </label>
+                                                            </div>
+                                                            <div className="col-lg-6 col-md-6 col-sm-6 mb-0">
+                                                                <div className={`checkout__input--list`}>
+                                                                    <label
+                                                                        className="checkout__input--label mb-0"
+                                                                        htmlFor="input2"
+                                                                    >
+                                                                        Last Name
+                                                                        <span className="checkout__input--label__star">
+                                                                            *
+                                                                        </span>
+                                                                    </label>
+                                                                    <div className={`${errors.lname ? 'error' : ''}`}>
                                                                         <input
                                                                             className="checkout__input--field border-radius-5"
                                                                             placeholder="Last name"
                                                                             type="text"
-                                                                            value={lname}
-                                                                            onChange={(e) => setLname(e.target.value)}
+                                                                            name="lname"
+                                                                            value={formValues.lname}
+                                                                            onChange={handleChange}
                                                                         />
                                                                     </div>
+                                                                    {/* {errors.lname && <span className="error">{errors.lname}</span>} */}
                                                                 </div>
-                                                                <div className="col-lg-6 col-md-6 col-sm-6 mb-10">
-                                                                    <div className="checkout__input--list">
-                                                                        <label
-                                                                            className="checkout__input--label mb-3"
-                                                                            htmlFor="input3"
-                                                                        >
-                                                                            Mobile Number
-                                                                            <span className="checkout__input--label__star">
-                                                                                *
-                                                                            </span>
-                                                                        </label>
+                                                            </div>
+                                                            <div className="col-lg-6 col-md-6 col-sm-6 mt-3">
+                                                                <div className={`checkout__input--list`}>
+                                                                    <label
+                                                                        className="checkout__input--label mb-0"
+                                                                        htmlFor="input3"
+                                                                    >
+                                                                        Mobile Number
+                                                                        <span className="checkout__input--label__star">
+                                                                            *
+                                                                        </span>
+                                                                    </label>
+                                                                    <div className={`${errors.mobile ? 'error' : ''}`}>
                                                                         <input
                                                                             className="checkout__input--field border-radius-5"
                                                                             placeholder="Mobile Number"
                                                                             type="text"
-                                                                            value={mobile}
-                                                                            onChange={(e) => setMobile(e.target.value)}
+                                                                            name="mobile"
+                                                                            value={formValues.mobile}
+                                                                            onChange={handleChange}
                                                                         />
                                                                     </div>
+                                                                    {/* {errors.mobile && <span className="error">{errors.mobile}</span>} */}
                                                                 </div>
-                                                                <div className="col-lg-6 col-md-6 col-sm-6 mb-10">
-                                                                    <div className="checkout__input--list">
-                                                                        <label
-                                                                            className="checkout__input--label mb-3"
-                                                                            htmlFor="input3"
-                                                                        >
-                                                                            Address Title
-                                                                            <span className="checkout__input--label__star">
-                                                                                *
-                                                                            </span>
-                                                                        </label>
+                                                            </div>
+                                                            <div className="col-lg-6 col-md-6 col-sm-6 mt-3">
+                                                                <div className={`checkout__input--list`}>
+                                                                    <label
+                                                                        className="checkout__input--label mb-0"
+                                                                        htmlFor="input3"
+                                                                    >
+                                                                        Address Title
+                                                                        <span className="checkout__input--label__star">
+                                                                            *
+                                                                        </span>
+                                                                    </label>
+                                                                    <div className={`${errors.add_title ? 'error' : ''}`}>
                                                                         <input
                                                                             className="checkout__input--field border-radius-5"
-                                                                            placeholder="Address Title (optional)"
+                                                                            placeholder="Address Title"
                                                                             type="text"
-                                                                            value={add_title}
-                                                                            onChange={(e) => setAdd_title(e.target.value)}
+                                                                            name="add_title"
+                                                                            value={formValues.add_title}
+                                                                            onChange={handleChange}
                                                                         />
                                                                     </div>
+                                                                    {/* {errors.add_title && <span className="error">{errors.add_title}</span>} */}
                                                                 </div>
-                                                                <div className="col-12 mb-10">
-                                                                    <div className="checkout__input--list">
-                                                                        <label
-                                                                            className="checkout__input--label mb-3"
-                                                                            htmlFor="input4"
-                                                                        >
-                                                                            Address
-                                                                            <span className="checkout__input--label__star">
-                                                                                *
-                                                                            </span>
-                                                                        </label>
+                                                            </div>
+                                                            <div className="col-12 mt-3">
+                                                                <div className={`checkout__input--list `}>
+                                                                    <label
+                                                                        className="checkout__input--label mb-0"
+                                                                        htmlFor="input4"
+                                                                    >
+                                                                        Address
+                                                                        <span className="checkout__input--label__star">
+                                                                            *
+                                                                        </span>
+                                                                    </label>
+                                                                    <div className={`${errors.address ? 'error' : ''}`}>
                                                                         <input
                                                                             className="checkout__input--field border-radius-5"
                                                                             placeholder="Address1"
                                                                             type="text"
-                                                                            value={address}
-                                                                            onChange={(e) => setAddress(e.target.value)}
+                                                                            name='address'
+                                                                            value={formValues.address}
+                                                                            onChange={handleChange}
                                                                         />
                                                                     </div>
+                                                                    {/* {errors.address && <span className="error">{errors.address}</span>} */}
                                                                 </div>
+                                                            </div>
 
-                                                                <div className="col-lg-6 mb-10">
-                                                                    <div className="checkout__input--list">
-                                                                        <label
-                                                                            className="checkout__input--label mb-3"
-                                                                            htmlFor="input5"
-                                                                        >
-                                                                            City
-                                                                            <span className="checkout__input--label__star">
-                                                                                *
-                                                                            </span>
-                                                                        </label>
+                                                            <div className="col-lg-6 mt-3">
+                                                                <div className={`checkout__input--list `}>
+                                                                    <label
+                                                                        className="checkout__input--label mb-0"
+                                                                        htmlFor="input5"
+                                                                    >
+                                                                        City
+                                                                        <span className="checkout__input--label__star">
+                                                                            *
+                                                                        </span>
+                                                                    </label>
+                                                                    <div className={`${errors.city ? 'error' : ''}`}>
                                                                         <input
                                                                             className="checkout__input--field border-radius-5"
                                                                             placeholder="City"
                                                                             type="text"
-                                                                            value={city}
-                                                                            onChange={(e) => setCity(e.target.value)}
+                                                                            name='city'
+                                                                            value={formValues.city}
+                                                                            onChange={handleChange}
                                                                         />
                                                                     </div>
+                                                                    {/* {errors.city && <span className="error">{errors.city}</span>} */}
                                                                 </div>
-                                                                <div className="col-lg-6 mb-10">
-                                                                    <div className="checkout__input--list">
-                                                                        <label
-                                                                            className="checkout__input--label mb-3"
-                                                                            htmlFor="input5"
-                                                                        >
-                                                                            State
-                                                                            <span className="checkout__input--label__star">
-                                                                                *
-                                                                            </span>
-                                                                        </label>
+                                                            </div>
+                                                            <div className="col-lg-6 mt-3">
+                                                                <div className={`checkout__input--list`}>
+                                                                    <label
+                                                                        className="checkout__input--label mb-0"
+                                                                        htmlFor="input5"
+                                                                    >
+                                                                        State
+                                                                        <span className="checkout__input--label__star">
+                                                                            *
+                                                                        </span>
+                                                                    </label>
+                                                                    <div className={`${errors.state ? 'error' : ''}`}>
                                                                         <input
                                                                             className="checkout__input--field border-radius-5"
                                                                             placeholder="State"
                                                                             type="text"
-                                                                            value={state}
-                                                                            onChange={(e) => setState(e.target.value)}
+                                                                            name='state'
+                                                                            value={formValues.state}
+                                                                            onChange={handleChange}
                                                                         />
                                                                     </div>
+                                                                    {/* {errors.state && <span className="error">{errors.state}</span>} */}
                                                                 </div>
-                                                                <div className="col-lg-6 mb-10">
-                                                                    <div className="checkout__input--list">
-                                                                        <label
-                                                                            className="checkout__input--label mb-3"
-                                                                            htmlFor="country"
-                                                                        >
-                                                                            Country/region
-                                                                            <span className="checkout__input--label__star">
-                                                                                *
-                                                                            </span>
-                                                                        </label>
+                                                            </div>
+                                                            <div className="col-lg-6 mt-3">
+                                                                <div className={`checkout__input--list `}>
+                                                                    <label
+                                                                        className="checkout__input--label mb-0"
+                                                                        htmlFor="country"
+                                                                    >
+                                                                        Country/region
+                                                                        <span className="checkout__input--label__star">
+                                                                            *
+                                                                        </span>
+                                                                    </label>
+                                                                    <div className={`${errors.country ? 'error' : ''}`}>
                                                                         <input
                                                                             className="checkout__input--field border-radius-5"
-                                                                            placeholder="State"
+                                                                            placeholder="Country"
                                                                             type="text"
-                                                                            value={country}
-                                                                            onChange={(e) => setCountry(e.target.value)}
+                                                                            name='country'
+                                                                            value={formValues.country}
+                                                                            onChange={handleChange}
                                                                         />
                                                                     </div>
+                                                                    {/* {errors.country && <span className="error">{errors.country}</span>} */}
+
                                                                 </div>
-                                                                <div className="col-lg-6 mb-10">
-                                                                    <div className="checkout__input--list">
-                                                                        <label
-                                                                            className="checkout__input--label mb-3"
-                                                                            htmlFor="input6"
-                                                                        >
-                                                                            Pin Code
-                                                                            <span className="checkout__input--label__star">
-                                                                                *
-                                                                            </span>
-                                                                        </label>
+                                                            </div>
+                                                            <div className="col-lg-6 mt-3">
+                                                                <div className={`checkout__input--list `}>
+                                                                    <label
+                                                                        className="checkout__input--label mb-0"
+                                                                        htmlFor="input6"
+                                                                    >
+                                                                        Pin Code
+                                                                        <span className="checkout__input--label__star">
+                                                                            *
+                                                                        </span>
+                                                                    </label>
+                                                                    <div className={`${errors.pincode ? 'error' : ''}`}>
                                                                         <input
                                                                             className="checkout__input--field border-radius-5"
                                                                             placeholder="Pin code"
                                                                             type="text"
-                                                                            value={pincode}
-                                                                            onChange={(e) => setPincode(e.target.value)}
+                                                                            name='pincode'
+                                                                            value={formValues.pincode}
+                                                                            onChange={handleChange}
                                                                         />
                                                                     </div>
+                                                                    {/* {errors.pincode && <span className="error">{errors.pincode}</span>} */}
+
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="checkout__content--step__footer d-flex align-items-center">
-                                                        <button
-                                                            className="continue__shipping--btn primary__btn border-radius-5"
-                                                        >
-                                                            Continue To Save
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </div>
+                                                </div>
+                                                <div className="checkout__content--step__footer d-flex align-items-center mt-4">
+                                                    <button
+                                                        className="continue__shipping--btn primary__btn border-radius-5"
+                                                    >
+                                                        Continue To Save
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                     :

@@ -30,7 +30,7 @@ const ShopCategory = () => {
 
     return (
         <>
-            <section className="categories__section">
+            <section className="categories__section mt-5">
                 <div className="container">
                     <div className="section__heading border-bottom mb-30">
                         <h2 className="section__heading--maintitle">

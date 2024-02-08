@@ -39,6 +39,8 @@ const Review = () => {
   const [razorpayPaymentId, setRazorpayPaymentId] = useState("");
   const [razorpaySignatureId, setRazorpaySignatureId] = useState("");
   const [email, setEmail] = useState("");
+  const [errors, setErrors] = useState('');
+
 
   const [isInsuranceOpen, setInsuranceOpen] = useState(false);
   const [Insuranceval, setInsuranceval] = useState('');
@@ -156,7 +158,7 @@ const Review = () => {
 
   const handleSubmit = () => {
     if (!type && !Insuranceval && !policyNumber) {
-      alert("Please select Type")
+      setErrors("Please select Type")
     } else {
       let data = {
         use_for: type,
@@ -176,7 +178,8 @@ const Review = () => {
     }
   }
 
-  const handleChange = (e) => {
+  const handleChange = () => {
+    setErrors("")
     setType('personal')
     setInsuranceOpen(false);
     setpolicyNumber('');
@@ -218,7 +221,7 @@ const Review = () => {
           <div className="container">
             <div className="row">
               <div className="col-lg-7 col-md-6">
-                <div className="main checkout__mian">
+                <div className="checkout__mian">
                   <div className="checkout__content--step section__contact--information">
                     <div className="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
                       <h2 className="section__header--title h3">
@@ -253,6 +256,8 @@ const Review = () => {
                       <button className={`${type == 'personal' ? 'selected_btn' : "personal_btn"}  `} onClick={handleChange}>Personal Use</button>
                       <button className={`${type == 'insurance' ? 'selected_btn' : "personal_btn"}  `} onClick={handleChange1}>Insurance</button>
                     </div>
+                    {errors && <span className="error">{errors}</span>}
+
 
                     {
                       isInsuranceOpen &&

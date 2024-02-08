@@ -14,7 +14,6 @@ import ProductsView from './Mainpages/ProductsView';
 import CarMakers from './Subpages/CarMakers';
 import BrandsAll from './Subpages/Brands';
 import Checkout from './Mainpages/Checkout';
-import ScrollToTop from "react-scroll-to-top";
 import ProtectedRouteLogin from './Utils/ProtectedRouteLogin';
 import ProtectedRouteWishlist from './Utils/ProtectedRouteWishlist';
 import About from './Mainpages/About';
@@ -31,11 +30,13 @@ import ToolEquimdent from './Mainpages/ToolEquimdent';
 import CarExchange from './Mainpages/CarExchange';
 import CarInsurance from './Mainpages/CarInsurance';
 import MarketPlace from './Mainpages/MarketPlace';
+import ScrollToTop from "react-scroll-to-top";
 import 'react-modern-drawer/dist/index.css';
 import "../node_modules/slick-carousel/slick/slick-theme.css";
 import "../node_modules/slick-carousel/slick/slick.css";
 import MarketAutoDetails from './Mainpages/MarketAutoDetails';
 import MarketCarDetails from './Mainpages/MarketCarDetails';
+import SupportPage from './Utils/SupportPage';
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
     <>
       <ScrollToTop smooth color="#363062" />
       <Header />
+      <SupportPage />
       <main style={{ minHeight: "70vh" }}>
         <Routes>
           <Route path='/' element={<Home />} />
@@ -84,7 +86,7 @@ function App() {
       {
         pathName.startsWith('/market-places/auto') || pathName.startsWith('/market-places/car')
           ?
-          " "
+          ""
           :
           <Footer />
       }

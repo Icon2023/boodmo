@@ -10,25 +10,27 @@ const Checkout = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { coupon_code, login_cart, add_ship } = useSelector((state) => ({ ...state.products }));
-
     const user = JSON.parse(localStorage.getItem('USER'));
-    const [email, setEmail] = useState('');
-    const [fname, setFname] = useState('');
-    const [lname, setLname] = useState('');
-    const [companyName, setCompanyName] = useState('');
-    const [address, setAddress] = useState('');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-    const [country, setCountry] = useState('');
-    const [pincode, setPincode] = useState('');
+    const [email, setEmail] = useState('')
+    const [formValues, setFormValues] = useState({
+        fname: '',
+        lname: '',
+        companyName: '',
+        mobile: '',
+        address: '',
+        city: '',
+        state: '',
+        country: '',
+        pincode: '',
+        add_title: ''
+    });
+
     const [coupon, setCoupon] = useState('');
     const [invaildCoupon, setInvaildCoupon] = useState('');
     const [isOpen, setIsOpen] = useState(false);
-    const [mobile, setMobile] = useState('');
-    const [add_title, setAdd_title] = useState('');
     const [selectedAddress, setSelectedAddress] = useState(0);
     const [isOpenDiscount, setIsOpenDiscount] = useState(false);
-
+    const [errors, setErrors] = useState('');
 
     const countTotal = (items) => items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
     const coupon_value = ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2)
@@ -47,22 +49,18 @@ const Checkout = () => {
         } else {
             setEmail(user?.data?.email)
         }
-
-        if (add_ship) {
-            setFname(add_ship?.first_name);
-            setLname(add_ship?.last_name);
-            setCompanyName(add_ship?.company_name);
-            setAddress(add_ship?.address);
-            setCity(add_ship?.city);
-            setState(add_ship?.state);
-            setCountry(add_ship?.country);
-            setPincode(add_ship?.zip)
-        }
-    }, [])
-
-    useEffect(() => {
         GetAddress();
     }, [])
+
+    const GetAddress = () => {
+        GetAddressUser().then((res) => {
+            if (res?.success) {
+                dispatch(add_ship_details(res?.data))
+            } else {
+                console.log("hello");
+            }
+        })
+    }
 
     const handleChange = (e) => {
         if (!e.target.value) {
@@ -90,53 +88,89 @@ const Checkout = () => {
         }
     }
 
-    const GetAddress = () => {
-        GetAddressUser().then((res) => {
-            if (res?.success) {
-                dispatch(add_ship_details(res?.data))
-            } else {
-                console.log("hello");
-            }
-        })
-    }
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!formValues.fname) {
+            newErrors.fname = 'Name is required';
+        }
+
+        if (!formValues.lname) {
+            newErrors.lname = 'Last name is required';
+        }
+
+        if (!formValues.mobile) {
+            newErrors.mobile = 'Mobile is required';
+        }
+
+        if (!formValues.address) {
+            newErrors.address = 'Address is required';
+        }
+
+        if (!formValues.pincode) {
+            newErrors.pincode = 'Pincode is required';
+        }
+
+        if (!formValues.state) {
+            newErrors.state = 'State is required';
+        }
+
+        if (!formValues.city) {
+            newErrors.city = 'City is required';
+        }
+
+        if (!formValues.add_title) {
+            newErrors.add_title = 'Add title is required';
+        }
+
+        if (!formValues.country) {
+            newErrors.country = 'Country is required';
+        }
+        setErrors(newErrors);
+
+        // Return true if there are no errors, indicating a valid form
+        return Object.keys(newErrors).length === 0;
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        let code = {
-            coupon,
-            coupon_value,
-        };
-        dispatch(coupon_Pricevalue(code));
-        if (!fname || !lname || !address || !city || !state || !country || !pincode || !mobile) {
-            alert("Please Fill All Details")
-        } else {
+        const isValid = validateForm();
+        if (isValid) {
+            let code = {
+                coupon,
+                coupon_value,
+            };
+            dispatch(coupon_Pricevalue(code));
             let data = {
-                first_name: fname,
-                last_name: lname,
-                mobile: mobile,
-                address: address,
-                pincode: pincode,
-                state: state,
-                city: city,
-                country: city,
-                address_title: add_title,
-                country: country,
+                first_name: formValues.fname,
+                last_name: formValues.lname,
+                mobile: formValues.mobile,
+                address: formValues.address,
+                pincode: formValues.pincode,
+                state: formValues.state,
+                city: formValues.city,
+                country: formValues.city,
+                address_title: formValues.add_title,
+                country: formValues.country,
             };
             AddAddressUser(data).then((res) => {
                 GetAddress();
                 setIsOpen(false);
-                setFname("");
-                setLname("");
-                setMobile("");
-                setAddress("");
-                setCity("");
-                setState("");
-                setCountry("");
-                setPincode("");
-                setAdd_title("");
             });
+            setFormValues({
+                fname: '',
+                lname: '',
+                companyName: '',
+                mobile: '',
+                address: '',
+                city: '',
+                state: '',
+                country: '',
+                pincode: '',
+                add_title: ''
+            })
         }
-    };
+    }
 
     const addressSave = () => {
         if (!selectedAddress) {
@@ -162,6 +196,14 @@ const Checkout = () => {
         });
     };
 
+    const handleChangeForm = (event) => {
+        const { name, value } = event.target;
+        setFormValues((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+        setErrors("");
+    };
 
     return (
         <>
@@ -191,7 +233,7 @@ const Checkout = () => {
                         <div className="container">
                             <div className="row">
                                 <div className="col-lg-7 col-md-6">
-                                    <div className="main checkout__mian">
+                                    <div className="checkout__mian">
                                         <div className="checkout__content--step section__contact--information">
                                             <div className="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
                                                 <h2 className="section__header--title h3">
@@ -271,7 +313,7 @@ const Checkout = () => {
                                                                     <div className="col-lg-6 col-md-6 col-sm-6 mb-20">
                                                                         <div className="checkout__input--list">
                                                                             <label
-                                                                                className="checkout__input--label mb-3"
+                                                                                className="checkout__input--label mb-0"
                                                                                 htmlFor="input1"
                                                                             >
                                                                                 First Name
@@ -279,19 +321,23 @@ const Checkout = () => {
                                                                                     *
                                                                                 </span>
                                                                             </label>
-                                                                            <input
-                                                                                className="checkout__input--field border-radius-5"
-                                                                                placeholder="First name"
-                                                                                type="text"
-                                                                                value={fname}
-                                                                                onChange={(e) => setFname(e.target.value)}
-                                                                            />
+                                                                            <div className={`${errors.fname ? 'error' : ''}`}>
+                                                                                <input
+                                                                                    className="checkout__input--field border-radius-5"
+                                                                                    placeholder="First name"
+                                                                                    type="text"
+                                                                                    name='fname'
+                                                                                    value={formValues.fname}
+                                                                                    onChange={handleChangeForm}
+                                                                                />
+                                                                            </div>
+                                                                            {/* {errors.fname && <span className="error">{errors.fname}</span>} */}
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-lg-6 col-md-6 col-sm-6 mb-10">
                                                                         <div className="checkout__input--list">
                                                                             <label
-                                                                                className="checkout__input--label mb-3"
+                                                                                className="checkout__input--label mb-0"
                                                                                 htmlFor="input2"
                                                                             >
                                                                                 Last Name
@@ -299,19 +345,24 @@ const Checkout = () => {
                                                                                     *
                                                                                 </span>
                                                                             </label>
-                                                                            <input
-                                                                                className="checkout__input--field border-radius-5"
-                                                                                placeholder="Last name"
-                                                                                type="text"
-                                                                                value={lname}
-                                                                                onChange={(e) => setLname(e.target.value)}
-                                                                            />
+                                                                            <div className={`${errors.lname ? 'error' : ''}`}>
+                                                                                <input
+                                                                                    className="checkout__input--field border-radius-5"
+                                                                                    placeholder="Last name"
+                                                                                    type="text"
+                                                                                    name='lname'
+                                                                                    value={formValues.lname}
+                                                                                    onChange={handleChangeForm}
+                                                                                />
+                                                                            </div>
+                                                                            {/* {errors.lname && <span className="error">{errors.lname}</span>} */}
+
                                                                         </div>
                                                                     </div>
-                                                                    <div className="col-lg-6 col-md-6 col-sm-6 mb-10">
+                                                                    <div className="col-lg-6 col-md-6 col-sm-6 mb-0">
                                                                         <div className="checkout__input--list">
                                                                             <label
-                                                                                className="checkout__input--label mb-3"
+                                                                                className="checkout__input--label mb-0"
                                                                                 htmlFor="input3"
                                                                             >
                                                                                 Mobile Number
@@ -319,19 +370,24 @@ const Checkout = () => {
                                                                                     *
                                                                                 </span>
                                                                             </label>
-                                                                            <input
-                                                                                className="checkout__input--field border-radius-5"
-                                                                                placeholder="Mobile Number"
-                                                                                type="text"
-                                                                                value={mobile}
-                                                                                onChange={(e) => setMobile(e.target.value)}
-                                                                            />
+                                                                            <div className={`${errors.mobile ? 'error' : ''}`}>
+                                                                                <input
+                                                                                    className="checkout__input--field border-radius-5"
+                                                                                    placeholder="Mobile Number"
+                                                                                    type="text"
+                                                                                    name='mobile'
+                                                                                    maxlength = "10"
+                                                                                    value={formValues.mobile}
+                                                                                    onChange={handleChangeForm}
+                                                                                />
+                                                                            </div>
+                                                                            {/* {errors.mobile && <span className="error">{errors.mobile}</span>} */}
                                                                         </div>
                                                                     </div>
-                                                                    <div className="col-lg-6 col-md-6 col-sm-6 mb-10">
+                                                                    <div className="col-lg-6 col-md-6 col-sm-6 mb-0">
                                                                         <div className="checkout__input--list">
                                                                             <label
-                                                                                className="checkout__input--label mb-3"
+                                                                                className="checkout__input--label mb-0"
                                                                                 htmlFor="input3"
                                                                             >
                                                                                 Address Title
@@ -339,19 +395,23 @@ const Checkout = () => {
                                                                                     *
                                                                                 </span>
                                                                             </label>
-                                                                            <input
-                                                                                className="checkout__input--field border-radius-5"
-                                                                                placeholder="Address Title (optional)"
-                                                                                type="text"
-                                                                                value={add_title}
-                                                                                onChange={(e) => setAdd_title(e.target.value)}
-                                                                            />
+                                                                            <div className={`${errors.add_title ? 'error' : ''}`}>
+                                                                                <input
+                                                                                    className="checkout__input--field border-radius-5"
+                                                                                    placeholder="Address Title"
+                                                                                    type="text"
+                                                                                    name='add_title'
+                                                                                    value={formValues.add_title}
+                                                                                    onChange={handleChangeForm}
+                                                                                />
+                                                                            </div>
+                                                                            {/* {errors.add_title && <span className="error">{errors.add_title}</span>} */}
                                                                         </div>
                                                                     </div>
-                                                                    <div className="col-12 mb-10">
+                                                                    <div className="col-12 mt-4">
                                                                         <div className="checkout__input--list">
                                                                             <label
-                                                                                className="checkout__input--label mb-3"
+                                                                                className="checkout__input--label"
                                                                                 htmlFor="input4"
                                                                             >
                                                                                 Address
@@ -359,20 +419,24 @@ const Checkout = () => {
                                                                                     *
                                                                                 </span>
                                                                             </label>
-                                                                            <input
-                                                                                className="checkout__input--field border-radius-5"
-                                                                                placeholder="Address1"
-                                                                                type="text"
-                                                                                value={address}
-                                                                                onChange={(e) => setAddress(e.target.value)}
-                                                                            />
+                                                                            <div className={`${errors.address ? 'error' : ''}`}>
+                                                                                <input
+                                                                                    className="checkout__input--field border-radius-5"
+                                                                                    placeholder="Address1"
+                                                                                    type="text"
+                                                                                    name='address'
+                                                                                    value={formValues.address}
+                                                                                    onChange={handleChangeForm}
+                                                                                />
+                                                                            </div>
+                                                                            {/* {errors.address && <span className="error">{errors.address}</span>} */}
+
                                                                         </div>
                                                                     </div>
-
-                                                                    <div className="col-lg-6 mb-10">
+                                                                    <div className="col-lg-6 mt-3">
                                                                         <div className="checkout__input--list">
                                                                             <label
-                                                                                className="checkout__input--label mb-3"
+                                                                                className="checkout__input--label mb-0"
                                                                                 htmlFor="input5"
                                                                             >
                                                                                 City
@@ -380,19 +444,24 @@ const Checkout = () => {
                                                                                     *
                                                                                 </span>
                                                                             </label>
-                                                                            <input
-                                                                                className="checkout__input--field border-radius-5"
-                                                                                placeholder="City"
-                                                                                type="text"
-                                                                                value={city}
-                                                                                onChange={(e) => setCity(e.target.value)}
-                                                                            />
+                                                                            <div className={`${errors.city ? 'error' : ''}`}>
+                                                                                <input
+                                                                                    className="checkout__input--field border-radius-5"
+                                                                                    placeholder="City"
+                                                                                    type="text"
+                                                                                    name='city'
+                                                                                    value={formValues.city}
+                                                                                    onChange={handleChangeForm}
+                                                                                />
+                                                                            </div>
+                                                                            {/* {errors.city && <span className="error">{errors.city}</span>} */}
+
                                                                         </div>
                                                                     </div>
-                                                                    <div className="col-lg-6 mb-10">
+                                                                    <div className="col-lg-6 mt-3">
                                                                         <div className="checkout__input--list">
                                                                             <label
-                                                                                className="checkout__input--label mb-3"
+                                                                                className="checkout__input--label mb-0  "
                                                                                 htmlFor="input5"
                                                                             >
                                                                                 State
@@ -400,19 +469,24 @@ const Checkout = () => {
                                                                                     *
                                                                                 </span>
                                                                             </label>
-                                                                            <input
-                                                                                className="checkout__input--field border-radius-5"
-                                                                                placeholder="State"
-                                                                                type="text"
-                                                                                value={state}
-                                                                                onChange={(e) => setState(e.target.value)}
-                                                                            />
+                                                                            <div className={`${errors.state ? 'error' : ''}`}>
+                                                                                <input
+                                                                                    className="checkout__input--field border-radius-5"
+                                                                                    placeholder="State"
+                                                                                    type="text"
+                                                                                    name='state'
+                                                                                    value={formValues.state}
+                                                                                    onChange={handleChangeForm}
+                                                                                />
+                                                                            </div>
+                                                                            {/* {errors.state && <span className="error">{errors.state}</span>} */}
+
                                                                         </div>
                                                                     </div>
-                                                                    <div className="col-lg-6 mb-10">
+                                                                    <div className="col-lg-6 mt-3">
                                                                         <div className="checkout__input--list">
                                                                             <label
-                                                                                className="checkout__input--label mb-3"
+                                                                                className="checkout__input--label mb-0"
                                                                                 htmlFor="country"
                                                                             >
                                                                                 Country/region
@@ -420,19 +494,24 @@ const Checkout = () => {
                                                                                     *
                                                                                 </span>
                                                                             </label>
-                                                                            <input
-                                                                                className="checkout__input--field border-radius-5"
-                                                                                placeholder="State"
-                                                                                type="text"
-                                                                                value={country}
-                                                                                onChange={(e) => setCountry(e.target.value)}
-                                                                            />
+                                                                            <div className={`${errors.country ? 'error' : ''}`}>
+                                                                                <input
+                                                                                    className="checkout__input--field border-radius-5"
+                                                                                    placeholder="Country"
+                                                                                    type="text"
+                                                                                    name='country'
+                                                                                    value={formValues.country}
+                                                                                    onChange={handleChangeForm}
+                                                                                />
+                                                                            </div>
+                                                                            {/* {errors.country && <span className="error">{errors.country}</span>} */}
+
                                                                         </div>
                                                                     </div>
-                                                                    <div className="col-lg-6 mb-10">
+                                                                    <div className="col-lg-6 mt-3">
                                                                         <div className="checkout__input--list">
                                                                             <label
-                                                                                className="checkout__input--label mb-3"
+                                                                                className="checkout__input--label mb-0"
                                                                                 htmlFor="input6"
                                                                             >
                                                                                 Pin Code
@@ -440,19 +519,25 @@ const Checkout = () => {
                                                                                     *
                                                                                 </span>
                                                                             </label>
-                                                                            <input
-                                                                                className="checkout__input--field border-radius-5"
-                                                                                placeholder="Pin code"
-                                                                                type="text"
-                                                                                value={pincode}
-                                                                                onChange={(e) => setPincode(e.target.value)}
-                                                                            />
+                                                                            <div className={`${errors.pincode ? 'error' : ''}`}>
+                                                                                <input
+                                                                                    className="checkout__input--field border-radius-5"
+                                                                                    placeholder="Pin code"
+                                                                                    type="text"
+                                                                                    name='pincode'
+                                                                                    maxlength = "6"
+                                                                                    value={formValues.pincode}
+                                                                                    onChange={handleChangeForm}
+                                                                                />
+                                                                            </div>
+                                                                            {/* {errors.pincode && <span className="error">{errors.pincode}</span>} */}
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className="checkout__content--step__footer d-flex align-items-center">
+                                                        <div className="checkout__content--step__footer d-flex align-items-center mt-3">
                                                             <button
                                                                 className="continue__shipping--btn primary__btn border-radius-5"
                                                             >

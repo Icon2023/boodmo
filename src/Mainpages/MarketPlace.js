@@ -53,11 +53,10 @@ const MarketPlace = () => {
         localStorage.removeItem('AUTO', gridOpen);
     }
 
-
     return (
         <>
             <div className="wrapper">
-                <div className={`${scroll ? "header__sidebar " : "sidebar"}`}>
+                <div className={`${scroll ? "header__sidebar " : "sidebar_marketplace"}`}>
                     <div className="d-flex justify-content-between align-items-center">
                         <h2>Market Place</h2>
                         <IoSettingsSharp style={{ fontSize: "24px" }} />
@@ -100,7 +99,7 @@ const MarketPlace = () => {
                         <p style={{ fontSize: "20px", paddingLeft: "8px" }}>Coming Soon</p>
                     </div>
                 </div>
-                <div className="main">
+                <div className="main_market">
                     <aside className="mobile_sidebar">
                         <div className=" d-flex gap-5">
                             <div className={` ${gridOpen === true ? 'auto_part_btn_selected' : 'auto_part_btn'}`} onClick={handleClick}>

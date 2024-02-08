@@ -13,7 +13,7 @@ const Home = () => {
       <HomeSilder />
 
       {/* start banner brand */}
-      <Banner />
+      {/* <Banner /> */}
 
       {/* Start categories section */}
       <ShopCategory />

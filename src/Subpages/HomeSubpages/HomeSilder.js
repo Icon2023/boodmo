@@ -178,13 +178,15 @@ const HomeSilder = () => {
                       <option selected="" value={0}>
                         Select Car Maker
                       </option>
-                      {carName.map((e, index) => {
-                        return (
-                          <option value={e?.id} key={index}>
-                            {e?.name}
-                          </option>
-                        );
-                      })}
+                      {
+                        carName.map((e, index) => {
+                          return (
+                            <option value={e?.id} key={index}>
+                              {e?.name}
+                            </option>
+                          );
+                        })
+                      }
                     </select>
                   </div>
                   <div className="search__filter--select select search__filter--width">
@@ -242,7 +244,7 @@ const HomeSilder = () => {
                       }
                     </select>
                   </div>
-                  <div className="search__filter--width">
+                  <div className="search__filter--width d-flex align-items-end">
                     <button className="search__filter--btn primary__btn" onClick={handleClickOpen}>
                       Search Parts
                     </button>
@@ -257,7 +259,7 @@ const HomeSilder = () => {
                         </a>
                       </div> : null
                   } */}
-                  <div className="search__filter--width">
+                  <div className="search__filter--width d-flex align-items-end">
                     <a href="https://oriparts.com/?back_url_pn=https://autoholic.hypehy.com/" target="_blank">
                       <button className="search__filter--btn primary__btn">
                         OEM CATALOG
