@@ -5,6 +5,8 @@ import { AddAddressUser, CartList, DeleteAddress, GetAddressUser, GetCouponCode 
 import { addLoginCart, add_coupon_code, add_ship_details, coupon_Pricevalue, removeAddress, remove_coupon_code, selectedValueAddress } from '../store/reducers/ProductSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
+import Breadcrumb from '../Utils/breadcrumb';
+import { IoBarcodeOutline } from "react-icons/io5";
 
 const Checkout = () => {
     const dispatch = useDispatch();
@@ -208,25 +210,20 @@ const Checkout = () => {
     return (
         <>
             <main className="margin_top_all">
-                {/* Start breadcrumb section */}
-                <section className="breadcrumb__section breadcrumb__bg">
-                    <div className="container">
-                        <div className="row row-cols-1">
-                            <div className="col">
-                                <div className="breadcrumb__content text-center">
-                                    <ul className="breadcrumb__content--menu d-flex justify-content-center">
-                                        <li className="breadcrumb__content--menu__items">
-                                            <a href="/">Home</a>
-                                        </li>
-                                        <li className="breadcrumb__content--menu__items">
-                                            <span>Checkout</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <Breadcrumb
+          subTitle2="Checkout"
+          icon2={
+            <IoBarcodeOutline
+              color="#363062"
+              style={{
+                fontSize: "22px",
+                marginRight: "4px",
+                boxSizing: "border-box",
+                cursor:"pointer"
+              }}
+            />
+          }
+        />
                 {/* Start checkout page area */}
                 {login_cart?.length >= 1 ?
                     <div className="checkout__page--area section--padding">

@@ -26,7 +26,7 @@ const MarketAutoDetails = () => {
                                 <IoChevronBackSharp style={{ color: "#363062" , marginTop:"1px" }} />
                             </a>
                         </div>
-                        <div class="center_mainimg">
+                        <div className="center_mainimg">
                             <img src={pro?.image} alt="" />
                         </div>
                     </div>

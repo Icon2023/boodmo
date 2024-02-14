@@ -21,10 +21,9 @@ const Header = () => {
     const [scroll, setScroll] = useState(false);
 
     const [open, setOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
     const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [searchClicked, setSearchClicked] = useState(false);
+    // const [searchClicked, setSearchClicked] = useState(false);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
@@ -44,35 +43,13 @@ const Header = () => {
 
     }, [])
 
-    useEffect(() => {
-        SearchProduct().then((res) => {
-            if (res.success) {
-                // console.log("dh",res);
-            }
-        })
-    }, [])
+    // useEffect(() => {
+    //     SearchProduct().then((res) => {
+    //         console.log(res);
+    //     })
+    // }, [])
 
-    // const handleSearch = async () => {
-    //     try {
-    //         setLoading(true);
-    //         setSearchClicked(true); // Set searchClicked to true when the search button is clicked
-    //         const data = { search: searchTerm };
-    //         const response = await Product(data);
 
-    //         if (response) {
-    //             const filteredResult = response.data.filter(
-    //                 (item) =>
-    //                     item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    //             );
-
-    //             setFilteredData(filteredResult);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
 
     const handleToggleDrawer = () => {
         setOpen(!open);
@@ -100,6 +77,7 @@ const Header = () => {
         e.preventDefault()
         if (search.length > 0) {
             navigate(`/search/${search}`)
+            setOpen(!open);
         }
     };
     return (
@@ -298,7 +276,7 @@ const Header = () => {
                         <div className="main__header--inner position__relative d-flex justify-content-between align-items-center">
                             <div className='toggle_icon'>
                                 <a onClick={toggleDrawer}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="ionicon offcanvas__header--menu__open--svg" viewBox="0 0 512 512"><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 160h352M80 256h352M80 352h352" /></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="ionicon offcanvas__header--menu__open--svg" viewBox="0 0 512 512"><path fill="currentColor" stroke="currentColor" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="32" d="M80 160h352M80 256h352M80 352h352" /></svg>
                                 </a>
                             </div>
 
@@ -435,9 +413,9 @@ const Header = () => {
                                         </Link>
                                     </li>
                                     <li className="header__account--items d-none d-lg-block">
-                                        <a
+                                        <Link
                                             className="header__account--btn minicart__open--btn"
-                                            href="/cart"
+                                            to="/cart"
                                         >
                                             <AiOutlineShoppingCart style={{ fontSize: "28px" }} />
                                             {
@@ -453,14 +431,14 @@ const Header = () => {
                                                         }
                                                     </>
                                             }
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li className="header__account--items d-none d-lg-block">
                                         {
                                             user?.success !== true ?
-                                                <a className="header__account--btn" href="/login">
+                                                <Link className="header__account--btn" to="/login">
                                                     <IoMdContact style={{ fontSize: "28px" }} />
-                                                </a>
+                                                </Link>
                                                 : <a className="header__account--btn" onClick={handleLogout}>
                                                     <AiOutlineLogout style={{ fontSize: "28px", color: "#363062" }} />
                                                 </a>
@@ -492,7 +470,6 @@ const Header = () => {
                     <ul className="d-flex justify-content-between text-center">
                         <li className="offcanvas__stikcy--toolbar__list">
                             <a className="offcanvas__stikcy--toolbar__btn" href="/">
-
                                 <AiOutlineHome style={{ fontSize: "20px" }} />
                                 <span className="offcanvas__stikcy--toolbar__label">Home</span>
                             </a>
@@ -504,12 +481,6 @@ const Header = () => {
                             </a>
                         </li>
                         <li className="offcanvas__stikcy--toolbar__list ">
-                            {/* <a
-                                className="offcanvas__stikcy--toolbar__btn search__open--btn"
-                                href="/"
-                                data-offcanvas=""
-                            >
-                            </a> */}
                             <AiOutlineSearch style={{ fontSize: "22px" }} onClick={handleToggleDrawer} />
                             <span className="offcanvas__stikcy--toolbar__label">Search</span>
                         </li>

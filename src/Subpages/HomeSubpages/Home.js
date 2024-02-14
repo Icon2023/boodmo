@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HomeSilder from "./HomeSilder";
 import ShopCategory from "./ShopCategory";
-import Banner from "./Banner";
 import PopularCarMakers from "./PopularCarMakers";
 import BrandsWeTrust from "./BrandsWeTrust";
 import AfterMarketProducts from "./AfterMarketProducts";
+import { ScrollToTop } from "../../Utils/ScrollToTop";
+import AnimatedComponent from "../../Utils/AnimatedComponent";
 
 const Home = () => {
+  useEffect(() => {
+    ScrollToTop();
+  }, []);
   return (
     <>
       {/* Start slider section */}
@@ -16,17 +20,24 @@ const Home = () => {
       {/* <Banner /> */}
 
       {/* Start categories section */}
-      <ShopCategory />
+      <AnimatedComponent>
+        <ShopCategory />
+      </AnimatedComponent>
 
       {/* Start Aftermarkrt section */}
-      <AfterMarketProducts />
+      <AnimatedComponent>
+        <AfterMarketProducts />
+      </AnimatedComponent>
 
       {/* start Popular Car Makers */}
-      <PopularCarMakers />
+      <AnimatedComponent>
+        <PopularCarMakers />
+      </AnimatedComponent>
 
       {/* start Popular brand */}
-      <BrandsWeTrust />
-
+      <AnimatedComponent>
+        <BrandsWeTrust />
+      </AnimatedComponent>
     </>
   );
 };

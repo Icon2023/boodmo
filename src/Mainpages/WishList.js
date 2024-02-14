@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToWishlist, removeAllItemWishlist, removeProductWishlist } from '../store/reducers/ProductSlice';
 import ShippingAddress from '../Subpages/ShippingAddress';
 import { WishListLogin, WishListLoginDelete } from '../Services/apiServices';
+import LayoutTransition from '../Utils/Layout';
+import Breadcrumb from '../Utils/breadcrumb';
+import { FaListCheck } from "react-icons/fa6";
 
 const WishList = () => {
     const dispatch = useDispatch();
@@ -27,27 +30,22 @@ const WishList = () => {
     };
     return (
         <>
+        <LayoutTransition>
             <main className="margin_top_all">
-                {/* Start breadcrumb section */}
-                <section className="breadcrumb__section breadcrumb__bg">
-                    <div className="container">
-                        <div className="row row-cols-1">
-                            <div className="col">
-                                <div className="breadcrumb__content text-center">
-                                    <h1 className="breadcrumb__content--title mb-20">Wishlist</h1>
-                                    <ul className="breadcrumb__content--menu d-flex justify-content-center">
-                                        <li className="breadcrumb__content--menu__items">
-                                            <a href="/">Home</a>
-                                        </li>
-                                        <li className="breadcrumb__content--menu__items">
-                                            <span>Wishlist</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <Breadcrumb
+          subTitle2="Product Category"
+          icon2={
+            <FaListCheck
+              color="#363062"
+              style={{
+                fontSize: "22px",
+                marginRight: "4px",
+                boxSizing: "border-box",
+                cursor:"pointer"
+              }}
+            />
+          }
+        />
 
                 {/* cart section start */}
                 <section className="container">
@@ -153,6 +151,7 @@ const WishList = () => {
                 <ShippingAddress />
 
             </main>
+            </LayoutTransition>
 
         </>
     )

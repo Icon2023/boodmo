@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react'
-import ShippingAddress from '../Subpages/ShippingAddress'
-import { AddOrderList } from '../Services/apiServices'
-import { dateFormate } from '../Utils/utils';
-import { useDispatch, useSelector } from 'react-redux';
-import { addOrderDetails } from '../store/reducers/ProductSlice';
+import React, { useEffect } from "react";
+import ShippingAddress from "../Subpages/ShippingAddress";
+import { AddOrderList } from "../Services/apiServices";
+import { dateFormate } from "../Utils/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { addOrderDetails } from "../store/reducers/ProductSlice";
+import Breadcrumb from "../Utils/breadcrumb";
+import { IoSaveOutline } from "react-icons/io5";
 
 const MyOrders = () => {
     const dispatch = useDispatch();
@@ -17,26 +19,21 @@ const MyOrders = () => {
         })
     }, [])
 
-    return (
-        <div className='margin_top_all'>
-            <section className="breadcrumb__section breadcrumb__bg">
-                <div className="container">
-                    <div className="row row-cols-1">
-                        <div className="col">
-                            <div className="breadcrumb__content text-center">
-                                <ul className="breadcrumb__content--menu d-flex justify-content-center">
-                                    <li className="breadcrumb__content--menu__items">
-                                        <a href="/">Home</a>
-                                    </li>
-                                    <li className="breadcrumb__content--menu__items">
-                                        <span>My Orders</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+  return (
+    <div className="margin_top_all">
+      <Breadcrumb
+        subTitle2="My Orders"
+        icon2={
+          <IoSaveOutline
+            color="#363062"
+            style={{
+              fontSize: "22px",
+              marginRight: "4px",
+              boxSizing: "border-box",
+            }}
+          />
+        }
+      />
 
             {/*  <!-- my account section start --> */}
             <section className="my__account--section section--padding">
@@ -123,10 +120,9 @@ const MyOrders = () => {
                 </div>
             </section>
 
-            <ShippingAddress />
+      <ShippingAddress />
+    </div>
+  );
+};
 
-        </div>
-    )
-}
-
-export default MyOrders
+export default MyOrders;

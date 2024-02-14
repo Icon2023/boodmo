@@ -4,6 +4,8 @@ import { AddAddressUser, DeleteAddress, GetAddressUser } from '../Services/apiSe
 import { useDispatch, useSelector } from 'react-redux';
 import { add_ship_details, removeAddress } from '../store/reducers/ProductSlice';
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
+import Breadcrumb from '../Utils/breadcrumb';
+import { FaAddressBook } from "react-icons/fa";
 
 const MyAddress = () => {
     const dispatch = useDispatch();
@@ -141,24 +143,20 @@ const MyAddress = () => {
 
     return (
         <div className='margin_top_all'>
-            <section className="breadcrumb__section breadcrumb__bg">
-                <div className="container">
-                    <div className="row row-cols-1">
-                        <div className="col">
-                            <div className="breadcrumb__content text-center">
-                                <ul className="breadcrumb__content--menu d-flex justify-content-center">
-                                    <li className="breadcrumb__content--menu__items">
-                                        <a href="/">Home</a>
-                                    </li>
-                                    <li className="breadcrumb__content--menu__items">
-                                        <span>My Address</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <Breadcrumb
+          subTitle2="My Address"
+          icon2={
+            <FaAddressBook
+              color="#363062"
+              style={{
+                fontSize: "22px",
+                marginRight: "4px",
+                boxSizing: "border-box",
+                cursor:"pointer"
+              }}
+            />
+          }
+        />
 
             {/*  <!-- my account section start --> */}
             <section className="my__account--section section--padding">

@@ -6,6 +6,8 @@ import { addLoginCart, add_insurance_companyname } from "../store/reducers/Produ
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { AiOutlineClose } from "react-icons/ai";
+import Breadcrumb from "../Utils/breadcrumb";
+import { MdReviews } from "react-icons/md";
 
 const Review = () => {
   const dispatch = useDispatch();
@@ -195,25 +197,20 @@ const Review = () => {
 
   return (
     <main className="margin_top_all">
-      {/* Start breadcrumb section */}
-      <section className="breadcrumb__section breadcrumb__bg">
-        <div className="container">
-          <div className="row row-cols-1">
-            <div className="col">
-              <div className="breadcrumb__content text-center">
-                <ul className="breadcrumb__content--menu d-flex justify-content-center">
-                  <li className="breadcrumb__content--menu__items">
-                    <a href="/">Home</a>
-                  </li>
-                  <li className="breadcrumb__content--menu__items">
-                    <span>Review</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Breadcrumb
+          subTitle2="Review"
+          icon2={
+            <MdReviews
+              color="#363062"
+              style={{
+                fontSize: "22px",
+                marginRight: "4px",
+                boxSizing: "border-box",
+                cursor:"pointer"
+              }}
+            />
+          }
+        />
 
       {/* Start checkout page area */}
       {login_cart?.length >= 1 ?

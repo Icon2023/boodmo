@@ -10,8 +10,8 @@ const About = () => {
           <div className="container">
             <div className="row row-cols-1">
               <div className="col">
-                <div className="breadcrumb__content text-center">
-                  <ul className="breadcrumb__content--menu d-flex justify-content-center">
+                <div className="breadcrumb__content text-start">
+                  <ul className="breadcrumb__content--menu d-flex justify-content-start">
                     <li className="breadcrumb__content--menu__items">
                       <a href="index.html">Home</a>
                     </li>

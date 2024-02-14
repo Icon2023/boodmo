@@ -1,197 +1,204 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { AddReviewList, Add_Tocart_Login, SingleProductDetails, WishListLogin, WishListLoginDelete } from "../Services/apiServices";
+import {
+  AddReviewList,
+  Add_Tocart_Login,
+  SingleProductDetails,
+  WishListLogin,
+  WishListLoginDelete,
+} from "../Services/apiServices";
 import ShippingAddress from "../Subpages/ShippingAddress";
 import { useDispatch, useSelector } from "react-redux";
+import { motion } from "framer-motion";
 import {
-    addProductDetails,
-    addToCart,
-    addToWishlist,
-    removeProductWishlist,
+  addProductDetails,
+  addToCart,
+  addToWishlist,
+  removeProductWishlist,
 } from "../store/reducers/ProductSlice";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
-import { Carousel } from 'react-responsive-carousel';
+import { Carousel } from "react-responsive-carousel";
 import { dateFormate } from "../Utils/utils";
 import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 import "../../node_modules/react-responsive-carousel/lib/styles/carousel.min.css";
-import Rating from '@mui/material/Rating';
-import Lightbox from 'react-image-lightbox';
+import Rating from "@mui/material/Rating";
+import Lightbox from "react-image-lightbox";
 import { FiSearch } from "react-icons/fi";
-import '../../node_modules/react-image-lightbox/style.css';
-
-
+import "../../node_modules/react-image-lightbox/style.css";
+import Breadcrumb from "../Utils/breadcrumb";
+import { BsCardText } from "react-icons/bs";
 
 const SingleProductsDetails = () => {
-    const user = JSON.parse(localStorage.getItem('USER'));
-    const { id } = useParams();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const [reviewOpen, setReviewOpen] = useState(true)
-    const [addOpen, setAddOpen] = useState(true);
-    const [rating, setRating] = useState(0);
-    const [reviewText, setReviewText] = useState("");
-    const { add_Details, add_wish, addto_cart, login_cart } = useSelector((state) => ({ ...state.products }));
-    const [lightboxIsOpen, setLightboxIsOpen] = useState(false);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const user = JSON.parse(localStorage.getItem("USER"));
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [reviewOpen, setReviewOpen] = useState(true);
+  const [addOpen, setAddOpen] = useState(true);
+  const [rating, setRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
+  const { add_Details, add_wish, addto_cart, login_cart } = useSelector(
+    (state) => ({ ...state.products })
+  );
+  const [lightboxIsOpen, setLightboxIsOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    useEffect(() => {
-        SingleProductDetails(id).then((res) => {
-            if (res.success) {
-                dispatch(addProductDetails(res?.data?.product))
-            }
-        })
-    }, [])
+  useEffect(() => {
+    SingleProductDetails(id).then((res) => {
+      if (res.success) {
+        dispatch(addProductDetails(res?.data?.product));
+      }
+    });
+  }, []);
 
-    var productwishIdsArray = [];
-    add_wish.forEach(function (obj) {
-        productwishIdsArray.push(obj.product_id);
-    })
+  var productwishIdsArray = [];
+  add_wish.forEach(function (obj) {
+    productwishIdsArray.push(obj.product_id);
+  });
 
-    var productIdsArray = [];
-    addto_cart.forEach(function (obj) {
-        productIdsArray.push(obj.part_no);
-    })
+  var productIdsArray = [];
+  addto_cart.forEach(function (obj) {
+    productIdsArray.push(obj.part_no);
+  });
 
-    var productLoginIdsArray = [];
-    login_cart.forEach(function (obj) {
-        productLoginIdsArray.push(obj?.product?.part_no);
-    })
+  var productLoginIdsArray = [];
+  login_cart.forEach(function (obj) {
+    productLoginIdsArray.push(obj?.product?.part_no);
+  });
 
-    const handleReviewClick = () => {
-        reviewOpen ? setAddOpen(false) : setReviewOpen(true)
+  const handleReviewClick = () => {
+    reviewOpen ? setAddOpen(false) : setReviewOpen(true);
+  };
+
+  const handleAddClick = () => {
+    reviewOpen ? setReviewOpen(false) : setAddOpen(true);
+  };
+
+  const handleWish = (id) => {
+    dispatch(addToWishlist({ product_id: id }));
+    WishListLoginDelete({ product_id: id }).then((res) => {
+      if (res.success) {
+        // dispatch(addToWishlist(res.data))
+      }
+    });
+  };
+
+  const removeElement = (id) => {
+    dispatch(removeProductWishlist(id));
+    WishListLoginDelete({ product_id: id }).then((res) => {
+      // console.log(res);
+    });
+  };
+
+  const handleAddcart = () => {
+    if (user?.success !== true) {
+      let data = {
+        proId: add_Details?.id,
+        price: add_Details?.original_price,
+        qty: 1,
+        name: add_Details?.name,
+        image: add_Details?.images[0].image,
+        part_no: add_Details?.part_no,
+      };
+      dispatch(addToCart(data));
+    } else {
+      let data = {
+        product_id: add_Details?.id,
+        price: add_Details?.original_price,
+        qty: 1,
+        part_no: add_Details?.part_no,
+      };
+      Add_Tocart_Login(data).then((res) => {
+        navigate("/cart");
+      });
     }
+  };
 
-    const handleAddClick = () => {
-        reviewOpen ? setReviewOpen(false) : setAddOpen(true)
+  const handleBuyNow = () => {
+    if (user?.success !== true) {
+      let data = {
+        proId: add_Details?.id,
+        price: add_Details?.original_price,
+        qty: 1,
+        name: add_Details?.name,
+        image: add_Details?.images[0].image,
+        part_no: add_Details?.part_no,
+      };
+      dispatch(addToCart(data));
+    } else {
+      let data = {
+        product_id: add_Details?.id,
+        price: add_Details?.original_price,
+        qty: 1,
+        part_no: add_Details?.part_no,
+      };
+      Add_Tocart_Login(data).then((res) => {
+        navigate("/checkout");
+      });
     }
+  };
 
-    const handleWish = (id) => {
-        dispatch(addToWishlist({ product_id: id }))
-        WishListLoginDelete({ product_id: id }).then((res) => {
-            if (res.success) {
-                // dispatch(addToWishlist(res.data))
-            }
-        })
+  const handleSubmitReview = (event) => {
+    event.preventDefault();
+    let data = {
+      rating: rating,
+      text: reviewText,
+      user_id: user?.data?.id,
+      product_id: id,
+      vendor_id: add_Details?.vendor_id,
     };
+    console.log(data);
+    AddReviewList(data).then((res) => {
+      if (!res.status) {
+        alert(res.message);
+      }
+    });
+  };
 
-    const removeElement = (id) => {
-        dispatch(removeProductWishlist(id));
-        WishListLoginDelete({ product_id: id }).then((res) => {
-            // console.log(res);
-        })
-    };
+  const openLightbox = (index) => {
+    setCurrentImageIndex(index);
+    setLightboxIsOpen(true);
+    document.body.style.overflow = "hidden";
+  };
 
-    const handleAddcart = () => {
-        if (user?.success !== true) {
-            let data = {
-                proId: add_Details?.id,
-                price: add_Details?.original_price,
-                qty: 1,
-                name: add_Details?.name,
-                image: add_Details?.images[0].image,
-                part_no: add_Details?.part_no
-            }
-            dispatch(addToCart(data))
-        } else {
-            let data = {
-                product_id: add_Details?.id,
-                price: add_Details?.original_price,
-                qty: 1,
-                part_no: add_Details?.part_no
-            }
-            Add_Tocart_Login(data).then((res) => {
-                navigate('/cart')
-            })
-        }
-    }
+  const closeLightbox = () => {
+    setLightboxIsOpen(false);
+    document.body.style.overflow = "auto";
+  };
 
-    const handleBuyNow = () => {
-        if (user?.success !== true) {
-            let data = {
-                proId: add_Details?.id,
-                price: add_Details?.original_price,
-                qty: 1,
-                name: add_Details?.name,
-                image: add_Details?.images[0].image,
-                part_no: add_Details?.part_no
-            }
-            dispatch(addToCart(data))
-        } else {
-            let data = {
-                product_id: add_Details?.id,
-                price: add_Details?.original_price,
-                qty: 1,
-                part_no: add_Details?.part_no
-            }
-            Add_Tocart_Login(data).then((res) => {
-                navigate('/checkout')
-            })
-        }
+  const gotoPrevious = () => {
+    setCurrentImageIndex(
+      (prevIndex) =>
+        (prevIndex - 1 + add_Details?.images?.length) %
+        add_Details?.images?.length
+    );
+  };
 
-    }
+  const gotoNext = () => {
+    setCurrentImageIndex(
+      (prevIndex) => (prevIndex + 1) % add_Details?.images?.length
+    );
+  };
 
-    const handleSubmitReview = (event) => {
-        event.preventDefault();
-        let data = {
-            rating: rating,
-            text: reviewText,
-            user_id: user?.data?.id,
-            product_id: id,
-            vendor_id: add_Details?.vendor_id
-        }
-        console.log(data);
-        AddReviewList(data).then((res) => {
-            if (!res.status) {
-                alert(res.message)
-            }
-        })
-    }
+  return (
+    <>
+      <main className="margin_top_all">
 
-    const openLightbox = (index) => {
-        setCurrentImageIndex(index);
-        setLightboxIsOpen(true);
-        document.body.style.overflow = 'hidden';
-    };
-
-    const closeLightbox = () => {
-        setLightboxIsOpen(false);
-        document.body.style.overflow = 'auto';
-    };
-
-    const gotoPrevious = () => {
-        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + add_Details?.images?.length) % add_Details?.images?.length);
-    };
-
-    const gotoNext = () => {
-        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % add_Details?.images?.length);
-    };
-
-
-
-    return (
-        <>
-            <main className="margin_top_all">
-
-                {/* Start breadcrumb section */}
-                <section className="breadcrumb__section breadcrumb__bg">
-                    <div className="container">
-                        <div className="row row-cols-1">
-                            <div className="col">
-                                <div className="breadcrumb__content text-center">
-                                    <ul className="breadcrumb__content--menu d-flex justify-content-center">
-                                        <li className="breadcrumb__content--menu__items">
-                                            <a href="/">Home</a>
-                                        </li>
-                                        <li className="breadcrumb__content--menu__items">
-                                            <span>Product</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+        <Breadcrumb
+          subTitle2="Product Details"
+          icon2={
+            <BsCardText
+              color="#363062"
+              style={{
+                fontSize: "22px",
+                marginRight: "4px",
+                boxSizing: "border-box",
+                cursor: "pointer",
+              }}
+            />
+          }
+        />
 
                 {/* Start product details section */}
 

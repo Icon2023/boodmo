@@ -26,7 +26,7 @@ const MarketCarDetails = () => {
                             </a>
                         </div>
 
-                        <div class="center_mainimg">
+                        <div className="center_mainimg">
                             <img src={pro?.image} alt="" />
                         </div>
                     </div>
