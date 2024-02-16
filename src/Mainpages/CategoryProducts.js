@@ -18,33 +18,33 @@ import Placeholder_view from "../images/Placeholder_view_vector.svg";
 import Breadcrumb from "../Utils/breadcrumb";
 
 const CategoryProducts = () => {
-    const dispatch = useDispatch();
-    const { id } = useParams();
-    const [expanded, setExpanded] = useState(false);
-    const { single_category, category_list } = useSelector((state) => ({ ...state.products }));
-    const [isOpen, setIsOpen] = useState(false)
-    const [isLoadingImage, setIsLoadingImage] = useState(true);
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const [expanded, setExpanded] = useState(false);
+  const { single_category, category_list } = useSelector((state) => ({ ...state.products }));
+  const [isOpen, setIsOpen] = useState(false)
+  const [isLoadingImage, setIsLoadingImage] = useState(true);
 
-    useEffect(() => {
-        CategoryProduct(id).then((res) => {
-            if (res.success) {
-                setIsLoadingImage(false);
-                dispatch(addSingleCategory(res?.data));
-            }
-        }).catch((e) => {
-            console.log(e);
-            setIsLoadingImage(true);
+  useEffect(() => {
+    CategoryProduct(id).then((res) => {
+      if (res.success) {
+        setIsLoadingImage(false);
+        dispatch(addSingleCategory(res?.data));
+      }
+    }).catch((e) => {
+      console.log(e);
+      setIsLoadingImage(true);
 
-        })
-    }, [])
+    })
+  }, [])
 
-    const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
-    const toggleDrawer = () => {
-        setIsOpen((prevState) => !prevState)
-    }
+  const toggleDrawer = () => {
+    setIsOpen((prevState) => !prevState)
+  }
 
   return (
     <>
@@ -79,64 +79,64 @@ const CategoryProducts = () => {
                         return (
                           <div key={index}>
                             <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.3 }}
-      >
-                            <Accordion
-                              expanded={expanded === e?.id}
-                              onChange={handleChange(e?.id)}
+                              initial={{ opacity: 0, y: -20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -20 }}
+                              transition={{ duration: 0.3 }}
                             >
-                              <AccordionSummary
-                                expandIcon={
-                                  <ExpandMoreIcon
-                                    style={{ fontSize: "28px" }}
-                                  />
-                                }
-                                aria-controls="panel1bh-content"
-                                id="panel1bh-header"
+                              <Accordion
+                                expanded={expanded === e?.id}
+                                onChange={handleChange(e?.id)}
                               >
-                                <a href={`/shop/${e?.id}`}>
-                                  <label className="widget__categories--menu__label d-flex align-items-center">
-                                    <img
-                                      className="widget__categories--menu__img"
-                                      src={e?.image}
-                                      alt="categories-img"
+                                <AccordionSummary
+                                  expandIcon={
+                                    <ExpandMoreIcon
+                                      style={{ fontSize: "28px" }}
                                     />
-                                    <span className="widget__categories--menu__text">
-                                      {e?.name}
-                                    </span>
-                                  </label>
-                                </a>
-                              </AccordionSummary>
-                              <AccordionDetails>
-                                {e?.sub_category?.map((i, index) => {
-                                  return (
-                                    <li
-                                      className="widget__categories--menu__list"
-                                      key={index}
-                                    >
-                                      <a href={`/shop/${e?.id}/${i?.id}`}>
-                                        <label
-                                          label
-                                          className="widget__categories--menu__label d-flex align-items-center"
-                                        >
-                                          <img
-                                            className="widget__categories--menu__img"
-                                            src={i?.image}
-                                            alt="categories-img"
-                                          />
-                                          <span className="widget__categories--menu__text">
-                                            {i?.name}
-                                          </span>
-                                        </label>
-                                      </a>
-                                    </li>
-                                  );
-                                })}
-                              </AccordionDetails>
-                            </Accordion>
+                                  }
+                                  aria-controls="panel1bh-content"
+                                  id="panel1bh-header"
+                                >
+                                  <a href={`/shop/${e?.id}`}>
+                                    <label className="widget__categories--menu__label d-flex align-items-center">
+                                      <img
+                                        className="widget__categories--menu__img"
+                                        src={e?.image}
+                                        alt="categories-img"
+                                      />
+                                      <span className="widget__categories--menu__text">
+                                        {e?.name}
+                                      </span>
+                                    </label>
+                                  </a>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                  {e?.sub_category?.map((i, index) => {
+                                    return (
+                                      <li
+                                        className="widget__categories--menu__list"
+                                        key={index}
+                                      >
+                                        <a href={`/shop/${e?.id}/${i?.id}`}>
+                                          <label
+                                            label
+                                            className="widget__categories--menu__label d-flex align-items-center"
+                                          >
+                                            <img
+                                              className="widget__categories--menu__img"
+                                              src={i?.image}
+                                              alt="categories-img"
+                                            />
+                                            <span className="widget__categories--menu__text">
+                                              {i?.name}
+                                            </span>
+                                          </label>
+                                        </a>
+                                      </li>
+                                    );
+                                  })}
+                                </AccordionDetails>
+                              </Accordion>
                             </motion.div>
                           </div>
                         );

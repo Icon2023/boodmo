@@ -9,6 +9,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { add_search, removeAllItemWishlist, removeAllLoginCart } from '../store/reducers/ProductSlice'
 import { Product, SearchProduct, searchProducts } from '../Services/apiServices'
 import Drawers from '@mui/material/Drawer';
+import { Box, Modal } from '@mui/material'
+import { IoCloseSharp } from 'react-icons/io5'
 
 const Header = () => {
     const dispatch = useDispatch();
@@ -23,6 +25,7 @@ const Header = () => {
     const [open, setOpen] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
     // const [searchClicked, setSearchClicked] = useState(false);
     const [search, setSearch] = useState('');
 
@@ -59,6 +62,8 @@ const Header = () => {
         localStorage.removeItem('USER')
         dispatch(removeAllItemWishlist())
         dispatch(removeAllLoginCart())
+        setOpenDelete(false);
+
     }
 
     const toggleDrawer = () => {
@@ -79,6 +84,14 @@ const Header = () => {
             navigate(`/search/${search}`)
             setOpen(!open);
         }
+    };
+
+    const handleOpenDelete = () => {
+        setOpenDelete(true);
+    };
+
+    const handleCloseDelete = () => {
+        setOpenDelete(false);
     };
     return (
         <>
@@ -285,7 +298,7 @@ const Header = () => {
                                     <a className="main__logo--link" href="/">
                                         <img
                                             className="main__logo--img"
-                                            src="assets/img/logo/logonew.png"
+                                            src="assets/img/logo/mechx.png"
                                             alt="logo-img"
                                         />
                                     </a>
@@ -373,7 +386,7 @@ const Header = () => {
                                                             : ""
                                                     }
                                                 </li>
-                                                <li className="header__sub--menu__items">
+                                                {/* <li className="header__sub--menu__items">
                                                     <Link
                                                         to="/brands"
                                                         className="header__sub--menu__link"
@@ -388,7 +401,7 @@ const Header = () => {
                                                     >
                                                         Vehicle
                                                     </Link>
-                                                </li>
+                                                </li> */}
                                             </ul>
                                         </li>
                                     </ul>
@@ -439,7 +452,7 @@ const Header = () => {
                                                 <Link className="header__account--btn" to="/login">
                                                     <IoMdContact style={{ fontSize: "28px" }} />
                                                 </Link>
-                                                : <a className="header__account--btn" onClick={handleLogout}>
+                                                : <a className="header__account--btn" onClick={handleOpenDelete}>
                                                     <AiOutlineLogout style={{ fontSize: "28px", color: "#363062" }} />
                                                 </a>
                                         }
@@ -573,7 +586,7 @@ const Header = () => {
                             <div className="offcanvas__logo">
                                 <a className="offcanvas__logo_link" href="/">
                                     <img
-                                        src="assets/img/logo/logonew.png"
+                                        src="assets/img/logo/mechx.png"
                                         alt="Grocee Logo"
                                         width={158}
                                         height={36}
@@ -656,6 +669,46 @@ const Header = () => {
                     </Drawer>
                 </div>
             </header>
+
+            <Modal
+                open={openDelete}
+                onClose={handleCloseDelete}
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
+            >
+                <Box
+                    sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: 400,
+                        maxWidth: 380,
+                        bgcolor: "background.paper",
+                        boxShadow: 24,
+                        p: 4,
+                    }}
+                >
+                    <div style={{ position: "relative" }}>
+                        <h2 className="my-5 text-center">Are you sure logout?</h2>
+                        {/* <p>This is a simple modal example.</p> */}
+                        <IoCloseSharp
+                            style={{
+                                position: "absolute",
+                                right: "-6%",
+                                top: "-30%",
+                                transform: "translate(-50%, -50%)",
+                                cursor: "pointer",
+                                fontSize: "18px",
+                            }}
+                            onClick={handleCloseDelete}
+                        />
+                        <button className="primary__btn w-100" onClick={handleLogout}>
+                            Logout
+                        </button>
+                    </div>
+                </Box>
+            </Modal>
         </>
     )
 }

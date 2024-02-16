@@ -34,6 +34,19 @@ const style = {
   p: 4,
 };
 
+// const styleOripart = {
+//   position: "absolute",
+//   top: "50%",
+//   left: "50%",
+//   transform: "translate(-50%, -50%)",
+//   width: '70%',
+//   bgcolor: "background.paper",
+//   // border: "2px solid #000",
+//   boxShadow: 24,
+//   borderRadius: '100px',
+//   p: 4,
+// };
+
 const HomeSilder = () => {
   const { category_list, single_category } = useSelector((state) => ({
     ...state.products,
@@ -55,6 +68,7 @@ const HomeSilder = () => {
 
   const [open, setOpen] = useState(false);
   const [number, setnumber] = useState("");
+  const [openWindow, setopenWindow] = useState(false);
 
   useEffect(() => {
     CarCompanies().then((res) => {
@@ -65,16 +79,13 @@ const HomeSilder = () => {
   const customStyles = {
     option: (defaultStyles, state) => ({
       ...defaultStyles,
-      // color: state.isSelected ? "#212529" : "#fff",
-      // backgroundColor: state.isSelected ? "#a0a0a0" : "#212529",
     }),
-
     control: (defaultStyles) => ({
       ...defaultStyles,
-      // backgroundColor: "#212529",
-      // padding: "10px",
       border: "none",
       boxShadow: "none",
+      borderRadius: "10px",
+
     }),
     placeholder: (provided) => ({
       ...provided,
@@ -82,7 +93,6 @@ const HomeSilder = () => {
       overflow: "hidden", // Hide overflow
       textOverflow: "ellipsis", // Add ellipsis (...) for long text
     }),
-    // singleValue: (defaultStyles) => ({ ...defaultStyles, color: "#fff" }),
   };
 
   useEffect(() => {
@@ -164,6 +174,12 @@ const HomeSilder = () => {
     window.location.reload();
   };
 
+  const openBrowser = () => {
+    setopenWindow(true)
+  };
+
+  const handleCloses = () => setopenWindow(false);
+
   return (
     <>
       <section className="hero__slider--section" style={{ marginTop: "85px" }}>
@@ -173,6 +189,8 @@ const HomeSilder = () => {
               className="mySwiper"
               spaceBetween={30}
               centeredSlides={true}
+              loopAddBlankSlides={true}
+              loop={true}
               autoplay={{
                 delay: 3000,
                 disableOnInteraction: false,
@@ -180,7 +198,7 @@ const HomeSilder = () => {
               pagination={{
                 clickable: true,
               }}
-              navigation={true}
+              navigation={false}
               modules={[Autoplay, Pagination, Navigation]}
             >
               {sliderData?.map((e) => {
@@ -286,80 +304,8 @@ const HomeSilder = () => {
             </div>
           </div>
           <div className="search__filter--inner style5">
-            {/* <div className="search__filter--form__style2 d-flex">
-                  <div className="search__filter--select select search__filter--width">
-                    <select
-                      className="search__filter--select__field"
-                      onChange={handleChange}
-                    >
-                      <option selected="" value={''}>
-                        Select Car Maker
-                      </option>
-                      {
-                        carName.map((e, index) => {
-                          return (
-                            <option value={e?.id} key={index}>
-                              {e?.name}
-                            </option>
-                          );
-                        })
-                      }
-                    </select>
-                  </div>
-                  <div className="search__filter--select select search__filter--width">
-                    <select
-                      className="search__filter--select__field"
-                      disabled={carValName.length <= 0 ? true : false}
-                      onChange={handleChange1}
-                    >
-                      <option selected="" value={''}>
-                        Select Model
-                      </option>
-                      {carModel.map((e, index) => {
-                        return (
-                          <option value={e?.id} key={index}>
-                            {e?.name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </div>
-
-                  <div className="search__filter--select select search__filter--width">
-                    <select
-                      className="search__filter--select__field"
-                      onChange={handleChange2}
-                      disabled={carValModel.length <= 0 ? true : false}
-                    >
-                      <option selected="" value={''}>
-                        Select Modification
-                      </option>
-                      {
-                        carModei.map((e, index) => {
-                          return (
-                            <option value={e?.id} key={index}>
-                              {e?.modification}
-                            </option>
-                          );
-                        })
-                      }
-                    </select>
-                  </div>
-                  <div className="search__filter--width d-flex align-items-end">
-                    <button className="search__filter--btn primary__btn" onClick={handleClickOpen}>
-                      Search Parts
-                    </button>
-                  </div>
-                  <div className="search__filter--width d-flex align-items-end">
-                    <a href={`https://oriparts.com/${carValName}/${carValModel}/${carValModei}/?back_url_pn=https://mechx.hypehy.com/search/{pn}`} target="_blank">
-                      <button className="search__filter--btn primary__btn">
-                        OEM CATALOG
-                      </button>
-                    </a>
-                  </div>
-                </div> */}
             <div className="testimonial-grid">
-              <div className="testimonial">
+              <div className="testimonial" >
                 <Select
                   options={carName.map((e, index) => ({
                     value: e && e.id ? e.id : "",
@@ -401,26 +347,27 @@ const HomeSilder = () => {
               </div>
               <div className="testimonial">
                 {/* <div className="d-flex flex-row"> */}
-                <button
+                {/* <button
                   className="search__filter--btn primary__btn w-100 mb-2"
                   onClick={handleClickOpen}
                 >
                   SEARCH PARTS
-                </button>
+                </button> */}
                 <a
                   href={`https://oriparts.com/${carValName}/${carValModel}/${carValModei}/?back_url_pn=https://mechx.hypehy.com/search/{pn}`}
                   target="_blank"
                   className="w-100"
                 >
-                  <button className="search__filter--btn primary__btn w-100">
+                  <button className="search__filter--btn primary__btn w-100" disabled={carValModel.length <= 0 ? true : false}>
                     OEM CATALOG
                   </button>
                 </a>
-                {/* </div> */}
               </div>
-              {/* <div className="testimonial">
-                    
-                  </div> */}
+
+              {/* <button className="search__filter--btn primary__btn w-100" onClick={openBrowser}>
+                Open
+              </button> */}
+
             </div>
           </div>
         </div>
@@ -483,7 +430,7 @@ const HomeSilder = () => {
                         <a
                           className="categories__card--link"
                           onClick={() => handleMultiFilter(e?.id)}
-                          // href={`/shop/${cateId}/${e?.id}/${carValName}/${carValModel}/${carValYear}/${carValModei}`}
+                        // href={`/shop/${cateId}/${e?.id}/${carValName}/${carValModel}/${carValYear}/${carValModei}`}
                         >
                           <div className="mx-auto">
                             <img
@@ -505,6 +452,25 @@ const HomeSilder = () => {
           )}
         </Box>
       </Modal>
+
+      {/* <Modal
+        open={openWindow}
+        onClose={handleCloses}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={styleOripart}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            <iframe
+              src="https://oriparts.com/"
+              title="External Page"
+              width="100%"
+              height="500px"
+            ></iframe>
+          </Typography>
+
+        </Box>
+      </Modal> */}
     </>
   );
 };

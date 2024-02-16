@@ -26,25 +26,24 @@ import Breadcrumb from "../Utils/breadcrumb";
 import { motion } from "framer-motion";
 
 const ProductsView = () => {
-    const dispatch = useDispatch();
-    const { add_product, category_list, filter_multi } = useSelector((state) => ({ ...state.products }));
-    const { cate_id, subcategory } = useParams();
-    const [gridOpen, setGridOpen] = useState(true);
-    const [trifOpen, setTrifOpen] = useState(true);
-    const [expanded, setExpanded] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 9; // Set the number of items to show per page here.
-    const [Stprice, setStPrice] = useState('')
-    const [endPrice, setEndPrice] = useState('')
-    const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { add_product, category_list, filter_multi } = useSelector((state) => ({ ...state.products }));
+  const { cate_id, subcategory } = useParams();
+  const [gridOpen, setGridOpen] = useState(true);
+  const [trifOpen, setTrifOpen] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9; // Set the number of items to show per page here.
+  const [Stprice, setStPrice] = useState('')
+  const [endPrice, setEndPrice] = useState('')
+  const [isOpen, setIsOpen] = useState(false);
 
-    const [brands, setBrands] = useState([]);
-    const [isMore, setIsMore] = useState(false);
-    const [selectedValues, setSelectedValues] = useState();
-    const [isLoadingImage, setIsLoadingImage] = useState(true);
+  const [brands, setBrands] = useState([]);
+  const [selectedValues, setSelectedValues] = useState();
+  const [isLoadingImage, setIsLoadingImage] = useState(true);
 
-    const [carName, setCarName] = useState([]);
-    const [carValName, setCarValName] = useState("");
+  const [carName, setCarName] = useState([]);
+  const [carValName, setCarValName] = useState("");
 
   const [carModel, setCarModel] = useState([]);
   const [carValModel, setCarValModel] = useState("");
@@ -55,8 +54,8 @@ const ProductsView = () => {
   // const [carModefication, setCarModefication] = useState([]);
   const [carValModefication, setValModefication] = useState("");
 
-    const [displayedBrands, setDisplayedBrands] = useState([]);
-    const [visibleItemCount, setVisibleItemCount] = useState(5);
+  const [displayedBrands, setDisplayedBrands] = useState([]);
+  const [visibleItemCount, setVisibleItemCount] = useState(5);
 
 
   useEffect(() => {
@@ -223,7 +222,6 @@ const ProductsView = () => {
     //     console.log([...selectedValues, ...value]);
     // }
     setSelectedValues(value);
-    // console.log(value);
   };
 
   const handleSubmit = (e) => {
@@ -242,12 +240,12 @@ const ProductsView = () => {
     Product(filterdata).then((res) => {
       if (res.success) {
         dispatch(addProducts(res?.data));
-        console.log(res?.data);
+      } else {
+        console.log("error");
       }
+
     });
   };
-
-  console.log("lfgdfgl", cate_id, subcategory);
 
   const handleLoadMore = () => {
     // setVisibleItemCount(prevCount => prevCount + 10);
@@ -261,7 +259,7 @@ const ProductsView = () => {
   return (
     <div>
       <main className="margin_top_all">
-        <Breadcrumb       
+        <Breadcrumb
           link2={`/shop/${cate_id}`}
           subTitle2="Category"
           subTitle3="Product"
@@ -344,45 +342,6 @@ const ProductsView = () => {
                               );
                             })}
                           </select>
-                          {/* {
-                                                        !carValName.length <= 0 &&
-                                                        <select className='vehicle_select_model mt-2' onChange={handleModelNameChange}>
-                                                            <option selected value={''}>Choose Model Line</option>
-                                                            {
-                                                                carModel.map((e, index) => {
-                                                                    return (
-                                                                        <option value={e?.id} key={index}>{e?.name}</option>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </select>
-                                                    } */}
-                          {/* {
-                                                        !carValModel.length <= 0 &&
-                                                        <select className='vehicle_select_model mt-2' onChange={handleModificationChange}>
-                                                            <option selected value={''}>Choose Model Year</option>
-                                                            {
-                                                                carYear.map((e, index) => {
-                                                                    return (
-                                                                        <option value={e?.id} key={index}>{e?.year}</option>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </select>
-                                                    } */}
-                          {/* {
-                                                        !carValModefication.length <= 0 &&
-                                                        <select className='vehicle_select_model mt-2'>
-                                                            <option selected value={''}>Choose Modification</option>
-                                                            {
-                                                                carModefication.map((e, index) => {
-                                                                    return (
-                                                                        <option value={e?.id} key={index}>{e?.modification}</option>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </select>
-                                                    } */}
                         </div>
                       </div>
                       <div className="mt-4">
@@ -543,7 +502,7 @@ const ProductsView = () => {
                           </label>
                           <div className="select shop__header--select">
                             <select
-                              className="product__view--select"
+                              className="product__view--select m-0 p-0 ps-3"
                               onChange={(e) => sortClick(e.target.value)}
                             >
                               <option selected="" value={"price, ASC"}>
@@ -559,9 +518,8 @@ const ProductsView = () => {
                         <div className="product__view--mode__list">
                           <div className="product__tab--one product__grid--column__buttons d-flex justify-content-center">
                             <button
-                              className={`product__grid--column__buttons--icons ${
-                                gridOpen == true ? "active" : ""
-                              } `}
+                              className={`product__grid--column__buttons--icons ${gridOpen == true ? "active" : ""
+                                } `}
                               aria-label="grid btn"
                               data-toggle="tab"
                               data-target="#product_grid"
@@ -570,9 +528,8 @@ const ProductsView = () => {
                               <CgMenuGridR />
                             </button>
                             <button
-                              className={`product__grid--column__buttons--icons ${
-                                gridOpen == true ? "" : "active"
-                              }`}
+                              className={`product__grid--column__buttons--icons ${gridOpen == true ? "" : "active"
+                                }`}
                               aria-label="list btn"
                               data-toggle="tab"
                               data-target="#product_list"
@@ -651,32 +608,7 @@ const ProductsView = () => {
                                                   Tranding
                                                 </span>
                                               )}
-                                              {/* <ul className="product__card--action d-flex align-items-center justify-content-center">
-                                                                                                    <li className="product__card--action__list">
-                                                                                                        <a
-                                                                                                            className="product__card--action__btn"
-                                                                                                            title="Wishlist"
-                                                                                                            href="wishlist.html"
-                                                                                                        >
-                                                                                                            <svg
-                                                                                                                className="product__card--action__btn--svg"
-                                                                                                                width={18}
-                                                                                                                height={18}
-                                                                                                                viewBox="0 0 16 13"
-                                                                                                                fill="none"
-                                                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                                                            >
-                                                                                                                <path
-                                                                                                                    d="M13.5379 1.52734C11.9519 0.1875 9.51832 0.378906 8.01442 1.9375C6.48317 0.378906 4.04957 0.1875 2.46364 1.52734C0.412855 3.25 0.713636 6.06641 2.1902 7.57031L6.97536 12.4648C7.24879 12.7383 7.60426 12.9023 8.01442 12.9023C8.39723 12.9023 8.7527 12.7383 9.02614 12.4648L13.8386 7.57031C15.2879 6.06641 15.5886 3.25 13.5379 1.52734ZM12.8816 6.64062L8.09645 11.5352C8.04176 11.5898 7.98707 11.5898 7.90504 11.5352L3.11989 6.64062C2.10817 5.62891 1.91676 3.71484 3.31129 2.53906C4.3777 1.63672 6.01832 1.77344 7.05739 2.8125L8.01442 3.79688L8.97145 2.8125C9.98317 1.77344 11.6238 1.63672 12.6902 2.51172C14.0847 3.71484 13.8933 5.62891 12.8816 6.64062Z"
-                                                                                                                    fill="currentColor"
-                                                                                                                />
-                                                                                                            </svg>
-                                                                                                            <span className="visually-hidden">
-                                                                                                                Wishlist
-                                                                                                            </span>
-                                                                                                        </a>
-                                                                                                    </li>
-                                                                                                </ul> */}
+
                                             </div>
                                             <div className="product__card--content">
                                               <ul className="rating product__card--rating d-flex">
@@ -684,64 +616,64 @@ const ProductsView = () => {
                                                   <span className="rating__icon mt-2">
                                                     {e?.average_rating ===
                                                       0 && (
-                                                      <>
-                                                        <AiOutlineStar />
-                                                        <AiOutlineStar />
-                                                        <AiOutlineStar />
-                                                        <AiOutlineStar />
-                                                        <AiOutlineStar />
-                                                      </>
-                                                    )}
+                                                        <>
+                                                          <AiOutlineStar />
+                                                          <AiOutlineStar />
+                                                          <AiOutlineStar />
+                                                          <AiOutlineStar />
+                                                          <AiOutlineStar />
+                                                        </>
+                                                      )}
                                                     {e?.average_rating ===
                                                       1 && (
-                                                      <>
-                                                        <AiFillStar />
-                                                        <AiOutlineStar />
-                                                        <AiOutlineStar />
-                                                        <AiOutlineStar />
-                                                        <AiOutlineStar />
-                                                      </>
-                                                    )}
+                                                        <>
+                                                          <AiFillStar />
+                                                          <AiOutlineStar />
+                                                          <AiOutlineStar />
+                                                          <AiOutlineStar />
+                                                          <AiOutlineStar />
+                                                        </>
+                                                      )}
                                                     {e?.average_rating ===
                                                       2 && (
-                                                      <>
-                                                        <AiFillStar />
-                                                        <AiFillStar />
-                                                        <AiOutlineStar />
-                                                        <AiOutlineStar />
-                                                        <AiOutlineStar />
-                                                      </>
-                                                    )}
+                                                        <>
+                                                          <AiFillStar />
+                                                          <AiFillStar />
+                                                          <AiOutlineStar />
+                                                          <AiOutlineStar />
+                                                          <AiOutlineStar />
+                                                        </>
+                                                      )}
                                                     {e?.average_rating ===
                                                       3 && (
-                                                      <>
-                                                        <AiFillStar />
-                                                        <AiFillStar />
-                                                        <AiFillStar />
-                                                        <AiOutlineStar />
-                                                        <AiOutlineStar />
-                                                      </>
-                                                    )}
+                                                        <>
+                                                          <AiFillStar />
+                                                          <AiFillStar />
+                                                          <AiFillStar />
+                                                          <AiOutlineStar />
+                                                          <AiOutlineStar />
+                                                        </>
+                                                      )}
                                                     {e?.average_rating ===
                                                       4 && (
-                                                      <>
-                                                        <AiFillStar />
-                                                        <AiFillStar />
-                                                        <AiFillStar />
-                                                        <AiFillStar />
-                                                        <AiOutlineStar />
-                                                      </>
-                                                    )}
+                                                        <>
+                                                          <AiFillStar />
+                                                          <AiFillStar />
+                                                          <AiFillStar />
+                                                          <AiFillStar />
+                                                          <AiOutlineStar />
+                                                        </>
+                                                      )}
                                                     {e?.average_rating ===
                                                       5 && (
-                                                      <>
-                                                        <AiFillStar />
-                                                        <AiFillStar />
-                                                        <AiFillStar />
-                                                        <AiFillStar />
-                                                        <AiFillStar />
-                                                      </>
-                                                    )}
+                                                        <>
+                                                          <AiFillStar />
+                                                          <AiFillStar />
+                                                          <AiFillStar />
+                                                          <AiFillStar />
+                                                          <AiFillStar />
+                                                        </>
+                                                      )}
                                                   </span>
                                                 </li>
                                                 <span>({e?.review_count})</span>
@@ -814,7 +746,6 @@ const ProductsView = () => {
                                               {isLoadingImage ? (
                                                 <>
                                                   <img
-                                                    // src={"https://via.placeholder.com/300x200/f0f0f0"}
                                                     src={Placeholder_view}
                                                     width={300}
                                                     height={200}
@@ -846,32 +777,7 @@ const ProductsView = () => {
                                                 Tranding
                                               </span>
                                             )}
-                                            {/* <ul className="product__card--action d-flex align-items-center justify-content-center">    
-                                                                                                    <li className="product__card--action__list">
-                                                                                                        <a
-                                                                                                            className="product__card--action__btn"
-                                                                                                            title="Wishlist"
-                                                                                                            href="wishlist.html"
-                                                                                                        >
-                                                                                                            <svg
-                                                                                                                className="product__card--action__btn--svg"
-                                                                                                                width={18}
-                                                                                                                height={18}
-                                                                                                                viewBox="0 0 16 13"
-                                                                                                                fill="none"
-                                                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                                                            >
-                                                                                                                <path
-                                                                                                                    d="M13.5379 1.52734C11.9519 0.1875 9.51832 0.378906 8.01442 1.9375C6.48317 0.378906 4.04957 0.1875 2.46364 1.52734C0.412855 3.25 0.713636 6.06641 2.1902 7.57031L6.97536 12.4648C7.24879 12.7383 7.60426 12.9023 8.01442 12.9023C8.39723 12.9023 8.7527 12.7383 9.02614 12.4648L13.8386 7.57031C15.2879 6.06641 15.5886 3.25 13.5379 1.52734ZM12.8816 6.64062L8.09645 11.5352C8.04176 11.5898 7.98707 11.5898 7.90504 11.5352L3.11989 6.64062C2.10817 5.62891 1.91676 3.71484 3.31129 2.53906C4.3777 1.63672 6.01832 1.77344 7.05739 2.8125L8.01442 3.79688L8.97145 2.8125C9.98317 1.77344 11.6238 1.63672 12.6902 2.51172C14.0847 3.71484 13.8933 5.62891 12.8816 6.64062Z"
-                                                                                                                    fill="currentColor"
-                                                                                                                />
-                                                                                                            </svg>
-                                                                                                            <span className="visually-hidden">
-                                                                                                                Wishlist
-                                                                                                            </span>
-                                                                                                        </a>
-                                                                                                    </li>
-                                                                                                </ul> */}
+
                                           </div>
                                           <div className="product__card--content product__list--content">
                                             <h3 className="product__card--title">
@@ -989,27 +895,33 @@ const ProductsView = () => {
                         </>
                       )}
                     </div>
-
-                    <div className="pagination__area">
-                      <ul className="pagination__wrapper d-flex align-items-center justify-content-center">
-                        <li className="pagination__list">
-                          <Pagination
-                            count={totalPages}
-                            page={currentPage}
-                            onChange={handlePageChange}
-                            renderItem={(item) => (
-                              <PaginationItem
-                                component="button"
-                                onClick={() =>
-                                  handlePageChange(null, item.page)
-                                }
-                                {...item}
-                              />
-                            )}
-                          />
-                        </li>
-                      </ul>
-                    </div>
+                    {
+                      add_product?.length <= 0 &&
+                      <p className="mt-5 text-center">No data Found</p>
+                    }
+                    {
+                      add_product?.length > 0 &&
+                      <div className="pagination__area">
+                        <ul className="pagination__wrapper d-flex align-items-center justify-content-center">
+                          <li className="pagination__list">
+                            <Pagination
+                              count={totalPages}
+                              page={currentPage}
+                              onChange={handlePageChange}
+                              renderItem={(item) => (
+                                <PaginationItem
+                                  component="button"
+                                  onClick={() =>
+                                    handlePageChange(null, item.page)
+                                  }
+                                  {...item}
+                                />
+                              )}
+                            />
+                          </li>
+                        </ul>
+                      </div>
+                    }
                   </div>
                 </div>
               </div>

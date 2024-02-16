@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import HomeSilder from "./HomeSilder";
 import ShopCategory from "./ShopCategory";
 import PopularCarMakers from "./PopularCarMakers";
+import Banner from '../HomeSubpages/Banner'
 import BrandsWeTrust from "./BrandsWeTrust";
 import AfterMarketProducts from "./AfterMarketProducts";
 import { ScrollToTop } from "../../Utils/ScrollToTop";

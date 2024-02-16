@@ -276,7 +276,7 @@ const MyAddress = () => {
                                                                         className="checkout__input--label mb-0"
                                                                         htmlFor="input3"
                                                                     >
-                                                                        Address Title
+                                                                        LandMark
                                                                         <span className="checkout__input--label__star">
                                                                             *
                                                                         </span>
@@ -284,7 +284,7 @@ const MyAddress = () => {
                                                                     <div className={`${errors.add_title ? 'error' : ''}`}>
                                                                         <input
                                                                             className="checkout__input--field border-radius-5"
-                                                                            placeholder="Address Title"
+                                                                            placeholder="Land Mark"
                                                                             type="text"
                                                                             name="add_title"
                                                                             value={formValues.add_title}
@@ -308,7 +308,7 @@ const MyAddress = () => {
                                                                     <div className={`${errors.address ? 'error' : ''}`}>
                                                                         <input
                                                                             className="checkout__input--field border-radius-5"
-                                                                            placeholder="Address1"
+                                                                            placeholder="Address"
                                                                             type="text"
                                                                             name='address'
                                                                             value={formValues.address}
@@ -407,14 +407,14 @@ const MyAddress = () => {
                                                                         <input
                                                                             className="checkout__input--field border-radius-5"
                                                                             placeholder="Pin code"
-                                                                            type="text"
+                                                                            type="number"
                                                                             name='pincode'
                                                                             value={formValues.pincode}
                                                                             onChange={handleChange}
+                                                                           
                                                                         />
                                                                     </div>
                                                                     {/* {errors.pincode && <span className="error">{errors.pincode}</span>} */}
-
                                                                 </div>
                                                             </div>
                                                         </div>

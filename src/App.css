@@ -320,20 +320,7 @@ img {
     border: 1px solid #363062;
 }
 
-.search_model {
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    padding: 20px;
-    border-radius: 10px;
-    width: auto;
-}
 
-.search_model button {
-    background-color: #363062;
-    color: white;
-    border: 0;
-    padding: 7px 18px;
-    border-radius: 5px;
-}
 
 span {
     display: inline-block;
@@ -2086,13 +2073,14 @@ body.overlay__active::before {
 }
 
 .main__logo--img {
-    width: 145px;
+    width: 200px;
+    height: 100%;
     display: block;
 }
 
 @media only screen and (min-width: 480px) {
     .main__logo--img {
-        max-width: 160px;
+        max-width: 135px;
     }
 }
 
@@ -8103,7 +8091,7 @@ input.quickview__value--number {
     width: 180px;
     height: 4rem;
     line-height: 4rem;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 @media only screen and (min-width: 1200px) {
@@ -14192,9 +14180,10 @@ select {
 }
 
 .testimonial {
-    /* padding: 2rem; */
-    border-radius: 0.5rem;
+    border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 /* header responsive fix */
@@ -14286,4 +14275,160 @@ select {
     border-radius: 5px;
     color: white;
     margin-left: 5px;
+}
+
+
+/* ========================================================================================================================= */
+/*  */
+.part-info-top {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    order: 1;
+    align-items: center;
+}
+
+@media (min-width: 770px) {
+
+    .part-info__right>div {
+        width: 100%;
+    }
+}
+
+.part-info-top__brand {
+    text-transform: uppercase;
+    text-decoration: underline;
+    font-size: 16px;
+    color: #000;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+@media (min-width: 770px) {
+
+    .part-info-delivery {
+        order: 9;
+        font-size: 16px;
+    }
+}
+
+.part-info-delivery {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    color: #001441;
+}
+
+.part-info-delivery__icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 13px;
+}
+
+/*  */
+.grid_product_details {
+    margin-top: 10px;
+    display: grid;
+    font-size: large;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1rem;
+    /* border: 2px solid red; */
+}
+
+
+/* prise */
+@media (min-width: 770px) {
+    .part-info-price__current {
+        font-size: 36px;
+    }
+}
+
+.part-info-price__current {
+    font-size: 28px;
+    color: #000;
+    font-weight: 600;
+}
+
+
+
+/* single title */
+.product-title {
+    font-size: 3rem;
+    text-transform: capitalize;
+    font-weight: 700;
+    position: relative;
+    color: #12263a;
+    margin: 1rem 0;
+}
+
+.product-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -9px;
+    height: 4px;
+    width: 80px;
+    background: #12263a;
+}
+
+/*  */
+.product-detail h2 {
+    text-transform: capitalize;
+    color: #12263a;
+    padding-bottom: 0.6rem;
+}
+
+.product-detail p {
+    font-size: 1.5rem;
+    padding: 0.3rem;
+    opacity: 0.8;
+}
+
+.product-detail ul {
+    margin: 1rem 0;
+    font-size: 0.9rem;
+}
+
+.product-detail ul li {
+    margin: 0;
+    list-style: none;
+    /* background: url(shoes_images/checked.png) left center no-repeat; */
+    background-size: 18px;
+    padding-left: 1.7rem;
+    margin: 0.4rem 0;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.product-detail ul li span {
+    font-weight: 400;
+}
+
+/*  */
+.product-rating {
+    color: #ffc107;
+}
+
+.product-rating span {
+    font-weight: 600;
+    color: #252525;
+}
+
+.product__details--section .swiper-button-prev,
+.product__details--section .swiper-button-next {
+    color: white !important;
+}
+
+.product__details--section .swiper-button-next:after,
+.product__details--section .swiper-button-prev:after {
+    font-size: 18px !important;
+    /* border: 1px solid black; */
+    padding: 12px;
+    border-radius: 50%;
+    background-color: #363062;
+}
+
+.single_main img {
+    display: block !important;
+    margin: 0 auto !important;
 }

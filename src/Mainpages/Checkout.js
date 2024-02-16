@@ -567,7 +567,8 @@ const Checkout = () => {
                                                                                 <a className="display-block">
                                                                                     <img
                                                                                         className="display-block border-radius-5"
-                                                                                        src={e?.product?.images[0].image}
+                                                                                        // src={e?.product?.images[0].image}
+                                                                                        src='https://avatars.mds.yandex.net/i?id=1b4bc532efe7ab812edc8fbb4f3290913c22ff63-9149598-images-thumbs&n=13'
                                                                                         alt="cart-product"
                                                                                     />
                                                                                 </a>
@@ -578,7 +579,7 @@ const Checkout = () => {
                                                                             <div className="product__description">
                                                                                 <h4 className="product__description--name">
                                                                                     <p>
-                                                                                        {e?.product?.name}
+                                                                                        {e?.product?.part_name}
                                                                                     </p>
                                                                                 </h4>
                                                                             </div>

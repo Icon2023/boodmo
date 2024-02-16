@@ -13,14 +13,14 @@ export const Product = async (data) => {
   }
 };
 
-export const CheckOutProduct = async (data) => {
-  const response = await axios.post(`${BASE_URL}/api/checkout`, data);
-  if (response?.status) {
-    return response.data;
-  } else {
-    console.log("error");
-  }
-};
+// export const CheckOutProduct = async (data) => {
+//   const response = await axios.post(`${BASE_URL}/api/checkout`, data);
+//   if (response?.status) {
+//     return response.data;
+//   } else {
+//     console.log("error");
+//   }
+// };
 
 export const Categories = async () => {
   const response = await axios.get(`${BASE_URL}/api/category`);
@@ -155,7 +155,7 @@ export const AddOrderList = async () => {
   const response = await axios.get(`${BASE_URL}/api/order`, {
     headers: authHeader(),
   });
-  if (response?.data?.success) {
+  if (response?.data) {
     return response.data;
   } else {
     console.log("error");

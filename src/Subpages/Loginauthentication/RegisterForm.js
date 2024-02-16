@@ -3,6 +3,7 @@ import HideShow from "../../Utils/HideShow";
 import { Register } from "../../Services/apiServices";
 import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const RegisterForm = () => {
     }
 
   }
-  
+
   const handleChange1 = (e) => {
     setNumber(e.target.value);
     setType('mobile')
@@ -44,22 +45,24 @@ const RegisterForm = () => {
       type: type,
       ...type === "email" ? { email: email } : { mobile: number },
       password: password,
-      device_type:'web',
-      device_token:'abcd'
+      device_type: 'web',
+      device_token: 'abcd'
     }
     if (password === conpassword) {
       Register(data).then((res) => {
         console.log("res----", res);
         if (res.success) {
           localStorage.setItem("USER", JSON.stringify(res));
+          toast.success("Register successfully!");
           navigate("/");
-          window.location.reload();
+          // window.location.reload();
         } else {
           setError(res.message);
+          toast.error(res.message || "Your are not  registered.");
         }
       });
-    }else{
-      alert("please match password")
+    } else {
+      toast.error("please match password");
     }
   }
 
@@ -92,13 +95,15 @@ const RegisterForm = () => {
             {
               isopen ? <input type="text" placeholder="Email" value={email} onChange={handleChange} className="account__login--input" /> : ""
             }
-
-            <div className="account__login--divide">
-              <span className="account__login--divide__text">OR</span>
-            </div>
+            {
+              isopen1 &&  isopen ?
+              <div className="account__login--divide">
+                <span className="account__login--divide__text">OR</span>
+              </div> : ""
+            }
 
             {
-              isopen1 ? <input type="number" placeholder="+91 Number" value={number} onChange={handleChange1} className="account__login--input" /> : ""
+              isopen1 ? <input type="number" placeholder="+91 Mobile Number"  value={number} onChange={handleChange1} className="account__login--input" /> : ""
             }
 
             <HideShow {...{ passwordShown, setPasswordShown }}>

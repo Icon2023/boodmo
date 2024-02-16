@@ -37,7 +37,8 @@ import "../node_modules/slick-carousel/slick/slick.css";
 import MarketAutoDetails from './Mainpages/MarketAutoDetails';
 import MarketCarDetails from './Mainpages/MarketCarDetails';
 import SupportPage from './Utils/SupportPage';
-
+import { ToastContainer } from 'react-toastify';
+import "../node_modules/react-toastify/dist/ReactToastify.css";
 
 function App() {
   const location = useLocation();
@@ -46,6 +47,7 @@ function App() {
   return (
     <>
       <ScrollToTop smooth color="#363062" />
+      <ToastContainer />
       <Header />
       <SupportPage />
       <main style={{ minHeight: "70vh" }}>

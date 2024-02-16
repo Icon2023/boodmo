@@ -20,42 +20,43 @@ import { RiShoppingCart2Line } from "react-icons/ri";
 import { motion } from "framer-motion";
 
 const Cart = () => {
-    const user = JSON.parse(localStorage.getItem('USER'));
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const { addto_cart, login_cart } = useSelector((state) => ({ ...state.products }));
-    const countTotal = (items) => items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
+  const user = JSON.parse(localStorage.getItem('USER'));
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { addto_cart, login_cart } = useSelector((state) => ({ ...state.products }));
+  const countTotal = (items) => items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
 
-    const handleCheckout = () => {
-        navigate('/checkout')
-    }
+  const handleCheckout = () => {
+    navigate('/checkout')
+  }
 
-    useEffect(() => {
-        CartList().then((res) => {
-            if (res.success) {
-                dispatch(addLoginCart(res?.data))
-            }
-        })
-    }, [])
+  useEffect(() => {
+    CartList().then((res) => {
+      if (res.success) {
+        dispatch(addLoginCart(res?.data))
+        console.log(res?.data);
+      }
+    })
+  }, [])
 
 
-    const handleInc = (id) => {
-        dispatch(qtyIncrementDecrement({ id, plusMinus: + 1 }))
-    }
+  const handleInc = (id) => {
+    dispatch(qtyIncrementDecrement({ id, plusMinus: + 1 }))
+  }
 
-    const handleDec = (id) => {
-        dispatch(qtyIncrementDecrement({ id, plusMinus: - 1 }))
-    }
+  const handleDec = (id) => {
+    dispatch(qtyIncrementDecrement({ id, plusMinus: - 1 }))
+  }
 
-    const removeElement = (id) => {
-        dispatch(removeProductAddtocart(id))
-    };
+  const removeElement = (id) => {
+    dispatch(removeProductAddtocart(id))
+  };
 
-    const removeLoginElement = (id) => {
-        CartLoginDelete(id).then((res) => {
-        })
-        dispatch(removeLoginAddtocart(id))
-    };
+  const removeLoginElement = (id) => {
+    CartLoginDelete(id).then((res) => {
+    })
+    dispatch(removeLoginAddtocart(id))
+  };
 
   const handleLoginInc = (id, qty, price) => {
     dispatch(login_qtyIncrement_Decrement({ id, plusMinus: +1 }));
@@ -64,7 +65,7 @@ const Cart = () => {
       price,
       qty,
     };
-    Add_Tocart_Login(data).then((res) => {});
+    Add_Tocart_Login(data).then((res) => { });
   };
 
   const handleLoginDec = (id, qty, price) => {
@@ -74,7 +75,7 @@ const Cart = () => {
       price,
       qty,
     };
-    Add_Tocart_Login(data).then((res) => {});
+    Add_Tocart_Login(data).then((res) => { });
   };
 
   return (
@@ -96,12 +97,12 @@ const Cart = () => {
         />
         {/* cart section start */}
         <motion.header
-        initial={{opacity: 0}}
-        animate={{opacity: 1}}
-        className="header">
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="header">
           <section className="container">
             <div className="table-responsive mt-5">
-              {addto_cart?.length >= 1 || login_cart?.length >= 1 ? (
+              {addto_cart?.length > 0 || login_cart?.length > 0 ? (
                 <>
                   {/* <h2 className="cart__title mb-30 ">Shopping Cart</h2> */}
                   <table className="table table-bordered table-hover">
@@ -131,7 +132,8 @@ const Cart = () => {
                                   </button>
                                   <img
                                     className="border-radius-5"
-                                    src={e?.image}
+                                    // src={e?.image}
+                                    src='https://avatars.mds.yandex.net/i?id=1b4bc532efe7ab812edc8fbb4f3290913c22ff63-9149598-images-thumbs&n=13'
                                     style={{ width: "100px", height: "auto" }}
                                     alt="cart-product"
                                   />
@@ -200,19 +202,20 @@ const Cart = () => {
                                   </button>
                                   <img
                                     className="border-radius-5"
-                                    src={e?.product?.images[0].image}
+                                    // src={e?.product?.images[0].image}
+                                    src='https://avatars.mds.yandex.net/i?id=1b4bc532efe7ab812edc8fbb4f3290913c22ff63-9149598-images-thumbs&n=13'
                                     style={{ width: "100px", height: "auto" }}
                                     alt="cart-product"
                                   />
                                   <aside>
                                     <h3 className="">
                                       <a
-                                        href={`/productsdetail/${e?.product?.part_no}`}
+                                        href={`/productsdetail/${e?.product?.part_name}`}
                                       >
-                                        {e?.product?.name}
+                                        {e?.product?.part_name}
                                       </a>
                                     </h3>
-                                    <p>{e?.product?.desc}</p>
+                                    {/* <p>Part Number:-{e?.product?.pn}</p> */}
                                   </aside>
                                 </td>
                                 <td
@@ -224,7 +227,7 @@ const Cart = () => {
                                   <p className="text-center">
                                     ₹{" "}
                                     {(
-                                      e?.product?.original_price * 1
+                                      e?.price * 1
                                     ).toLocaleString("en-IN")}
                                     /-
                                   </p>
@@ -236,7 +239,7 @@ const Cart = () => {
                                         handleLoginDec(
                                           e?.product_id,
                                           e?.qty - 1,
-                                          e?.product?.original_price
+                                          e?.price
                                         )
                                       }
                                       disabled={e?.qty == 1 ? true : false}
@@ -250,7 +253,7 @@ const Cart = () => {
                                         handleLoginInc(
                                           e?.product_id,
                                           e?.qty + 1,
-                                          e?.product?.original_price
+                                          e?.price
                                         )
                                       }
                                       className="quantity__value quickview__value--quantity increase"
@@ -263,7 +266,7 @@ const Cart = () => {
                                   <p className="">
                                     ₹{" "}
                                     {(
-                                      e?.product?.original_price * e?.qty
+                                      e?.price * e?.qty
                                     ).toLocaleString("en-IN")}
                                     /-
                                   </p>
@@ -329,7 +332,7 @@ const Cart = () => {
               )}
             </div>
           </section>
-          </motion.header>
+        </motion.header>
         {/* Start shipping section */}
         <ShippingAddress />
       </main>

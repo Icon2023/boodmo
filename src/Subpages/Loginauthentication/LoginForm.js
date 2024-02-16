@@ -5,6 +5,7 @@ import { Add_Tocart_Login, CartList, LogIn, WishListLogin } from "../../Services
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addLoginCart, addToWishlist, removeAllAddtocart, removeAllItemWishlist } from "../../store/reducers/ProductSlice";
+import { toast } from "react-toastify";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -43,17 +44,18 @@ const LoginForm = () => {
         }
 
         // get wishlist when user login
-        WishListLogin().then((res)=>{
+        WishListLogin().then((res) => {
           dispatch(addToWishlist(res?.data))
         })
 
-        CartList().then((res)=>{
+        CartList().then((res) => {
           dispatch(addLoginCart(res?.data))
         })
-        
+        toast.success("Login successfully!");
         navigate("/");
       } else {
         setError(res.message);
+        toast.error(res.message || "Your are not login");
       }
     });
   }
@@ -100,19 +102,19 @@ const LoginForm = () => {
                   Remember me
                 </label>
               </div>
-              <button className="account__login--forgot" type="submit">
+              {/* <button className="account__login--forgot" type="submit">
                 Forgot Your Password?
-              </button>
+              </button> */}
             </div>
             <button className="account__login--btn primary__btn">
               Login
             </button>
 
-            <div className="account__login--divide">
+            {/* <div className="account__login--divide">
               <span className="account__login--divide__text">OR</span>
-            </div>
+            </div> */}
 
-            <div className="account__social d-flex justify-content-center mb-15">
+            {/* <div className="account__social d-flex justify-content-center mb-15">
               <a
                 className="account__social--link facebook"
                 target="_blank"
@@ -134,7 +136,7 @@ const LoginForm = () => {
               >
                 Twitter
               </a>
-            </div>
+            </div> */}
           </div>
         </div>
       </form>

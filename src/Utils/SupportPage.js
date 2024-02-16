@@ -8,7 +8,7 @@ const SupportPage = () => {
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => {
-        setOpen(true);
+        setOpen(false);
     };
 
     const handleClose = () => {

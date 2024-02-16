@@ -80,7 +80,8 @@ const WishList = () => {
                                                         </button>
                                                         <img
                                                             className="border-radius-5"
-                                                            src={e?.product?.images[0]?.image}
+                                                            // src={e?.product?.image}
+                                                            src='https://avatars.mds.yandex.net/i?id=1b4bc532efe7ab812edc8fbb4f3290913c22ff63-9149598-images-thumbs&n=13'
                                                             style={{ width: "100px", height: "auto" }}
                                                             alt="cart-product"
                                                         />
@@ -89,7 +90,7 @@ const WishList = () => {
                                                                 <a
                                                                     href={`/productsdetail/${e?.product?.part_no}`}
                                                                 >
-                                                                    {e?.product?.name}
+                                                                    {e?.product?.part_name}
                                                                 </a>
                                                             </h3>
                                                             <p>{e?.desc}</p>
@@ -101,7 +102,7 @@ const WishList = () => {
                                                             textAlign: "center",
                                                         }}
                                                     >
-                                                        <p className="">{e?.product?.selling_price}/-</p>
+                                                        <p className="">{e?.product?.price}/-</p>
                                                     </td>
                                                     <td>
                                                         <div className="quantity__box justify-content-center">
@@ -115,7 +116,7 @@ const WishList = () => {
                                                     <td className="text-center">
                                                         <a
                                                             className="wishlist__cart--btn primary__btn "
-                                                            href={`/productsdetail/${e?.product?.part_no}`}
+                                                            href={`/productsdetail/${e?.product?.pn}`}
                                                         >
                                                             View Details
                                                         </a>

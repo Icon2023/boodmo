@@ -27,9 +27,9 @@ const Review = () => {
       productId: obj?.product_id,
       price: obj?.price,
       qty: obj?.qty,
-      image: obj?.product?.images[0]?.image,
-      name: obj?.product?.name,
-      pn: obj?.product?.part_no
+      // image: obj?.product?.images[0]?.image,
+      name: obj?.product?.part_name,
+      pn: obj?.product?.pn
     };
     productsArray.push(payload);
   });
@@ -173,6 +173,7 @@ const Review = () => {
       }
       console.log(data);
       OrderComplete(data).then((res) => {
+        console.log(res);
         if (res?.success) {
           navigate("/thank-you");
         }
@@ -493,7 +494,8 @@ const Review = () => {
                                     <a className="display-block">
                                       <img
                                         className="display-block border-radius-5"
-                                        src={e?.product?.images[0].image}
+                                        // src={e?.product?.images[0].image}
+                                        src='https://avatars.mds.yandex.net/i?id=1b4bc532efe7ab812edc8fbb4f3290913c22ff63-9149598-images-thumbs&n=13'
                                         alt="cart-product"
                                       />
                                     </a>
@@ -503,7 +505,7 @@ const Review = () => {
                                   </div>
                                   <div className="product__description">
                                     <h4 className="product__description--name">
-                                      <p>{e?.product?.name}</p>
+                                      <p>{e?.product?.part_name}</p>
                                     </h4>
                                   </div>
                                 </div>
