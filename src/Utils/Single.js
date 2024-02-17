@@ -122,12 +122,6 @@ export default function SingleApp() {
                                 <img src={product_4} width={100} />
                             </div>
                         </SwiperSlide>
-                        <SwiperSlide>
-                            <img
-                                src="https://swiperjs.com/demos/images/nature-5.jpg"
-                                width={200}
-                            />
-                        </SwiperSlide>
                     </Swiper>
                 </div>
             </main>

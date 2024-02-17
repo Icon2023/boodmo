@@ -21,11 +21,12 @@ const Footer = () => {
                                     <label>
                                         <input
                                             className="newsletter__subscribe--input"
+                                            style={{color:"black"}}
                                             placeholder=" Enter Your Email"
                                             type="text"
                                         />
                                     </label>
-                                    <button className="newsletter__subscribe--button" type="submit">
+                                    <button className="newsletter__subscribe--button" disabled>
                                         Subscribe Now
                                     </button>
                                 </form>
@@ -174,14 +175,7 @@ const Footer = () => {
                                         </svg>
                                     </h2>
                                     <ul className="footer__widget--menu footer__widget--inner">
-                                        <li className="footer__widget--menu__list">
-                                            <a
-                                                className="footer__widget--menu__text"
-                                                href="/"
-                                            >
-                                                My Account
-                                            </a>
-                                        </li>
+                                      
                                         <li className="footer__widget--menu__list">
                                             <a className="footer__widget--menu__text" href="/">
                                                 Shopping Cart
@@ -198,7 +192,7 @@ const Footer = () => {
                                             </Link>
                                         </li>
                                         <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="/">
+                                            <a className="footer__widget--menu__text">
                                                 Checkout
                                             </a>
                                         </li>
@@ -239,11 +233,6 @@ const Footer = () => {
                                             </Link>
                                         </li>
                                         <li className="footer__widget--menu__list">
-                                            <Link className="footer__widget--menu__text" to="/wishlist">
-                                                Wishlist
-                                            </Link>
-                                        </li>
-                                        <li className="footer__widget--menu__list">
                                             <Link
                                                 className="footer__widget--menu__text"
                                                 to="/privacy-policy"
@@ -252,7 +241,7 @@ const Footer = () => {
                                             </Link>
                                         </li>
                                         <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="/">
+                                            <a className="footer__widget--menu__text">
                                                 Frequently
                                             </a>
                                         </li>
@@ -283,7 +272,7 @@ const Footer = () => {
                                     </h2>
                                     <ul className="footer__widget--menu footer__widget--inner">
                                         <li className="footer__widget--menu__list">
-                                            <Link className="footer__widget--menu__text" to="/">
+                                            <Link className="footer__widget--menu__text">
                                             Articles
                                             </Link>
                                         </li>
@@ -293,7 +282,7 @@ const Footer = () => {
                                             </Link>
                                         </li>
                                         <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="/">
+                                            <a className="footer__widget--menu__text">
                                             Catalogues
                                             </a>
                                         </li>
@@ -301,16 +290,6 @@ const Footer = () => {
                                             <Link className="footer__widget--menu__text" to="/vehicles">
                                             Car Makers
                                             </Link>
-                                        </li>
-                                        <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="/">
-                                            Sitemap
-                                            </a>
-                                        </li>
-                                        <li className="footer__widget--menu__list">
-                                            <a className="footer__widget--menu__text" href="/">
-                                            Sitemap2
-                                            </a>
                                         </li>
                                     </ul>
                                 </div>

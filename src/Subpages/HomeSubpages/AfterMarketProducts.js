@@ -11,7 +11,7 @@ const AfterMarketProducts = () => {
             </h2>
           </div>
           <div className="row">
-            <div className=" col-lg-4 col-sm-6 col-12 ">
+            <div className=" col-lg-4 col-sm-6 col-12 mb-4">
               <div
                 className="swiper-slides shadow_AfterMarket"
                 style={{ minHeight: "100%" }}
@@ -27,7 +27,7 @@ const AfterMarketProducts = () => {
                 </p>
               </div>
             </div>
-            <div className=" col-lg-4 col-sm-6 col-12">
+            <div className=" col-lg-4 col-sm-6 col-12 mb-4">
               <div className="swiper-slides shadow_AfterMarket">
                 <img
                   className="blog__card--thumbnail__img"
@@ -41,7 +41,7 @@ const AfterMarketProducts = () => {
                 </p>
               </div>
             </div>
-            <div className=" col-lg-4 col-sm-6 col-12">
+            <div className=" col-lg-4 col-sm-6 col-12 mb-4">
               <div className="swiper-slides shadow_AfterMarket">
                 <img
                   className="blog__card--thumbnail__img"
@@ -52,7 +52,7 @@ const AfterMarketProducts = () => {
                 <p className="blog__card--desc">
                   We have something for everyone when it comes to aftermarket
                   products. Just apply the "Aftermarket" filter in the catalogue
-                  and check the offers
+                  and check the offers.
                 </p>
               </div>
             </div>

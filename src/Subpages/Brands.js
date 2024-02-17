@@ -21,6 +21,7 @@ const BrandsAll = () => {
       .catch((err) => {
         console.log(err);
       });
+    window.scrollTo(0, 0);
   }, []);
 
   // Function to filter elements based on the first letter
@@ -48,7 +49,7 @@ const BrandsAll = () => {
     groupedElements[firstLetter].push({
       name: element.name,
       product_count: element.product_count,
-      id:element.id,
+      id: element.id,
     });
   });
 
@@ -97,7 +98,7 @@ const BrandsAll = () => {
                       return (
                         <>
                           <li className="brands-list__group__list__item" key={index}>
-                          <Link to={`/brands/${subData?.id}`}>
+                            <Link to={`/brands/${subData?.id}`}>
                               {subData?.name}({subData?.product_count})
                             </Link>
                           </li>

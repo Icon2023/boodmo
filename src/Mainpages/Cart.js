@@ -37,6 +37,7 @@ const Cart = () => {
         console.log(res?.data);
       }
     })
+    window.scrollTo(0, 0);
   }, [])
 
 
@@ -152,7 +153,7 @@ const Cart = () => {
                                     textAlign: "center",
                                   }}
                                 >
-                                  <p className="">₹ {e?.price}/-</p>
+                                  <p className="text-center">₹ {e?.price}/-</p>
                                 </td>
                                 <td>
                                   <div className="quantity__box justify-content-center">
@@ -174,7 +175,7 @@ const Cart = () => {
                                 </td>
                                 <td>
                                   <p className="text-center">
-                                    ₹{" "}
+                                    ₹
                                     {(e?.price * e?.qty).toLocaleString(
                                       "en-IN"
                                     )}
@@ -210,7 +211,7 @@ const Cart = () => {
                                   <aside>
                                     <h3 className="">
                                       <a
-                                        href={`/productsdetail/${e?.product?.part_name}`}
+                                        href={`/productsdetail/${e?.product?.pn}`}
                                       >
                                         {e?.product?.part_name}
                                       </a>
@@ -225,7 +226,7 @@ const Cart = () => {
                                   }}
                                 >
                                   <p className="text-center">
-                                    ₹{" "}
+                                    ₹
                                     {(
                                       e?.price * 1
                                     ).toLocaleString("en-IN")}
@@ -263,8 +264,8 @@ const Cart = () => {
                                   </div>
                                 </td>
                                 <td>
-                                  <p className="">
-                                    ₹{" "}
+                                  <p className="text-center">
+                                    ₹
                                     {(
                                       e?.price * e?.qty
                                     ).toLocaleString("en-IN")}
@@ -287,9 +288,9 @@ const Cart = () => {
                               <p>Total:</p>
                             </td>
                             <td className="text-center">
-                              <p>₹ {countTotal(addto_cart)}/-</p>
+                              <p>₹ {countTotal(addto_cart).toLocaleString("en-IN")}/-</p>
                               <p>₹ 100/-</p>
-                              <p>₹ {countTotal(addto_cart) + 100}/-</p>
+                              <p>₹ {(countTotal(addto_cart) + 100).toLocaleString("en-IN")}/-</p>
                             </td>
                           </tr>
                         </>
@@ -302,9 +303,9 @@ const Cart = () => {
                               <p>Total:</p>
                             </td>
                             <td className="text-center">
-                              <p>₹ {countTotal(login_cart)}/-</p>
+                              <p>₹ {countTotal(login_cart).toLocaleString("en-IN")}/-</p>
                               <p>₹ 100/-</p>
-                              <p>₹ {countTotal(login_cart) + 100}/-</p>
+                              <p>₹ {(countTotal(login_cart) + 100).toLocaleString("en-IN")}/-</p>
                             </td>
                           </tr>
                         </>

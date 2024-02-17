@@ -6,11 +6,15 @@ import { add_ship_details, removeAddress } from '../store/reducers/ProductSlice'
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 import Breadcrumb from '../Utils/breadcrumb';
 import { FaAddressBook } from "react-icons/fa";
+import { IoCloseSharp } from 'react-icons/io5';
+import { Box, Modal } from '@mui/material';
 
 const MyAddress = () => {
     const dispatch = useDispatch();
     const { add_ship } = useSelector((state) => ({ ...state.products }));
     const [isOpen, setIsOpen] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
+    const [openSaveId, setOpenSaveId] = useState('');
 
     const [formValues, setFormValues] = useState({
         fname: '',
@@ -134,29 +138,39 @@ const MyAddress = () => {
         isOpen === false ? setIsOpen(true) : setIsOpen(false)
     }
 
-    const handleAddressRemove = (id) => {
-        dispatch(removeAddress(id))
-        DeleteAddress(id).then((res) => {
+    const handleAddressRemove = () => {
+        dispatch(removeAddress(openSaveId))
+        DeleteAddress(openSaveId).then((res) => {
             console.log(res);
         })
+        setOpenDelete(false);
     }
 
+
+    const handleOpenDelete = (id) => {
+        setOpenDelete(true);
+        setOpenSaveId(id);
+    };
+
+    const handleCloseDelete = () => {
+        setOpenDelete(false);
+    };
     return (
         <div className='margin_top_all'>
             <Breadcrumb
-          subTitle2="My Address"
-          icon2={
-            <FaAddressBook
-              color="#363062"
-              style={{
-                fontSize: "22px",
-                marginRight: "4px",
-                boxSizing: "border-box",
-                cursor:"pointer"
-              }}
+                subTitle2="My Address"
+                icon2={
+                    <FaAddressBook
+                        color="#363062"
+                        style={{
+                            fontSize: "22px",
+                            marginRight: "4px",
+                            boxSizing: "border-box",
+                            cursor: "pointer"
+                        }}
+                    />
+                }
             />
-          }
-        />
 
             {/*  <!-- my account section start --> */}
             <section className="my__account--section section--padding">
@@ -176,7 +190,7 @@ const MyAddress = () => {
                                                 <div className='ship_multiple_box mt-3' key={index}>
                                                     <div className='d-flex justify-content-between'>
                                                         <h3>Name:{e?.first_name}</h3>
-                                                        <AiOutlineClose style={{ cursor: "pointer" }} onClick={() => handleAddressRemove(e?.id)} />
+                                                        <AiOutlineClose style={{ cursor: "pointer" }} onClick={() => handleOpenDelete(e?.id)} />
                                                     </div>
                                                     <p>Address
                                                         : {e?.address}  - {e?.mobile}</p>
@@ -411,7 +425,7 @@ const MyAddress = () => {
                                                                             name='pincode'
                                                                             value={formValues.pincode}
                                                                             onChange={handleChange}
-                                                                           
+
                                                                         />
                                                                     </div>
                                                                     {/* {errors.pincode && <span className="error">{errors.pincode}</span>} */}
@@ -437,7 +451,45 @@ const MyAddress = () => {
                     </div>
                 </div>
             </section>
-
+            <Modal
+                open={openDelete}
+                onClose={handleCloseDelete}
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
+            >
+                <Box
+                    sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: 400,
+                        maxWidth: 380,
+                        bgcolor: "background.paper",
+                        boxShadow: 24,
+                        p: 4,
+                    }}
+                >
+                    <div style={{ position: "relative" }}>
+                        <h2 className="my-5 text-center">Are you sure Delete?</h2>
+                        {/* <p>This is a simple modal example.</p> */}
+                        <IoCloseSharp
+                            style={{
+                                position: "absolute",
+                                right: "-6%",
+                                top: "-30%",
+                                transform: "translate(-50%, -50%)",
+                                cursor: "pointer",
+                                fontSize: "18px",
+                            }}
+                            onClick={handleCloseDelete}
+                        />
+                        <button className="primary__btn w-100" onClick={handleAddressRemove}>
+                            Yes
+                        </button>
+                    </div>
+                </Box>
+            </Modal>
             <ShippingAddress />
 
         </div>

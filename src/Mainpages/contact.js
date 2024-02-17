@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ShippingAddress from "../Subpages/ShippingAddress";
 import Breadcrumb from "../Utils/breadcrumb";
 import { LuContact } from "react-icons/lu";
 
 const Contact = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [])
   return (
     <div>
       <main className="main__content_wrapper">
@@ -16,7 +19,7 @@ const Contact = () => {
                 fontSize: "22px",
                 marginRight: "4px",
                 boxSizing: "border-box",
-                cursor:"pointer"
+                cursor: "pointer"
               }}
             />
           }

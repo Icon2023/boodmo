@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ShippingAddress from "../Subpages/ShippingAddress";
 import { GoHome } from "react-icons/go";
 import { MdPrivacyTip } from "react-icons/md";
@@ -6,6 +6,9 @@ import Breadcrumb from "../Utils/breadcrumb";
 import { motion } from "framer-motion";
 
 const PrivacyPolicy = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [])
   return (
     <>
       <main className="margin_top_all">

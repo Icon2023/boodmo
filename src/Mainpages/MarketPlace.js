@@ -134,7 +134,7 @@ const MarketPlace = () => {
                                                     </p>
                                                     <button>
                                                         <a href={`market-places/auto/${e?.id}`} style={{ color: "white" }}>
-                                                            Buy Now
+                                                        View Product
                                                         </a>
                                                     </button>
                                                 </div>

@@ -465,6 +465,7 @@ const BrandProductsView = () => {
                                   data-toggle="tab"
                                   data-target="#product_grid"
                                   onClick={handleGridClick}
+                                  title="Grid"
                                 >
                                   <CgMenuGridR />
                                 </button>
@@ -476,6 +477,7 @@ const BrandProductsView = () => {
                                   data-toggle="tab"
                                   data-target="#product_list"
                                   onClick={handleTfiClick}
+                                  title="List"
                                 >
                                   <TfiMenuAlt />
                                 </button>

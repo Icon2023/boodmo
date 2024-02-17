@@ -201,9 +201,9 @@ const HomeSilder = () => {
               navigation={false}
               modules={[Autoplay, Pagination, Navigation]}
             >
-              {sliderData?.map((e) => {
+              {sliderData?.map((e, index) => {
                 return (
-                  <SwiperSlide>
+                  <SwiperSlide key={index}>
                     <div className="swiper-slide ">
                       <div className="hero__slider--items style4 slider4__items--bg1">
                         <div className="container">
@@ -265,7 +265,7 @@ const HomeSilder = () => {
           <div className="section__heading style2 text-center mb-30">
             <h2 className="section__heading--maintitle">Search by Vehicle</h2>
             <p className="section__heading--desc">
-              Filter your results by entering your Vehicle to ensure you find
+              Filter your results by entering your vehicle to ensure you find
               the parts that fit.
             </p>
             <div className="number_plate">
@@ -314,7 +314,7 @@ const HomeSilder = () => {
                   styles={customStyles}
                   placeholder="Select Car Maker"
                   onChange={handleChange}
-                  isSearchable={true}
+                  isSearchable={false}
                   autoFocus={true}
                 />
               </div>
@@ -324,7 +324,7 @@ const HomeSilder = () => {
                     value: e && e.id ? e.id : "",
                     label: e && e.name ? e.name : "",
                   }))}
-                  // isSearchable={true}
+                  isSearchable={false}
                   styles={customStyles}
                   placeholder="Select Model"
                   isDisabled={carModel.length <= 0 ? true : false}
@@ -343,6 +343,7 @@ const HomeSilder = () => {
                   isDisabled={carValModel.length <= 0 ? true : false}
                   onChange={handleChange2}
                   autoFocus={true}
+                  isSearchable={false}
                 />
               </div>
               <div className="testimonial">

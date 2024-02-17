@@ -5,29 +5,29 @@ import { addCategory } from "../../store/reducers/ProductSlice";
 import { motion } from "framer-motion";
 
 const ShopCategory = () => {
-    const dispatch = useDispatch();
-    const { category_list } = useSelector((state) => ({ ...state.products }));
+  const dispatch = useDispatch();
+  const { category_list } = useSelector((state) => ({ ...state.products }));
 
-    const [displayedCategory, setDisplayedCategory] = useState([]);
-    const [visibleItemCount, setVisibleItemCount] = useState(5);
+  const [displayedCategory, setDisplayedCategory] = useState([]);
+  const [visibleItemCount, setVisibleItemCount] = useState(5);
 
-    const remainingItemCount = category_list.length - visibleItemCount;
+  const remainingItemCount = category_list.length - visibleItemCount;
 
-    useEffect(() => {
-        Categories().then((res) => {
-            if (res?.success) {
-                dispatch(addCategory(res?.data))
-                setDisplayedCategory(res?.data.slice(0, visibleItemCount));
-            }
-        }).catch((e) => {
-            console.log(e);
-        })
-    }, [])
+  useEffect(() => {
+    Categories().then((res) => {
+      if (res?.success) {
+        dispatch(addCategory(res?.data))
+        setDisplayedCategory(res?.data.slice(0, visibleItemCount));
+      }
+    }).catch((e) => {
+      console.log(e);
+    })
+  }, [])
 
-    const handleLoadMore = () => {
-        setVisibleItemCount(category_list.length);
-        setDisplayedCategory(category_list);
-    };
+  const handleLoadMore = () => {
+    setVisibleItemCount(category_list.length);
+    setDisplayedCategory(category_list);
+  };
 
   return (
     <>
@@ -69,7 +69,7 @@ const ShopCategory = () => {
           <div className="load_btn">
             {remainingItemCount > 0 && (
               // <button onClick={handleLoadMore} className="load_more">
-              //   Load More
+                //   Load More
               // </button>
               <motion.button
                 type="button"
@@ -79,7 +79,7 @@ const ShopCategory = () => {
               >
                 Load More
               </motion.button>
-            )}
+                       )}
           </div>
         </div>
       </section>

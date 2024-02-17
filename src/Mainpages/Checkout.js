@@ -6,7 +6,8 @@ import { addLoginCart, add_coupon_code, add_ship_details, coupon_Pricevalue, rem
 import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 import Breadcrumb from '../Utils/breadcrumb';
-import { IoBarcodeOutline } from "react-icons/io5";
+import { IoBarcodeOutline, IoCloseSharp } from "react-icons/io5";
+import { Box, Modal } from '@mui/material';
 
 const Checkout = () => {
     const dispatch = useDispatch();
@@ -33,6 +34,8 @@ const Checkout = () => {
     const [selectedAddress, setSelectedAddress] = useState(0);
     const [isOpenDiscount, setIsOpenDiscount] = useState(false);
     const [errors, setErrors] = useState('');
+    const [openDelete, setOpenDelete] = useState(false);
+    const [openSaveId, setOpenSaveId] = useState('');
 
     const countTotal = (items) => items.reduce((acc, curr) => acc + curr.qty * curr.price, 0);
     const coupon_value = ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2)
@@ -191,11 +194,12 @@ const Checkout = () => {
         isOpen === false ? setIsOpen(true) : setIsOpen(false);
     };
 
-    const handleAddressRemove = (id) => {
-        dispatch(removeAddress(id));
-        DeleteAddress(id).then((res) => {
+    const handleAddressRemove = () => {
+        dispatch(removeAddress(openSaveId));
+        DeleteAddress(openSaveId).then((res) => {
             console.log(res);
         });
+        setOpenDelete(false);
     };
 
     const handleChangeForm = (event) => {
@@ -207,23 +211,32 @@ const Checkout = () => {
         setErrors("");
     };
 
+    const handleOpenDelete = (id) => {
+        setOpenDelete(true);
+        setOpenSaveId(id);
+    };
+
+    const handleCloseDelete = () => {
+        setOpenDelete(false);
+    };
+
     return (
         <>
             <main className="margin_top_all">
                 <Breadcrumb
-          subTitle2="Checkout"
-          icon2={
-            <IoBarcodeOutline
-              color="#363062"
-              style={{
-                fontSize: "22px",
-                marginRight: "4px",
-                boxSizing: "border-box",
-                cursor:"pointer"
-              }}
-            />
-          }
-        />
+                    subTitle2="Checkout"
+                    icon2={
+                        <IoBarcodeOutline
+                            color="#363062"
+                            style={{
+                                fontSize: "22px",
+                                marginRight: "4px",
+                                boxSizing: "border-box",
+                                cursor: "pointer"
+                            }}
+                        />
+                    }
+                />
                 {/* Start checkout page area */}
                 {login_cart?.length >= 1 ?
                     <div className="checkout__page--area section--padding">
@@ -274,7 +287,7 @@ const Checkout = () => {
                                                             <div className='address-item__body'>
                                                                 <AiOutlineClose
                                                                     style={{ cursor: "pointer", textAlign: "end", position: "absolute", right: "2%", fontSize: "16px" }}
-                                                                    onClick={() => handleAddressRemove(e?.id)}
+                                                                    onClick={() => handleOpenDelete(e?.id)}
                                                                 />
                                                                 <div className='address-item__title'>{e?.first_name} {e?.last_name}</div>
                                                                 <div className='address-item__user'>{e?.address_title}</div>
@@ -373,7 +386,7 @@ const Checkout = () => {
                                                                                     placeholder="Mobile Number"
                                                                                     type="text"
                                                                                     name='mobile'
-                                                                                    maxlength = "10"
+                                                                                    maxlength="10"
                                                                                     value={formValues.mobile}
                                                                                     onChange={handleChangeForm}
                                                                                 />
@@ -387,7 +400,7 @@ const Checkout = () => {
                                                                                 className="checkout__input--label mb-0"
                                                                                 htmlFor="input3"
                                                                             >
-                                                                                Address Title
+                                                                                Land Mark
                                                                                 <span className="checkout__input--label__star">
                                                                                     *
                                                                                 </span>
@@ -419,7 +432,7 @@ const Checkout = () => {
                                                                             <div className={`${errors.address ? 'error' : ''}`}>
                                                                                 <input
                                                                                     className="checkout__input--field border-radius-5"
-                                                                                    placeholder="Address1"
+                                                                                    placeholder="Address"
                                                                                     type="text"
                                                                                     name='address'
                                                                                     value={formValues.address}
@@ -520,9 +533,9 @@ const Checkout = () => {
                                                                                 <input
                                                                                     className="checkout__input--field border-radius-5"
                                                                                     placeholder="Pin code"
-                                                                                    type="text"
+                                                                                    type="number"
                                                                                     name='pincode'
-                                                                                    maxlength = "6"
+                                                                                    maxlength="6"
                                                                                     value={formValues.pincode}
                                                                                     onChange={handleChangeForm}
                                                                                 />
@@ -586,7 +599,7 @@ const Checkout = () => {
                                                                         </div>
                                                                     </td>
                                                                     <td className="cart__table--body__list">
-                                                                        <span className="cart__price">{e?.price * e?.qty}/-</span>
+                                                                        <span className="cart__price">{(e?.price * e?.qty).toLocaleString("en-IN")}/-</span>
                                                                     </td>
                                                                 </tr>
                                                             )
@@ -625,7 +638,7 @@ const Checkout = () => {
                                                         </td>
                                                         <td className="checkout__total--amount text-right">
                                                             {
-                                                                <h4>₹{countTotal(login_cart)}/-</h4>
+                                                                <h4>₹{countTotal(login_cart).toLocaleString("en-IN")}/-</h4>
                                                             }
                                                         </td>
                                                     </tr>
@@ -708,7 +721,45 @@ const Checkout = () => {
                         />
                     </>
                 }
-
+                <Modal
+                    open={openDelete}
+                    onClose={handleCloseDelete}
+                    aria-labelledby="modal-title"
+                    aria-describedby="modal-description"
+                >
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            width: 400,
+                            maxWidth: 380,
+                            bgcolor: "background.paper",
+                            boxShadow: 24,
+                            p: 4,
+                        }}
+                    >
+                        <div style={{ position: "relative" }}>
+                            <h2 className="my-5 text-center">Are you sure Delete?</h2>
+                            {/* <p>This is a simple modal example.</p> */}
+                            <IoCloseSharp
+                                style={{
+                                    position: "absolute",
+                                    right: "-6%",
+                                    top: "-30%",
+                                    transform: "translate(-50%, -50%)",
+                                    cursor: "pointer",
+                                    fontSize: "18px",
+                                }}
+                                onClick={handleCloseDelete}
+                            />
+                            <button className="primary__btn w-100" onClick={handleAddressRemove}>
+                                Yes
+                            </button>
+                        </div>
+                    </Box>
+                </Modal>
                 <ShippingAddress />
             </main>
         </>

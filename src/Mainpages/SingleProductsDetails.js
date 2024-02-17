@@ -218,7 +218,7 @@ const SingleProductsDetails = () => {
                 <section className="product__details--section section--padding">
                     <div className="container">
                         <div className="row">
-                            <div className="col-md-6">
+                            <div className="col-md-6" style={{position:"relative"}}>
                                 {/* <Carousel
                                     selectedItem={currentImageIndex}
                                     // onClickItem={(index) => openLightbox(index)}
@@ -255,7 +255,14 @@ const SingleProductsDetails = () => {
                                             </div>
                                         ))}
                                 </Carousel> */}
-                                <SingleApp />
+                                {
+                                    add_Details?.image ?
+                                        <div>
+                                            <img src={add_Details?.image} className="main_img_single" alt="" srcset="" />
+                                        </div>
+                                        :
+                                        <img src="https://pngimg.com/uploads/gear/gear_PNG56.png" alt="" srcset="" />
+                                }
                             </div>
                             {/* <div className="col-md-6">
                                 <div className="product__details--info">
@@ -596,56 +603,14 @@ const SingleProductsDetails = () => {
                                 </div>
                             </div> */}
                             <div className="col-md-6">
-                                <div className="part-info-top">
-                                        <img
-                                            src="https://boodmo.com/media/images/brand/2fe2400.webp"
-                                            alt=""
-                                        />
-                                    <div className="ng-star-inserted">
-                                        <div className="part-info-delivery">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="49"
-                                                height="42"
-                                                viewBox="0 0 49 42"
-                                                class="part-info-delivery__icon"
-                                            >
-                                                <clipPath id="clipPathDeliverySmall">
-                                                    <path
-                                                        fill="#59d8fd"
-                                                        d="M35,38.5a3.5,3.5,0,0,1,6.991-.244,1.166,1.166,0,0,0-.023.244,1.133,1.133,0,0,0,.023.242A3.5,3.5,0,0,1,35,38.5Zm-28,0a3.5,3.5,0,0,1,6.991-.244,1.17,1.17,0,0,0-.023.244,1.137,1.137,0,0,0,.023.242A3.5,3.5,0,0,1,7,38.5Zm37.215,1.166a5.774,5.774,0,0,0,.118-1.166,5.834,5.834,0,1,0-11.667,0,5.774,5.774,0,0,0,.118,1.166H16.218a5.927,5.927,0,0,0,.115-1.166,5.833,5.833,0,1,0-11.665,0,5.931,5.931,0,0,0,.115,1.166H3.5a3.5,3.5,0,0,1-3.5-3.5V30.334H49v5.832a3.5,3.5,0,0,1-3.5,3.5Zm-39.433,0ZM35,28V21H49v7ZM0,28V7A7,7,0,0,1,7,0H25.668a7,7,0,0,1,7,7V28Zm35-9.334V7h1.243a8.163,8.163,0,0,1,6.445,3.152l4.593,5.9a8.16,8.16,0,0,1,1.359,2.61Z"
-                                                        transform="translate(0 -0.19)"
-                                                    ></path>
-                                                </clipPath>
-                                                <g transform="translate(-220 -361.81)">
-                                                    <g
-                                                        clip-path="url(#clipPathDeliverySmall)"
-                                                        transform="translate(220 362)"
-                                                    >
-                                                        <rect
-                                                            fill="#59d8fd"
-                                                            width="72"
-                                                            height="65"
-                                                            transform="translate(-12 -11.19)"
-                                                        ></rect>
-                                                    </g>
-                                                </g>
-                                            </svg>
-                                            <span className="ng-star-inserted">Free Delivery</span>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div className="product__details--info">
-                                    {/* <h2 className="product__details--info__title mb-15 ">
-                    {add_Details?.part_name}
-                  </h2> */}
                                     <h2 class="product-title">{add_Details?.part_name}</h2>
                                     <span class="badge text-bg-danger rounded-pill">Primary</span>
                                     <div className="product__details--info__price mb-12">
                                         <span className="part-info-price__current">
                                             ₹{add_Details?.price}/-
                                         </span>
-                                        <del className="old__price">MRP{add_Details?.price * 1.2}/-</del>
+                                        <del className="old__price">MRP {(add_Details?.price * 1.2).toFixed(2)}/-</del>
                                     </div>
                                     <ul className="rating product__card--rating mb-15 d-flex">
                                         <li className="rating__list">
@@ -706,33 +671,29 @@ const SingleProductsDetails = () => {
                                                 )}
                                             </span>
                                         </li>
-                                        {/* <li>
-                      <span className="rating__review--text">
-                        {add_Details?.review_count} Review
-                      </span>
-                    </li> */}
                                         <div class="product-rating">
                                             <i class="fas fa-star"></i>
                                             <i class="fas fa-star"></i>
                                             <i class="fas fa-star"></i>
                                             <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half-alt"></i>
+                                            <i class="fas fa-star-half-alt"></i> &nbsp;&nbsp;
                                             <span>4.7(21)</span>
                                         </div>
                                     </ul>
                                     <div class="product-detail">
                                         <h2>about this item: </h2>
-                                        <p>
-                                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                            Illo eveniet veniam tempora fuga tenetur placeat sapiente
-                                            architecto illum soluta consequuntur, aspernatur quidem at
-                                            sequi ipsa!
-                                        </p>
-                                        <p>
-                                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                            Consequatur, perferendis eius. Dignissimos, labore
-                                            suscipit. Unde.
-                                        </p>
+                                        {
+                                            add_Details?.description ?
+                                                <p>
+                                                    {add_Details?.description}
+                                                </p> :
+                                                <p>
+                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                                    Illo eveniet veniam tempora fuga tenetur placeat sapiente
+                                                    architecto illum soluta consequuntur, aspernatur quidem at
+                                                    sequi ipsa!
+                                                </p>
+                                        }
                                     </div>
                                     <p className="product__details--info__desc mb-15">
                                         {add_Details?.short_desc}
@@ -854,7 +815,7 @@ const SingleProductsDetails = () => {
                                                 </>
                                             )}
                                         </div>
-                                        <div className="product__variant--list mb-15 d-flex">
+                                        {/* <div className="product__variant--list mb-15 d-flex">
                                             <div className="product__details--info__meta grid_product_details">
                                                 <p className="product__details--info__meta--list">
                                                     <div className="fw-light">Barcode:</div>
@@ -866,14 +827,14 @@ const SingleProductsDetails = () => {
                                                 </p>
                                                 <p className="product__details--info__meta--list">
                                                     <div className="fw-light">Vendor:</div>
-                                                    <span>{add_Details?.vendor_id}</span>
+                                                    <span>{add_Details?.vendor_id}123</span>
                                                 </p>
                                                 <p className="product__details--info__meta--list">
                                                     <div className="fw-light">Type:</div>
                                                     <div className="fw-bold">Auto Parts</div>
                                                 </p>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="quickview__social d-flex align-items-center mb-15">
                                         <label className="quickview__social--title">
@@ -1017,13 +978,49 @@ const SingleProductsDetails = () => {
                                                             </h2>
                                                         </div>
                                                         <div className="reviews__comment--area">
-                                                            {
+                                                            <div className="reviews__comment--list d-flex">
+                                                                <div className="reviews__comment--thumb">
+                                                                    <img
+                                                                        src="assets/img/other/comment-thumb1.webp"
+                                                                        alt="comment-thumb"
+                                                                    />
+                                                                </div>
+                                                                <div className="reviews__comment--content">
+                                                                    <div className="reviews__comment--top d-flex justify-content-between">
+                                                                        <div className="reviews__comment--top__left">
+                                                                            <h3 className="reviews__comment--content__title h4">
+                                                                                Rino Shah
+                                                                            </h3>
+                                                                            <ul className="rating d-flex">
+                                                                                <li className="rating__list">
+                                                                                    <span className="rating__icon">
+                                                                                        <AiFillStar />
+                                                                                        <AiFillStar />
+                                                                                        <AiFillStar />
+                                                                                        <AiFillStar />
+                                                                                        <AiFillStar />
+                                                                                    </span>
+                                                                                </li>
+
+                                                                            </ul>
+                                                                        </div>
+                                                                        <span className="reviews__comment--content__date">
+                                                                            13/02/2023
+                                                                        </span>
+                                                                    </div>
+                                                                    <p className="reviews__comment--content__desc">
+                                                                        Good Products
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            {/* {
                                                                 add_Details?.reviews?.map((e, index) => {
                                                                     return (
                                                                         <div className="reviews__comment--list d-flex" key={index}>
-                                                                            <div className="reviews__comment--thumb">
-                                                                                <img
-                                                                                    src="assets/img/other/comment-thumb1.webp"
+                                                                        <div className="reviews__comment--thumb">
+                                                                        <img
+                                                                        src="assets/img/other/comment-thumb1.webp"
+                                                          
                                                                                     alt="comment-thumb"
                                                                                 />
                                                                             </div>
@@ -1112,8 +1109,9 @@ const SingleProductsDetails = () => {
                                                                         </div>
                                                                     )
                                                                 })
-                                                            }
+                                                            } */}
                                                         </div>
+
                                                     </div>
                                                 </> :
                                                 <>
@@ -1125,21 +1123,21 @@ const SingleProductsDetails = () => {
                                                                         <strong>Part Number</strong>
                                                                     </span>
                                                                     <span className="info__list--item-content">
-                                                                        {add_Details?.part_no}
+                                                                        {add_Details?.pn}
                                                                     </span>
                                                                 </li>
                                                                 <li className="additional__info_list--item">
                                                                     <span className="info__list--item-head">
                                                                         <strong>Manufacturer</strong>
                                                                     </span>
-                                                                    <span className="info__list--item-content">{add_Details?.manufacturer}</span>
+                                                                    <span className="info__list--item-content">{add_Details?.manufacturer}Honda</span>
                                                                 </li>
-                                                                <li className="additional__info_list--item">
+                                                                {/* <li className="additional__info_list--item">
                                                                     <span className="info__list--item-head">
                                                                         <strong>Brand</strong>
                                                                     </span>
-                                                                    <span className="info__list--item-content">{add_Details?.brand?.name}</span>
-                                                                </li>
+                                                                    <span className="info__list--item-content">{add_Details?.brand?.name}Ola</span>
+                                                                </li> */}
                                                                 <li className="additional__info_list--item">
                                                                     <span className="info__list--item-head">
                                                                         <strong>Guarantee</strong>

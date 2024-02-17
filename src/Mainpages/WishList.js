@@ -19,6 +19,7 @@ const WishList = () => {
                 dispatch(addToWishlist(res?.data))
             }
         })
+        window.scrollTo(0, 0);
     }, [])
 
     const removeElement = (id) => {
@@ -88,7 +89,7 @@ const WishList = () => {
                                                         <aside>
                                                             <h3 className="">
                                                                 <a
-                                                                    href={`/productsdetail/${e?.product?.part_no}`}
+                                                                    href={`/productsdetail/${e?.product?.pn}`}
                                                                 >
                                                                     {e?.product?.part_name}
                                                                 </a>
@@ -107,9 +108,10 @@ const WishList = () => {
                                                     <td>
                                                         <div className="quantity__box justify-content-center">
                                                             <span className="in__stock text__secondary">
-                                                                {e?.product?.out_of_stock === 0
+                                                                {/* {e?.product?.out_of_stock === 0
                                                                     ? " In stock"
-                                                                    : "Out Of Stock"}
+                                                                    : "Out Of Stock"} */}
+                                                                    In stock
                                                             </span>
                                                         </div>
                                                     </td>

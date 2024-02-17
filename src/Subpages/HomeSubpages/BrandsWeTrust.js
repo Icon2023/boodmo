@@ -42,6 +42,8 @@ const BrandsWeTrust = () => {
           slidesToShow: 2,
           slidesToScroll: 1,
           initialSlide: 2,
+          infinite: true,
+
         },
       },
       {
@@ -49,6 +51,7 @@ const BrandsWeTrust = () => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+          infinite: true,
         },
       },
     ],
@@ -58,22 +61,25 @@ const BrandsWeTrust = () => {
     <div className="container my-5" style={{ position: "relative" }}>
       <HeadingSection title="Brands we Trust" link="/brands" />
       <Slider {...settings}>
-        {brands?.map((brand, index) => {
-          return (
-            <div key={index}>
-              <div style={{ display: "flex", alignItems: "center" }} >
-                {/* <a href={`/brands/${brand?.id}`}> */}
+        {
+          brands?.map((brand, index) => {
+            return (
+              <div key={index}>
+                <div style={{ display: "flex", alignItems: "center" }} >
+                  {/* <a href={`/brands/${brand?.id}`}> */}
                   <img
                     src={brand?.image}
-                    style={{height:"100px"}}
+                    style={{ height: "100px" }}
                     className="center-img"
                   />
-                {/* </a> */}
+                  {/* </a> */}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        }
       </Slider>
+
     </div>
   );
 };

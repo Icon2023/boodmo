@@ -84,6 +84,7 @@ const Header = () => {
             navigate(`/search/${search}`)
             setOpen(!open);
         }
+        window.location.reload();
     };
 
     const handleOpenDelete = () => {
@@ -102,12 +103,12 @@ const Header = () => {
             >
                 <div className="predictive__search--box active">
                     <div className="predictive__search--box__inner">
-                        <h2 className="predictive__search--title">Search Products</h2>
+                        <h2 className="predictive__search--title">Search Part Number</h2>
                         <form className="predictive__search--form">
                             <label>
                                 <input
                                     className="predictive__search--input"
-                                    placeholder="Search Here"
+                                    placeholder="Search Part Number"
                                     type="text"
                                     value={search}
                                     onChange={handleSearchClick}
@@ -322,7 +323,7 @@ const Header = () => {
                                         <li className="header__menu--items">
                                             <a className={`header__menu--link ${window.location.pathname == "/market-place" || pathName.startsWith('/market-places/auto') || pathName.startsWith('/market-places/car') ? "active" : ""
                                                 }`} href="/market-place">
-                                                MarketPlace
+                                                Market Place
                                             </a>
                                         </li>
                                         <li className="header__menu--items">
@@ -452,11 +453,21 @@ const Header = () => {
                                                 <Link className="header__account--btn" to="/login">
                                                     <IoMdContact style={{ fontSize: "28px" }} />
                                                 </Link>
-                                                : <a className="header__account--btn" onClick={handleOpenDelete}>
-                                                    <AiOutlineLogout style={{ fontSize: "28px", color: "#363062" }} />
+                                                : <a className="header__account--btn" title='Logout' onClick={handleOpenDelete}>
+                                                    <AiOutlineLogout style={{ fontSize: "28px", color: "red" }} />
                                                 </a>
                                         }
                                     </li>
+                                    {/* <li className="header__account--items d-none d-lg-block">
+                                        {
+                                            user?.success !== true ?
+                                                ""
+                                                :
+                                                <div className='user_icon_img'>
+                                                    <img src="https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png" alt="" srcset="" />
+                                                </div>
+                                        }
+                                    </li> */}
                                 </ul>
                             </div>
                         </div>
@@ -493,9 +504,11 @@ const Header = () => {
                                 <span className="offcanvas__stikcy--toolbar__label">Market Place</span>
                             </a>
                         </li>
-                        <li className="offcanvas__stikcy--toolbar__list ">
-                            <AiOutlineSearch style={{ fontSize: "22px" }} onClick={handleToggleDrawer} />
-                            <span className="offcanvas__stikcy--toolbar__label">Search</span>
+                        <li className="offcanvas__stikcy--toolbar__lis ">
+                            <a className="offcanvas__stikcy--toolbar__btn" href="/cart">
+                                <AiOutlineShoppingCart style={{ fontSize: "22px" }} />
+                                <span className="offcanvas__stikcy--toolbar__label">Cart</span>
+                            </a>
                         </li>
                         <li className="offcanvas__stikcy--toolbar__list">
                             <Link className="offcanvas__stikcy--toolbar__btn" to="/wishlist">
@@ -597,22 +610,22 @@ const Header = () => {
                             <nav className="offcanvas__menu">
                                 <ul className="offcanvas__menu_ul">
                                     <li className="offcanvas__menu_li">
-                                        <Link className="offcanvas__menu_item" to="/">
+                                        <Link className="offcanvas__menu_item" to="/" onClick={toggleDrawer}>
                                             Home
                                         </Link>
                                     </li>
                                     <li className="offcanvas__menu_li">
-                                        <Link className="offcanvas__menu_item" to="/market-place">
+                                        <Link className="offcanvas__menu_item" to="/market-place" onClick={toggleDrawer}>
                                             Market Place
                                         </Link>
                                     </li>
                                     <li className="offcanvas__menu_li">
-                                        <Link className="offcanvas__menu_item" to="/">
+                                        <Link className="offcanvas__menu_item" to="/" onClick={toggleDrawer}>
                                             My Account
                                         </Link>
                                     </li>
                                     <li className="offcanvas__menu_li">
-                                        <Link className="offcanvas__menu_item" to="/privacy-policy">
+                                        <Link className="offcanvas__menu_item" to="/privacy-policy" onClick={toggleDrawer}>
                                             Privacy Policy
                                         </Link>
                                     </li>
@@ -649,15 +662,15 @@ const Header = () => {
                                                             />
                                                         </svg>
                                                     </span>
-                                                    <span className="offcanvas__account--items__label">
+                                                    <span className="offcanvas__account--items__label" onClick={toggleDrawer}>
                                                         Login / Register
                                                     </span>
                                                 </Link>
                                             </>
                                             :
                                             <>
-                                                <Link onClick={handleLogout}>
-                                                    <span className="offcanvas__account--items__label">
+                                                <Link onClick={handleOpenDelete}>
+                                                    <span className="offcanvas__account--items__label" onClick={toggleDrawer}>
                                                         Logout
                                                     </span>
                                                 </Link>

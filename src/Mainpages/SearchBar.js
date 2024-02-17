@@ -15,11 +15,13 @@ const SearchBar = () => {
         SearchProduct(pn).then((res) => {
             if (res?.success) {
                 setSearchPart(res?.data)
+                console.log(res?.data);
 
             } else {
                 setError(res?.message)
             }
         })
+        window.scrollTo(0, 0);
     }, [])
 
     const handleClick = (part_no) => {
@@ -45,30 +47,18 @@ const SearchBar = () => {
                         }
                     />
                     <div className='mt-4 mb-4'>
-                        {/* {
-                            searchpart?.map((e, index) => {
-                                return (
-                                    <div className='search_model'>
-                                        <div>
-                                            <img src="https://avatars.mds.yandex.net/get-altay/2776652/2a00000172e6dcd69e9339e08da164431209/XXL" alt="" />
-                                        </div>
-                                        <div className='mt-1' key={index}>
-                                            <p style={{ fontSize: "24px", color: "#12477a" }}>{e?.part_name}</p>
-                                            <p>Part Number:- {e?.pn}</p>
-                                            <p>₹ {e?.price}/-</p>
-                                            <button onClick={() => handleClick(e?.pn)}>View Details</button>
-                                        </div>
-                                    </div>
-                                )
-                            })
-                        } */}
                         <div className="row card_hover" >
                             {
                                 searchpart?.map((e, index) => {
                                     return (
                                         <a href={`/productsdetail/${e?.pn}`} className="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 px-2" key={index}>
                                             <div className="pro_card">
-                                                <img src="https://avatars.mds.yandex.net/get-altay/2776652/2a00000172e6dcd69e9339e08da164431209/XXL" alt="" />
+                                                {
+                                                    e?.image ?
+                                                        <img src={e?.image} alt="" />
+                                                        :
+                                                        <img src="https://pngimg.com/uploads/gear/gear_PNG56.png" alt="" />
+                                                }
                                                 <hr />
                                                 <h2 className="ps-3 categories__content--title" >
                                                     {e?.part_name}
@@ -77,7 +67,7 @@ const SearchBar = () => {
                                                     Part Number:- {e?.pn}
                                                 </p>
                                                 <button onClick={() => handleClick(e?.pn)}>
-                                                    Buy Now
+                                                    View Details
                                                 </button>
                                             </div>
                                         </a>

@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ShippingAddress from "../Subpages/ShippingAddress";
 
 const About = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [])
   return (
     <div>
       <main className="main__content_wrapper">

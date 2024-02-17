@@ -2073,7 +2073,7 @@ body.overlay__active::before {
 }
 
 .main__logo--img {
-    width: 200px;
+    width: 170px;
     height: 100%;
     display: block;
 }
@@ -2789,7 +2789,7 @@ body.overlay__active::before {
 }
 
 .header__menu--wrapper {
-    gap: 1.3rem;
+    /* gap: 1.3rem; */
 }
 
 @media only screen and (min-width: 1200px) {
@@ -4823,11 +4823,10 @@ input[type="number"]::-webkit-outer-spin-button {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-shadow: 0 2px 22px rgba(0, 0, 0, 0.1);
-    box-shadow: 0 2px 22px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
+    gap: 10px;
 }
 
 .categories__shop--card {
@@ -4835,7 +4834,9 @@ input[type="number"]::-webkit-outer-spin-button {
     border-bottom: 1px solid var(--border-color);
     -webkit-transition: var(--transition);
     transition: var(--transition);
-    width: 50%;
+    width: calc(50% - 10px);
+    -webkit-box-shadow: 0 2px 22px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 22px rgba(0, 0, 0, 0.1);
 }
 
 .categories__shop--card:hover {
@@ -4844,13 +4845,13 @@ input[type="number"]::-webkit-outer-spin-button {
 
 @media only screen and (min-width: 480px) {
     .categories__shop--card {
-        width: 33.33%;
+        width: calc(33.33% - 10px);
     }
 }
 
 @media only screen and (min-width: 768px) {
     .categories__shop--card {
-        width: 25%;
+        width: calc(25% - 10px);
     }
 }
 
@@ -8575,7 +8576,7 @@ input.quickview__value--number {
         flex-wrap: wrap;
         -webkit-box-pack: center !important;
         -ms-flex-pack: center !important;
-        justify-content: center !important;
+        /* justify-content: center !important; */
         gap: 2rem;
     }
 }
@@ -8591,7 +8592,7 @@ input.quickview__value--number {
         gap: 2rem;
         -webkit-box-pack: center;
         -ms-flex-pack: center;
-        justify-content: center;
+        /* justify-content: center; */
     }
 }
 
@@ -8625,6 +8626,13 @@ input.quickview__value--number {
     cursor: pointer;
     border-radius: 0.5rem;
     background: var(--body-background-color);
+    width: 185px;
+}
+
+.user_icon_img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
 }
 
 .select.shop__header--select::before {
@@ -13925,7 +13933,7 @@ input[type="radio"]:checked {
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border-radius: 10px;
     padding: 10px;
-    height: 350px;
+    height: 370px;
 }
 
 .pro_card p {
@@ -14188,9 +14196,9 @@ select {
 
 /* header responsive fix */
 @media screen and (max-width: 1096px) and (min-width: 992px) {
-    .header__menu--wrapper {
+    /* .header__menu--wrapper {
         gap: 0.5rem;
-    }
+    } */
 
     .header__menu--link {
         font-size: 12px;
@@ -14431,4 +14439,55 @@ select {
 .single_main img {
     display: block !important;
     margin: 0 auto !important;
+}
+
+@media (max-width: 991px) {
+    .scroll-to-top {
+        bottom: 71px !important;
+    }
+}
+
+/* ====================================================================================================================================
+================================================================================================================================= */
+/* slide text  */
+.slider__maintitle {
+    font-size: 40px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-image: linear-gradient(60deg, #E21143, #FFB03A);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+}
+
+/* tooltip grid list  */
+.product__grid--column__buttons--icons {
+    position: relative;
+    display: inline-block;
+}
+
+.product__grid--column__buttons--icons:hover::after {
+    content: attr(title);
+    position: absolute;
+    background-color: #363062;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.product__grid--column__buttons--icons:hover::after {
+    opacity: 1;
+}
+
+/*  */
+.main_img_single{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

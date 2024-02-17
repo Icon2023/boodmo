@@ -24,6 +24,7 @@ import { IoGridSharp } from "react-icons/io5";
 import { BiCategory } from "react-icons/bi";
 import Breadcrumb from "../Utils/breadcrumb";
 import { motion } from "framer-motion";
+import NoData from "../images/no-data2.svg";
 
 const ProductsView = () => {
   const dispatch = useDispatch();
@@ -503,6 +504,7 @@ const ProductsView = () => {
                           <div className="select shop__header--select">
                             <select
                               className="product__view--select m-0 p-0 ps-3"
+                              style={{ width: "minContent" }}
                               onChange={(e) => sortClick(e.target.value)}
                             >
                               <option selected="" value={"price, ASC"}>
@@ -524,6 +526,7 @@ const ProductsView = () => {
                               data-toggle="tab"
                               data-target="#product_grid"
                               onClick={handleGridClick}
+                              title="Grid"
                             >
                               <CgMenuGridR />
                             </button>
@@ -534,6 +537,8 @@ const ProductsView = () => {
                               data-toggle="tab"
                               data-target="#product_list"
                               onClick={handleTfiClick}
+                              title="List"
+
                             >
                               <TfiMenuAlt />
                             </button>
@@ -736,7 +741,16 @@ const ProductsView = () => {
                                 {currentItems &&
                                   currentItems?.map((e, index) => {
                                     return (
-                                      <div className="col mb-30" key={index}>
+                                      <motion.div
+                                        className="box col mb-30" key={index}
+                                        initial={{ opacity: 0, scale: 0.5 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{
+                                          duration: 0.8,
+                                          delay: 0.5,
+                                          ease: [0, 0.71, 0.2, 1.01],
+                                        }}
+                                      >
                                         <div className="product__card product__list d-flex align-items-center">
                                           <div className="product__card--thumbnail product__list--thumbnail">
                                             <a
@@ -781,7 +795,7 @@ const ProductsView = () => {
                                           </div>
                                           <div className="product__card--content product__list--content">
                                             <h3 className="product__card--title">
-                                              <a href="/">{e?.name}</a>
+                                              {e?.name}
                                             </h3>
                                             <ul className="rating product__card--rating d-flex">
                                               <li className="rating__list">
@@ -886,7 +900,7 @@ const ProductsView = () => {
                                             )}
                                           </div>
                                         </div>
-                                      </div>
+                                      </motion.div>
                                     );
                                   })}
                               </div>
@@ -897,7 +911,21 @@ const ProductsView = () => {
                     </div>
                     {
                       add_product?.length <= 0 &&
-                      <p className="mt-5 text-center">No data Found</p>
+                      // <p className="mt-5 text-center">No data Found</p>
+                      <div className="">
+                      <img
+                          src={NoData}
+                          alt=""
+                          className="d-block mx-auto align-bottom"
+                          style={{ marginTop: "30px", width: "50%" }}
+                        />
+                        <p
+                          className="mt-5 text-center text-danger"
+                          style={{ fontWeight: "700", fontSize: "24px" }}
+                        >
+                          Data Not Found!
+                        </p>
+                      </div>
                     }
                     {
                       add_product?.length > 0 &&
