@@ -57,7 +57,7 @@ const SearchBar = () => {
                                                     e?.image ?
                                                         <img src={e?.image} alt="" />
                                                         :
-                                                        <img src="https://pngimg.com/uploads/gear/gear_PNG56.png" alt="" />
+                                                        <img src="https://krasnodar.velmaster.pro/assets/images/prokat/image2.png" alt="" />
                                                 }
                                                 <hr />
                                                 <h2 className="ps-3 categories__content--title" >

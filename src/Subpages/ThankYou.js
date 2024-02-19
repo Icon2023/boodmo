@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../Mainpages/Header";
 import Footer from "../Mainpages/Footer";
 import thank from "../images/thank-you.svg";
@@ -13,6 +13,10 @@ import { Link, useParams } from "react-router-dom";
 
 const ThankYou = () => {
     const { paymentID } = useParams();
+
+    useEffect(()=>{
+      window.scrollTo(0, 0);
+    },[])
 
     const copyText = () => {
         const textToCopy = paymentID;

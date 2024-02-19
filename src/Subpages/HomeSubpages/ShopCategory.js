@@ -38,7 +38,7 @@ const ShopCategory = () => {
               Shop by <span>Categories</span>
             </h2>
           </div>
-          <div className="categories__inner--style3 d-flex mb-4">
+          <div className="categories__inner--style3 d-flex  justify-content-center mb-4">
             {displayedCategory?.map((e, index) => {
               return (
                 // <div className="categories__card--style3 text-center" key={index}>
@@ -69,7 +69,7 @@ const ShopCategory = () => {
           <div className="load_btn">
             {remainingItemCount > 0 && (
               // <button onClick={handleLoadMore} className="load_more">
-                //   Load More
+              //   Load More
               // </button>
               <motion.button
                 type="button"
@@ -79,7 +79,7 @@ const ShopCategory = () => {
               >
                 Load More
               </motion.button>
-                       )}
+            )}
           </div>
         </div>
       </section>

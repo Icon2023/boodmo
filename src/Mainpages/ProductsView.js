@@ -321,12 +321,12 @@ const ProductsView = () => {
                         </div>
                       </div>
                       <div className="mt-4">
-                        <div className="d-flex justify-content-between">
+                        {/* <div className="d-flex justify-content-between">
                           <h3 className="mt-1">Vehicle</h3>
                           <a onClick={handleReset} style={{ color: "#12477a" }}>
                             Reset
                           </a>
-                        </div>
+                        </div> */}
                         <div className="mt-3 mb-3">
                           <select
                             className="vehicle_select_model"
@@ -913,7 +913,7 @@ const ProductsView = () => {
                       add_product?.length <= 0 &&
                       // <p className="mt-5 text-center">No data Found</p>
                       <div className="">
-                      <img
+                        <img
                           src={NoData}
                           alt=""
                           className="d-block mx-auto align-bottom"
@@ -964,8 +964,8 @@ const ProductsView = () => {
           className="bla bla bla"
           style={{ overflowY: "scroll" }}
         >
-          <div className="single__widget price__filter widget__bg">
-            <div className="d-flex">
+          <div className="single__widget price__filter widget__bg ">
+            <div className="d-flex justify-content-between">
               <h2>Filters</h2>
               <a
                 onClick={handleReset}
@@ -1015,6 +1015,31 @@ const ProductsView = () => {
                   +{remainingItemCount} More
                 </span>
               )}
+            </div>
+            <div className="mt-4">
+              <div className="d-flex justify-content-between">
+                <h3 className="mt-1">Vehicle</h3>
+                {/* <a onClick={handleReset} style={{ color: "#12477a" }}>
+                  Reset
+                </a> */}
+              </div>
+              <div className="mt-3 mb-3">
+                <select
+                  className="vehicle_select_model"
+                  onChange={handlecarNameChange}
+                >
+                  <option selected value={""}>
+                    Choose Car Maker
+                  </option>
+                  {carName.map((e, index) => {
+                    return (
+                      <option value={e?.id} key={index}>
+                        {e?.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
             </div>
             <form onSubmit={handleSubmit} style={{ marginBottom: "100px" }}>
               <h3 className="mt-4">Price</h3>

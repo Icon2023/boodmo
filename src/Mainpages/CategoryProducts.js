@@ -149,7 +149,7 @@ const CategoryProducts = () => {
                 <div className="shop__right--sidebar">
                   {/* Start categories section */}
                   <div className="categories__shop mb-50">
-                    <div className="section__heading border-bottom mb-30 d-flex">
+                    <div className="section__heading border-bottom mb-30 d-flex align-items-center">
                       <h2 className="section__heading--maintitle">
                         Shop By <span>Categories</span>
                       </h2>

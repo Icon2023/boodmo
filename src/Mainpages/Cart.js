@@ -192,7 +192,7 @@ const Cart = () => {
                             return (
                               <tr key={index} className="align-middle">
                                 <td
-                                  className="d-md-flex align-items-start"
+                                  className="d-md-flex align-items-center"
                                   style={{ minWidth: "300px", gap: "16px" }}
                                 >
                                   <button
@@ -289,8 +289,8 @@ const Cart = () => {
                             </td>
                             <td className="text-center">
                               <p>₹ {countTotal(addto_cart).toLocaleString("en-IN")}/-</p>
-                              <p>₹ 100/-</p>
-                              <p>₹ {(countTotal(addto_cart) + 100).toLocaleString("en-IN")}/-</p>
+                              <p>Free</p>
+                              <p>₹ {(countTotal(addto_cart)).toLocaleString("en-IN")}/-</p>
                             </td>
                           </tr>
                         </>
@@ -304,8 +304,8 @@ const Cart = () => {
                             </td>
                             <td className="text-center">
                               <p>₹ {countTotal(login_cart).toLocaleString("en-IN")}/-</p>
-                              <p>₹ 100/-</p>
-                              <p>₹ {(countTotal(login_cart) + 100).toLocaleString("en-IN")}/-</p>
+                              <p>Free</p>
+                              <p>₹ {(countTotal(login_cart)).toLocaleString("en-IN")}/-</p>
                             </td>
                           </tr>
                         </>

@@ -12,7 +12,7 @@ const ShippingAddress = () => {
                             </div>
                             <div className="shipping__content">
                                 <h2 className="shipping__content--title h3">Free Shipping</h2>
-                                <p className="shipping__content--desc">Free shipping over $100</p>
+                                <p className="shipping__content--desc">Free shipping over ₹ 100/-</p>
                             </div>
                         </div>
                         <div className="shipping__items style2 d-flex align-items-center">

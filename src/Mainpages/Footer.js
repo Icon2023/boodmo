@@ -301,7 +301,7 @@ const Footer = () => {
                     <div className="container">
                         <div className="footer__bottom--inenr d-flex justify-content-between align-items-center">
                             <p className="copyright__content">
-                                <span className="text__secondary">© 2023</span> Powered by &nbsp;
+                                <span className="text__secondary">© 2024</span> Powered by &nbsp;
                                 <a
                                     className="copyright__content--link"
                                     // target="_blank"

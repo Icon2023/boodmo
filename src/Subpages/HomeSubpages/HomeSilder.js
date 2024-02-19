@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   CarCompanies,
   CarModel,
@@ -6,7 +6,7 @@ import {
   CategoryProduct,
 } from "../../Services/apiServices";
 import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
-import { Modal } from "@mui/material";
+import { Modal, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addFilterDetail,
@@ -34,18 +34,18 @@ const style = {
   p: 4,
 };
 
-// const styleOripart = {
-//   position: "absolute",
-//   top: "50%",
-//   left: "50%",
-//   transform: "translate(-50%, -50%)",
-//   width: '70%',
-//   bgcolor: "background.paper",
-//   // border: "2px solid #000",
-//   boxShadow: 24,
-//   borderRadius: '100px',
-//   p: 4,
-// };
+const styleOripart = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: '70%',
+  // bgcolor: "background.paper",
+  // border: "2px solid #000",
+  boxShadow: 24,
+  borderRadius: '10px',
+  p: 4,
+};
 
 const HomeSilder = () => {
   const { category_list, single_category } = useSelector((state) => ({
@@ -69,6 +69,29 @@ const HomeSilder = () => {
   const [open, setOpen] = useState(false);
   const [number, setnumber] = useState("");
   const [openWindow, setopenWindow] = useState(false);
+
+  var iframe = document.getElementById('ori_part')
+  // var iframeWindow = iframe.contentWindow;
+  // var iframeUrl = iframeWindow.location.href;
+  // console.log('URL of the iframe', iframeUrl);
+
+  if (iframe) {
+    // Get the contentWindow of the iframe
+    var iframeWindow = iframe.contentWindow;
+
+    // Check if the iframeWindow is not null
+    if (iframeWindow) {
+      // Get the URL from the iframe
+      var iframeUrl = iframeWindow.location.href;
+
+      console.log('URL of the iframe:', iframeUrl);
+    } else {
+      console.error('ContentWindow is null');
+    }
+  } else {
+    console.error('Iframe not found');
+  }
+
 
   useEffect(() => {
     CarCompanies().then((res) => {
@@ -110,7 +133,6 @@ const HomeSilder = () => {
   }, [cateId]);
 
   const handleChange = (selectedOption) => {
-    console.log("one", selectedOption);
     // setCarValName(e.target.value);
     setCarValName(selectedOption.value);
     CarModel(selectedOption.value).then((res) => {
@@ -119,7 +141,6 @@ const HomeSilder = () => {
   };
 
   const handleChange1 = (selectedOption) => {
-    console.log("two", selectedOption);
     setCarValModel(selectedOption.value);
     let val = selectedOption.value;
     CarModelModification({ carValName, val }).then((res) => {
@@ -128,7 +149,6 @@ const HomeSilder = () => {
   };
 
   const handleChange2 = (e) => {
-    console.log("three", e);
     setValModei(e?.value);
   };
 
@@ -365,9 +385,9 @@ const HomeSilder = () => {
                 </a>
               </div>
 
-              {/* <button className="search__filter--btn primary__btn w-100" onClick={openBrowser}>
+              <button className="search__filter--btn primary__btn w-100" onClick={openBrowser}>
                 Open
-              </button> */}
+              </button>
 
             </div>
           </div>
@@ -454,7 +474,7 @@ const HomeSilder = () => {
         </Box>
       </Modal>
 
-      {/* <Modal
+      <Modal
         open={openWindow}
         onClose={handleCloses}
         aria-labelledby="modal-modal-title"
@@ -463,7 +483,8 @@ const HomeSilder = () => {
         <Box sx={styleOripart}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             <iframe
-              src="https://oriparts.com/"
+              id="ori_part"
+              src={`https://oriparts.com/${carValName}/${carValModel}/${carValModei}/?back_url_pn=https://boodmo.com/search/{pn}`}
               title="External Page"
               width="100%"
               height="500px"
@@ -471,7 +492,7 @@ const HomeSilder = () => {
           </Typography>
 
         </Box>
-      </Modal> */}
+      </Modal>
     </>
   );
 };

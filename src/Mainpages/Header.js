@@ -27,7 +27,7 @@ const Header = () => {
     const [loading, setLoading] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     // const [searchClicked, setSearchClicked] = useState(false);
-    const [search, setSearch] = useState('');
+    const [search, setSearch] = useState(null);
 
     useEffect(() => {
         const changeNavbarBg = () => {
@@ -332,12 +332,12 @@ const Header = () => {
                                                 Car Exchange
                                             </a>
                                         </li>
-                                        <li className="header__menu--items">
+                                        {/* <li className="header__menu--items">
                                             <a className={`header__menu--link ${window.location.pathname == "/car-insurance" ? "active" : ""
                                                 }`} href="/car-insurance">
                                                 Car Insurance
                                             </a>
-                                        </li>
+                                        </li> */}
                                         <li className="header__menu--items">
                                             <a className="header__menu--link">
                                                 Others
@@ -349,6 +349,14 @@ const Header = () => {
                                                         user?.success === true ?
                                                             <Link to="/my-orders" className="header__sub--menu__link">
                                                                 My Orders
+                                                            </Link> : ""
+                                                    }
+                                                </li>
+                                                <li className="header__sub--menu__items">
+                                                    {
+                                                        user?.success === true ?
+                                                            <Link to="/car-insurance" className="header__sub--menu__link">
+                                                                Car Insurance
                                                             </Link> : ""
                                                     }
                                                 </li>
@@ -453,21 +461,34 @@ const Header = () => {
                                                 <Link className="header__account--btn" to="/login">
                                                     <IoMdContact style={{ fontSize: "28px" }} />
                                                 </Link>
-                                                : <a className="header__account--btn" title='Logout' onClick={handleOpenDelete}>
-                                                    <AiOutlineLogout style={{ fontSize: "28px", color: "red" }} />
-                                                </a>
+                                                : ""
                                         }
                                     </li>
-                                    {/* <li className="header__account--items d-none d-lg-block">
-                                        {
-                                            user?.success !== true ?
-                                                ""
-                                                :
-                                                <div className='user_icon_img'>
-                                                    <img src="https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png" alt="" srcset="" />
-                                                </div>
-                                        }
-                                    </li> */}
+                                    <li className="header__menu--items">
+                                        <a className="header__menu--links">
+                                                {
+                                                    user?.success !== true ?
+                                                        ""
+                                                        :
+                                                        <div className="circle" title='User'>
+                                                            <p className="circle-inner">{user?.data?.email ? (user?.data?.email).substring(0, 1).toUpperCase() : 'M'}</p>
+                                                        </div>
+                                                }
+                                        </a>
+                                        <ul className="header__sub--menu">
+                                            <li className="header__sub--menu__items">
+                                                {
+                                                    user?.success !== true ?
+                                                        ""
+                                                        :
+                                                        <a className="header__account--btn" title='Logout' onClick={handleOpenDelete}>
+                                                            Logout
+                                                        </a>
+                                                }
+                                            </li>
+                                        </ul>
+                                    </li>
+
                                 </ul>
                             </div>
                         </div>
@@ -494,25 +515,25 @@ const Header = () => {
                     <ul className="d-flex justify-content-between text-center">
                         <li className="offcanvas__stikcy--toolbar__list">
                             <a className="offcanvas__stikcy--toolbar__btn" href="/">
-                                <AiOutlineHome style={{ fontSize: "20px" }} />
+                                <AiOutlineHome style={{ fontSize: "20px" }} className={`${window.location.pathname == "/" ? "icon_toolbar_active" : ""}`} />
                                 <span className="offcanvas__stikcy--toolbar__label">Home</span>
                             </a>
                         </li>
                         <li className="offcanvas__stikcy--toolbar__list">
                             <a className="offcanvas__stikcy--toolbar__btn" href="/market-place">
-                                <BsShop style={{ fontSize: "20px" }} />
+                                <BsShop style={{ fontSize: "20px" }} className={`${window.location.pathname == "/market-place" ? "icon_toolbar_active" : ""}`} />
                                 <span className="offcanvas__stikcy--toolbar__label">Market Place</span>
                             </a>
                         </li>
                         <li className="offcanvas__stikcy--toolbar__lis ">
                             <a className="offcanvas__stikcy--toolbar__btn" href="/cart">
-                                <AiOutlineShoppingCart style={{ fontSize: "22px" }} />
+                                <AiOutlineShoppingCart style={{ fontSize: "22px" }} className={`${window.location.pathname == "/cart" ? "icon_toolbar_active" : ""}`} />
                                 <span className="offcanvas__stikcy--toolbar__label">Cart</span>
                             </a>
                         </li>
                         <li className="offcanvas__stikcy--toolbar__list">
                             <Link className="offcanvas__stikcy--toolbar__btn" to="/wishlist">
-                                <AiOutlineHeart style={{ fontSize: "24px" }} />
+                                <AiOutlineHeart style={{ fontSize: "24px" }} className={`${window.location.pathname == "/wishlist" ? "icon_toolbar_active" : ""}`} />
                                 <span className="offcanvas__stikcy--toolbar__label">Wishlist</span>
                                 {
                                     add_wish?.length !== 0 ? <span className="items__count">{add_wish?.length}</span> : ""
@@ -620,8 +641,33 @@ const Header = () => {
                                         </Link>
                                     </li>
                                     <li className="offcanvas__menu_li">
-                                        <Link className="offcanvas__menu_item" to="/" onClick={toggleDrawer}>
-                                            My Account
+                                        <Link className="offcanvas__menu_item" to="/tools-equiments" onClick={toggleDrawer}>
+                                            Tool & Equimdent
+                                        </Link>
+                                    </li>
+                                    <li className="offcanvas__menu_li">
+                                        <Link className="offcanvas__menu_item" to="/car-exchange" onClick={toggleDrawer}>
+                                            Car Exchange
+                                        </Link>
+                                    </li>
+                                    <li className="offcanvas__menu_li">
+                                        <Link className="offcanvas__menu_item" to="/car-insurance" onClick={toggleDrawer}>
+                                            Car Insurance
+                                        </Link>
+                                    </li>
+                                    <li className="offcanvas__menu_li">
+                                        <Link className="offcanvas__menu_item" to="/my-orders" onClick={toggleDrawer}>
+                                            My Orders
+                                        </Link>
+                                    </li>
+                                    <li className="offcanvas__menu_li">
+                                        <Link className="offcanvas__menu_item" to="/my-address" onClick={toggleDrawer}>
+                                            My Address
+                                        </Link>
+                                    </li>
+                                    <li className="offcanvas__menu_li">
+                                        <Link className="offcanvas__menu_item" to="/wishlist" onClick={toggleDrawer}>
+                                            My WishList
                                         </Link>
                                     </li>
                                     <li className="offcanvas__menu_li">

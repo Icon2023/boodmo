@@ -46,15 +46,16 @@ const Checkout = () => {
                 dispatch(addLoginCart(res?.data))
             }
         })
-        if (coupon_code) {
-            setCoupon(coupon_code?.coupon_code)
-        }
+        dispatch(remove_coupon_code())
+        dispatch(coupon_Pricevalue(0))
+   
         if (user?.data?.mobile) {
             setEmail(user?.data?.mobile)
         } else {
             setEmail(user?.data?.email)
         }
         GetAddress();
+        window.scrollTo(0, 0);
     }, [])
 
     const GetAddress = () => {
@@ -82,10 +83,12 @@ const Checkout = () => {
             GetCouponCode(coupon).then((res) => {
                 if (res?.success) {
                     dispatch(add_coupon_code(res?.data))
+                    dispatch(coupon_Pricevalue((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100) ? ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : 0))
                     setInvaildCoupon('')
                     setIsOpenDiscount(true)
                 } else {
                     dispatch(remove_coupon_code())
+                    dispatch(coupon_Pricevalue(0))
                     setInvaildCoupon(res?.message)
                     setIsOpenDiscount(false)
                 }
@@ -252,7 +255,7 @@ const Checkout = () => {
                                             </div>
                                             <div className="customer__information">
                                                 <div className="checkout__email--phone">
-                                                    <label>Email
+                                                    <label>Email / Mobile :-
                                                         <input
                                                             className="checkout__input--field border-radius-5"
                                                             placeholder="Email or mobile phone mumber"
@@ -599,7 +602,7 @@ const Checkout = () => {
                                                                         </div>
                                                                     </td>
                                                                     <td className="cart__table--body__list">
-                                                                        <span className="cart__price">{(e?.price * e?.qty).toLocaleString("en-IN")}/-</span>
+                                                                        <span className="cart__price">₹{(e?.price * e?.qty).toLocaleString("en-IN")}/-</span>
                                                                     </td>
                                                                 </tr>
                                                             )
@@ -649,7 +652,7 @@ const Checkout = () => {
                                                                 Discount ( {add_ship?.coupon} Appied )
                                                             </td>
                                                             <td className="checkout__total--calculated__text text-right">
-                                                                {(countTotal(login_cart)) * (coupon_code?.coupon_discount / 100) ? ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : 0}/-
+                                                            ₹{(countTotal(login_cart)) * (coupon_code?.coupon_discount / 100) ? ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : 0}/-
                                                             </td>
                                                         </tr>
                                                     }
@@ -668,7 +671,7 @@ const Checkout = () => {
                                                             Total
                                                         </td>
                                                         <td className="checkout__total--footer__amount checkout__total--footer__list text-right">
-                                                            ₹{countTotal(login_cart) - ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)) ? countTotal(login_cart) - ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : countTotal(login_cart)}/-
+                                                            ₹{(countTotal(login_cart) - ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)) ? countTotal(login_cart) - ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : countTotal(login_cart)).toLocaleString("en-IN")}/-
                                                         </td>
                                                     </tr>
                                                 </tfoot>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ShippingAddress from "../Subpages/ShippingAddress";
 import { useDispatch, useSelector } from "react-redux";
 import { CartList, InsuranceCompanyList, MakeOrderId, OrderComplete } from "../Services/apiServices";
-import { addLoginCart, add_insurance_companyname } from "../store/reducers/ProductSlice";
+import { addLoginCart, add_insurance_companyname, coupon_Pricevalue, removeAllLoginCart, remove_coupon_code } from "../store/reducers/ProductSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { AiOutlineClose } from "react-icons/ai";
@@ -169,12 +169,15 @@ const Review = () => {
         total_amount: countTotal(login_cart),
         currency: 'INR',
         products: JSON.stringify(productsArray),
-        address_id: selected_value_address.id
+        address_id: selected_value_address.id,
+        coupon_code: coupon_code?.coupon_code ? coupon_code?.coupon_code  : null,
+        coupon_value: ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100) ? ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : 0),
       }
-      console.log(data);
       OrderComplete(data).then((res) => {
-        console.log(res);
         if (res?.success) {
+          dispatch(removeAllLoginCart())
+          dispatch(remove_coupon_code())
+          dispatch(coupon_Pricevalue(''))
           navigate("/thank-you");
         }
       });
@@ -187,31 +190,29 @@ const Review = () => {
     setInsuranceOpen(false);
     setpolicyNumber('');
     setInsuranceval('')
-
   }
 
   const handleChange1 = (e) => {
     setType('insurance')
     setInsuranceOpen(true)
-
   }
 
   return (
     <main className="margin_top_all">
       <Breadcrumb
-          subTitle2="Review"
-          icon2={
-            <MdReviews
-              color="#363062"
-              style={{
-                fontSize: "22px",
-                marginRight: "4px",
-                boxSizing: "border-box",
-                cursor:"pointer"
-              }}
-            />
-          }
-        />
+        subTitle2="Review"
+        icon2={
+          <MdReviews
+            color="#363062"
+            style={{
+              fontSize: "22px",
+              marginRight: "4px",
+              boxSizing: "border-box",
+              cursor: "pointer"
+            }}
+          />
+        }
+      />
 
       {/* Start checkout page area */}
       {login_cart?.length >= 1 ?
@@ -512,7 +513,7 @@ const Review = () => {
                               </td>
                               <td className="cart__table--body__list">
                                 <span className="cart__price">
-                                  {e?.price * e?.qty}/-
+                                ₹ {(e?.price * e?.qty).toLocaleString("en-IN")}/-
                                 </span>
                               </td>
                             </tr>
@@ -529,15 +530,15 @@ const Review = () => {
                             Subtotal
                           </td>
                           <td className="checkout__total--amount text-right">
-                            <h4>{countTotal(login_cart)}/-</h4>
+                            <h4>₹{countTotal(login_cart).toLocaleString("en-IN")}/-</h4>
                           </td>
                         </tr>
                         <tr className="checkout__total--items">
                           <td className="checkout__total--title text-left">
-                            Discount ( {add_ship?.coupon} Appied )
+                            Discount {add_ship?.coupon}
                           </td>
                           <td className="checkout__total--calculated__text text-right">
-                            {countTotal(login_cart) *
+                          ₹{countTotal(login_cart) *
                               (coupon_code?.coupon_discount / 100)
                               ? (
                                 countTotal(login_cart) *
@@ -554,7 +555,7 @@ const Review = () => {
                             Total
                           </td>
                           <td className="checkout__total--footer__amount checkout__total--footer__list text-right">
-                            {countTotal(login_cart) -
+                          ₹{(countTotal(login_cart) -
                               countTotal(login_cart) *
                               (coupon_code?.coupon_discount / 100)
                               ? countTotal(login_cart) -
@@ -562,7 +563,7 @@ const Review = () => {
                                 countTotal(login_cart) *
                                 (coupon_code?.coupon_discount / 100)
                               ).toFixed(2)
-                              : countTotal(login_cart)}
+                              : countTotal(login_cart)).toLocaleString("en-IN")}
                             /-
                           </td>
                         </tr>

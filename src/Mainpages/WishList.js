@@ -31,129 +31,124 @@ const WishList = () => {
     };
     return (
         <>
-        <LayoutTransition>
-            <main className="margin_top_all">
-                <Breadcrumb
-          subTitle2="Product Category"
-          icon2={
-            <FaListCheck
-              color="#363062"
-              style={{
-                fontSize: "22px",
-                marginRight: "4px",
-                boxSizing: "border-box",
-                cursor:"pointer"
-              }}
-            />
-          }
-        />
+            <LayoutTransition>
+                <main className="margin_top_all">
+                    <Breadcrumb
+                        subTitle2="WishList"
+                        icon2={
+                            <FaListCheck
+                                color="#363062"
+                                style={{
+                                    fontSize: "22px",
+                                    marginRight: "4px",
+                                    boxSizing: "border-box",
+                                    cursor: "pointer"
+                                }}
+                            />
+                        }
+                    />
 
-                {/* cart section start */}
-                <section className="container">
-                    <div className="table-responsive">
-                        {add_wish?.length >= 1 ? (
-                            <>
-                                {/* <h2 className="cart__title mb-30 ">Wishlist</h2> */}
-                                <table className="table table-bordered table-hover mt-5">
-                                    <thead className="table-dark">
-                                        <tr className="text-center">
-                                            <th>PRODUCT</th>
-                                            <th>PRICE</th>
-                                            <th>STOCK STATUS</th>
-                                            <th>VIEW PRODUCT</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {add_wish?.map((e, index) => {
-                                            return (
-                                                <tr key={index} className="align-middle">
-                                                    <td
-                                                        className="d-md-flex align-align-items-lg-start"
-                                                        style={{ minWidth: "300px", gap: "16px" }}
-                                                    >
-                                                        <button
-                                                            className="cart__remove--btn"
-                                                            aria-label="search button"
-                                                            type="button"
-                                                            onClick={() => removeElement(e?.product_id)}
+                    {/* cart section start */}
+                    <section className="container">
+                        <div className="table-responsive">
+                            {add_wish?.length >= 1 ? (
+                                <>
+                                    {/* <h2 className="cart__title mb-30 ">Wishlist</h2> */}
+                                    <table className="table table-bordered table-hover mt-5">
+                                        <thead className="table-dark">
+                                            <tr className="text-center">
+                                                <th>PRODUCT</th>
+                                                <th>PRICE</th>
+                                                <th>STOCK STATUS</th>
+                                                <th>VIEW PRODUCT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {add_wish?.map((e, index) => {
+                                                return (
+                                                    <tr key={index} className="align-middle">
+                                                        <td
+                                                            className="d-md-flex align-items-center"
+                                                            style={{ minWidth: "300px", gap: "16px" }}
                                                         >
-                                                            <AiOutlineClose />
-                                                        </button>
-                                                        <img
-                                                            className="border-radius-5"
-                                                            // src={e?.product?.image}
-                                                            src='https://avatars.mds.yandex.net/i?id=1b4bc532efe7ab812edc8fbb4f3290913c22ff63-9149598-images-thumbs&n=13'
-                                                            style={{ width: "100px", height: "auto" }}
-                                                            alt="cart-product"
-                                                        />
-                                                        <aside>
-                                                            <h3 className="">
-                                                                <a
-                                                                    href={`/productsdetail/${e?.product?.pn}`}
-                                                                >
-                                                                    {e?.product?.part_name}
-                                                                </a>
-                                                            </h3>
-                                                            <p>{e?.desc}</p>
-                                                        </aside>
-                                                    </td>
-                                                    <td
-                                                        style={{
-                                                            minWidth: "103px",
-                                                            textAlign: "center",
-                                                        }}
-                                                    >
-                                                        <p className="">{e?.product?.price}/-</p>
-                                                    </td>
-                                                    <td>
-                                                        <div className="quantity__box justify-content-center">
-                                                            <span className="in__stock text__secondary">
-                                                                {/* {e?.product?.out_of_stock === 0
+                                                            <button
+                                                                className="cart__remove--btn"
+                                                                aria-label="search button"
+                                                                type="button"
+                                                                onClick={() => removeElement(e?.product_id)}
+                                                            >
+                                                                <AiOutlineClose />
+                                                            </button>
+                                                            <img
+                                                                className="border-radius-5"
+                                                                // src={e?.product?.image}
+                                                                src='https://avatars.mds.yandex.net/i?id=1b4bc532efe7ab812edc8fbb4f3290913c22ff63-9149598-images-thumbs&n=13'
+                                                                style={{ width: "100px", height: "auto" }}
+                                                                alt="cart-product"
+                                                            />
+                                                            <aside>
+                                                                <h3 className="">
+                                                                    <a
+                                                                        href={`/productsdetail/${e?.product?.pn}`}
+                                                                    >
+                                                                        {e?.product?.part_name}
+                                                                    </a>
+                                                                </h3>
+                                                                <p>{e?.desc}</p>
+                                                            </aside>
+                                                        </td>
+                                                        <td
+                                                            style={{
+                                                                minWidth: "103px",
+                                                                textAlign: "center",
+                                                            }}
+                                                        >
+                                                            <p>₹ {(parseInt(e?.product?.price)).toLocaleString("en-IN")}/-</p>
+                                                        </td>
+                                                        <td>
+                                                            <div className="quantity__box justify-content-center">
+                                                                <span className="in__stock text__secondary">
+                                                                    {/* {e?.product?.out_of_stock === 0
                                                                     ? " In stock"
                                                                     : "Out Of Stock"} */}
                                                                     In stock
-                                                            </span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="text-center">
-                                                        <a
-                                                            className="wishlist__cart--btn primary__btn "
-                                                            href={`/productsdetail/${e?.product?.pn}`}
-                                                        >
-                                                            View Details
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </table>
-                                <span className="cart__checkout">
-                                    {/* <button className="checkout_btn" onClick={handleCheckout}>
-                    CheckOut
-                  </button> */}
-                                </span>
-                            </>
-                        ) : (
-                            <>
-                                <img
-                                    style={{
-                                        marginLeft: "auto",
-                                        marginRight: "auto",
-                                        display: "block",
-                                    }}
-                                    src="https://nmkonline.com/images/pages/tumbleweed.gif"
-                                    alt=""
-                                />
-                            </>
-                        )}
-                    </div>
-                </section>
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td className="text-center">
+                                                            <a
+                                                                className="wishlist__cart--btn primary__btn "
+                                                                href={`/productsdetail/${e?.product?.pn}`}
+                                                            >
+                                                                View Details
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </>
+                            ) : (
+                                <>
+                                    <img
+                                        style={{
+                                            marginLeft: "auto",
+                                            marginRight: "auto",
+                                            display: "block",
+                                        }}
+                                        src="https://nmkonline.com/images/pages/tumbleweed.gif"
+                                        alt=""
+                                    />
+                                </>
+                            )}
+                        </div>
+                    </section>
 
-                {/* Start shipping section */}
-                <ShippingAddress />
+                    {/* Start shipping section */}
+                    <ShippingAddress />
 
-            </main>
+                </main>
             </LayoutTransition>
 
         </>

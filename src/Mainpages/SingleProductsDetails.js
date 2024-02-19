@@ -218,7 +218,7 @@ const SingleProductsDetails = () => {
                 <section className="product__details--section section--padding">
                     <div className="container">
                         <div className="row">
-                            <div className="col-md-6" style={{position:"relative"}}>
+                            <div className="col-md-6 col-12 mb-5">
                                 {/* <Carousel
                                     selectedItem={currentImageIndex}
                                     // onClickItem={(index) => openLightbox(index)}
@@ -261,7 +261,10 @@ const SingleProductsDetails = () => {
                                             <img src={add_Details?.image} className="main_img_single" alt="" srcset="" />
                                         </div>
                                         :
-                                        <img src="https://pngimg.com/uploads/gear/gear_PNG56.png" alt="" srcset="" />
+                                        <div>
+                                            <img className="main_img_single" src="https://krasnodar.velmaster.pro/assets/images/prokat/image2.png" alt="" srcset="" />
+                                        </div>
+
                                 }
                             </div>
                             {/* <div className="col-md-6">
@@ -602,7 +605,7 @@ const SingleProductsDetails = () => {
                                     </div>
                                 </div>
                             </div> */}
-                            <div className="col-md-6">
+                            <div className="col-md-6 col-12 ">
                                 <div className="product__details--info">
                                     <h2 class="product-title">{add_Details?.part_name}</h2>
                                     <span class="badge text-bg-danger rounded-pill">Primary</span>

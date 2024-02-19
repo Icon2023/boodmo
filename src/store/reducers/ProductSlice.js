@@ -127,6 +127,7 @@ export const productsSlice = createSlice({
     remove_coupon_code: (state) => {
       state.coupon_code = ""
     },
+    
     coupon_Pricevalue: (state, { payload }) => {
       state.coupon_value = payload
     },
