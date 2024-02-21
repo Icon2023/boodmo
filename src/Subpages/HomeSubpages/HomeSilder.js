@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CarCompanies,
   CarModel,
@@ -40,7 +40,6 @@ const styleOripart = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: '90%',
-  // bgcolor: "background.paper",
   // border: "2px solid #000",
   boxShadow: 24,
   borderRadius: '10px',
@@ -57,45 +56,43 @@ const HomeSilder = () => {
   const [cateId, setCateId] = useState("");
   const [isOpen, setIsOpen] = useState(true);
 
-  const [carName, setCarName] = useState([]);
-  const [carValName, setCarValName] = useState("");
+  const [selectedCarCompany, setSelectedCarCompany] = useState(null);
+  const [selectedCarModel, setSelectedCarModel] = useState(null);
+  const [selectedCarModification, setSelectedCarModification] = useState(null);
 
-  const [carModel, setCarModel] = useState([]);
-  const [carValModel, setCarValModel] = useState("");
-
-  const [carModei, setCarModei] = useState([]);
-  const [carValModei, setValModei] = useState("");
+  const [carCompanies, setCarCompanies] = useState([]);
+  const [carModels, setCarModels] = useState([]);
+  const [carModifications, setCarModifications] = useState([]);
 
   const [open, setOpen] = useState(false);
   const [number, setnumber] = useState("");
   const [openWindow, setopenWindow] = useState(false);
 
-  // var iframe = document.getElementById('ori_part')
+  var iframe = document.getElementsByClassName('redirect_link')
   // var iframeWindow = iframe.contentWindow;
   // var iframeUrl = iframeWindow.location.href;
   // console.log('URL of the iframe', iframeUrl);
+  if (iframe) {
+    // Get the contentWindow of the iframe
+    var iframeWindow = iframe.contentWindow;
 
-  // if (iframe) {
-  //   // Get the contentWindow of the iframe
-  //   var iframeWindow = iframe.contentWindow;
+    // Check if the iframeWindow is not null
+    if (iframeWindow) {
+      // Get the URL from the iframe
+      var iframeUrl = iframeWindow.location.href;
 
-  //   // Check if the iframeWindow is not null
-  //   if (iframeWindow) {
-  //     // Get the URL from the iframe
-  //     var iframeUrl = iframeWindow.location.href;
-
-  //     console.log('URL of the iframe:', iframeUrl);
-  //   } else {
-  //     console.error('ContentWindow is null');
-  //   }
-  // } else {
-  //   console.error('Iframe not found');
-  // }
+      console.log('URL of the iframe:', iframeUrl);
+    } else {
+      console.error('ContentWindow is null');
+    }
+  } else {
+    console.error('Iframe not found');
+  }
 
 
   useEffect(() => {
     CarCompanies().then((res) => {
-      setCarName(res?.data);
+      setCarCompanies(res?.data);
     });
   }, []);
 
@@ -132,34 +129,70 @@ const HomeSilder = () => {
     }
   }, [cateId]);
 
-  const handleChange = (selectedOption) => {
-    // setCarValName(e.target.value);
-    setCarValName(selectedOption.value);
-    CarModel(selectedOption.value).then((res) => {
-      setCarModel(res?.data);
-    });
-  };
 
-  const handleChange1 = (selectedOption) => {
-    setCarValModel(selectedOption.value);
-    let val = selectedOption.value;
-    CarModelModification({ carValName, val }).then((res) => {
-      setCarModei(res?.data);
-    });
-  };
-
-  const handleChange2 = (e) => {
-    setValModei(e?.value);
-  };
-
-  const handleClickOpen = (e) => {
-    e.preventDefault();
-    if (!carValModei) {
-    } else {
-      setOpen(true);
-      console.log(cateId);
+  const handleCarCompanyChange = async (selectedOption) => {
+    if (!selectedCarCompany || selectedOption.value !== selectedCarCompany.value){
+      setSelectedCarCompany(selectedOption);
+      try {
+        // Fetch car models based on the selected car company
+        const response = await CarModel(selectedOption.id);
+        if (response.success && response.data) {
+          // Assuming the data property contains the array of models
+          setCarModels(response.data);
+        } else {
+          console.error("Invalid response format for car models:", response);
+        }
+      } catch (error) {
+        console.error("Error fetching car models:", error);
+      }
+      setSelectedCarModel(null); // Reset selected car model
+      setSelectedCarModification(null); // Reset selected car modification
     }
   };
+
+  const handleCarModelChange = async (selectedOption) => {
+    if (!selectedCarModel || selectedOption.value !== selectedCarModel.value) {
+      setSelectedCarModel(selectedOption);
+      try {
+        // Fetch car modifications based on the selected car model
+        const response = await CarModelModification({
+          carValName: selectedCarCompany.id,
+          val: selectedOption.id,
+        });
+
+        console.log("CarModelModification Response:", response);
+
+        if (response.success && response.data) {
+          console.log("Modifications Data:", response.data);
+          // Assuming the data property contains the array of modifications
+          setCarModifications(response.data);
+        } else {
+          console.error(
+            "Invalid response format for car modifications:",
+            response
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching car modifications:", error);
+      }
+
+      setSelectedCarModification(null); // Reset selected car modification
+    }
+  };
+
+  const handleCarModificationChange = (selectedOption) => {
+    setSelectedCarModification(selectedOption);
+  };
+
+
+  // const handleClickOpen = (e) => {
+  //   e.preventDefault();
+  //   if (!carValModei) {
+  //   } else {
+  //     setOpen(true);
+  //     console.log(cateId);
+  //   }
+  // };
 
   const handleClose = () => {
     setOpen(false);
@@ -327,43 +360,48 @@ const HomeSilder = () => {
             <div className="testimonial-grid">
               <div className="testimonial" >
                 <Select
-                  options={carName.map((e, index) => ({
-                    value: e && e.id ? e.id : "",
-                    label: e && e.name ? e.name : "",
-                  }))}
+                  value={selectedCarCompany}
                   styles={customStyles}
                   placeholder="Select Car Maker"
-                  onChange={handleChange}
+                  onChange={handleCarCompanyChange}
                   isSearchable={false}
                   autoFocus={true}
+                  options={carCompanies.map((company) => ({
+                    value: company.id,
+                    label: company.name,
+                    id: company.id,
+                  }))}
                 />
               </div>
               <div className="testimonial">
                 <Select
-                  options={carModel.map((e, index) => ({
-                    value: e && e.id ? e.id : "",
-                    label: e && e.name ? e.name : "",
+                  value={selectedCarModel}
+                  onChange={handleCarModelChange}
+                  options={carModels.map((model) => ({
+                    value: model.id,
+                    label: model.name,
+                    id: model.id,
                   }))}
                   isSearchable={false}
                   styles={customStyles}
-                  placeholder="Select Model"
-                  isDisabled={carModel.length <= 0 ? true : false}
-                  onChange={handleChange1}
                   autoFocus={true}
+                  placeholder="Select Car Model"
+                  isDisabled={!selectedCarCompany}
                 />
               </div>
               <div className="testimonial">
                 <Select
-                  options={carModei.map((e, index) => ({
-                    value: e && e.id ? e.id : "",
-                    label: e && e.modification ? e.modification : "",
+                  value={selectedCarModification}
+                  onChange={handleCarModificationChange}
+                  options={carModifications.map((modification) => ({
+                    value: modification.id,
+                    label: modification.modification,
                   }))}
-                  placeholder="Select Modification"
-                  styles={customStyles}
-                  isDisabled={carValModel.length <= 0 ? true : false}
-                  onChange={handleChange2}
+                  placeholder="Select Car Modification"
                   autoFocus={true}
                   isSearchable={false}
+                  styles={customStyles}
+                  isDisabled={!selectedCarModel}
                 />
               </div>
               <div className="testimonial">
@@ -380,9 +418,9 @@ const HomeSilder = () => {
                   className="w-100"
                 >
                 </a> */}
-                  <button className="search__filter--btn primary__btn w-100" onClick={openBrowser} disabled={carValModel.length <= 0 ? true : false}>
-                    OEM CATALOG
-                  </button>
+                <button className="search__filter--btn primary__btn w-100" onClick={openBrowser}>
+                  OEM CATALOG
+                </button>
               </div>
             </div>
           </div>
@@ -479,10 +517,11 @@ const HomeSilder = () => {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             <iframe
               id="ori_part"
-              src={`https://oriparts.com/${carValName}/${carValModel}/${carValModei}/?back_url_pn=https://boodmo.com/search/{pn}`}
+              // src={`https://oriparts.com/${carValName}/${carValModel}/${carValModei}/?back_url_pn=https://boodmo.com/search/{pn}`}
               title="External Page"
               width="100%"
               height="800px"
+              className="redirect_link"
             ></iframe>
           </Typography>
         </Box>

@@ -8258,6 +8258,10 @@ input.quickview__value--number {
     min-height: 171px;
 }
 
+iframe >.redirect_link {
+    color: #000 !important;
+}
+
 .search__filter--inner.style5 {
     background: -webkit-gradient(linear,
             left top,
