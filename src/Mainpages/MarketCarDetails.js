@@ -13,6 +13,7 @@ const MarketCarDetails = () => {
     useEffect(() => {
         const product = Products?.car?.find((p) => p.id === id);
         setPro(product);
+        window.scrollTo(0, 0);
     }, [])
     return (
         <>

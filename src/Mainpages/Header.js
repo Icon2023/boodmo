@@ -63,6 +63,7 @@ const Header = () => {
         dispatch(removeAllItemWishlist())
         dispatch(removeAllLoginCart())
         setOpenDelete(false);
+        window.location.reload();
 
     }
 

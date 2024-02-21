@@ -32,6 +32,7 @@ const MyAddress = () => {
 
     useEffect(() => {
         GetAddress();
+        window.scrollTo(0, 0);
     }, [])
 
     const GetAddress = () => {
@@ -181,20 +182,20 @@ const MyAddress = () => {
                             <div className='Add_ship'>
                                 <h3 onClick={handleOpenNewAddress}><AiOutlinePlus style={{ fontSize: "24px" }} /> Add New Address</h3>
                             </div>
-                            <div className='d-flex' style={{ gap: "20px", flexWrap: "wrap" }}>
+                            <div className='d-flex mt-3' style={{ gap: "20px", flexWrap: "wrap" }}>
                                 {
                                     add_ship &&
                                     add_ship?.map((e, index) => {
                                         return (
                                             <>
-                                                <div className='ship_multiple_box mt-3' key={index}>
+                                                <div className='ship_multiple_box' key={index}>
                                                     <div className='d-flex justify-content-between'>
-                                                        <h3>Name:{e?.first_name}</h3>
+                                                        <h3>Name:-&nbsp;{e?.first_name} {e?.last_name}</h3> <br/>
                                                         <AiOutlineClose style={{ cursor: "pointer" }} onClick={() => handleOpenDelete(e?.id)} />
                                                     </div>
-                                                    <p>Address
-                                                        : {e?.address}  - {e?.mobile}</p>
-                                                    <p>{e?.city},{e?.state},{e?.country}</p>
+                                                    <p>
+                                                        Address:- &nbsp;{e?.address}  - {e?.mobile} &nbsp; {e?.city},&nbsp;{e?.state},&nbsp;{e?.country},&nbsp;{e?.pincode}.
+                                                    </p>
                                                 </div>
                                             </>
                                         )

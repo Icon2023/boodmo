@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HideShow from "../../Utils/HideShow";
 import { Register } from "../../Services/apiServices";
 import { Alert } from "@mui/material";
@@ -17,7 +17,10 @@ const RegisterForm = () => {
   const [isopen, setIsopen] = useState(true);
   const [isopen1, setIsopen1] = useState(true);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
 
+  }, [])
   const handleChange = (e) => {
     setEmail(e.target.value);
     setType('email')
@@ -96,14 +99,14 @@ const RegisterForm = () => {
               isopen ? <input type="text" placeholder="Email" value={email} onChange={handleChange} className="account__login--input" /> : ""
             }
             {
-              isopen1 &&  isopen ?
-              <div className="account__login--divide">
-                <span className="account__login--divide__text">OR</span>
-              </div> : ""
+              isopen1 && isopen ?
+                <div className="account__login--divide">
+                  <span className="account__login--divide__text">OR</span>
+                </div> : ""
             }
 
             {
-              isopen1 ? <input type="number" placeholder="+91 Mobile Number"  value={number} onChange={handleChange1} className="account__login--input" /> : ""
+              isopen1 ? <input type="number" placeholder="+91 Mobile Number" value={number} onChange={handleChange1} className="account__login--input" /> : ""
             }
 
             <HideShow {...{ passwordShown, setPasswordShown }}>

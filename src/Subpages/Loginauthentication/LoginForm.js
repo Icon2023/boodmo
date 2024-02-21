@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HideShow from "../../Utils/HideShow";
 import { Alert } from "@mui/material";
 import { Add_Tocart_Login, CartList, LogIn, WishListLogin } from "../../Services/apiServices";
@@ -17,6 +17,10 @@ const LoginForm = () => {
 
   const { addto_cart } = useSelector((state) => ({ ...state.products }));
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+  }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault()

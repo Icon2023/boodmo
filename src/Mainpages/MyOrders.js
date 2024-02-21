@@ -7,8 +7,10 @@ import { addOrderDetails } from "../store/reducers/ProductSlice";
 import Breadcrumb from "../Utils/breadcrumb";
 import { IoSaveOutline } from "react-icons/io5";
 import Invoice from "../Utils/Invoice";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import { BlobProvider, PDFDownloadLink } from "@react-pdf/renderer";
 import { MdOutlineFileDownload } from "react-icons/md";
+import { HiOutlinePrinter } from "react-icons/hi";
+
 
 const MyOrders = () => {
     const dispatch = useDispatch();
@@ -23,6 +25,8 @@ const MyOrders = () => {
                 console.log(res?.message);
             }
         })
+        window.scrollTo(0, 0);
+
     }, [])
 
 
@@ -71,7 +75,7 @@ const MyOrders = () => {
                                                                 Total Amount
                                                             </th>
                                                             <th className="account__table--header__child--items">
-                                                                &nbsp;&nbsp; Invoice
+                                                                Invoice
                                                             </th>
                                                         </tr>
                                                     </thead>
@@ -89,10 +93,10 @@ const MyOrders = () => {
                                                                         </td>
                                                                         <td className="account__table--body__child--items">{(e?.payment_status).toUpperCase()}</td>
                                                                         <td className="account__table--body__child--items">
-                                                                            ₹{(e?.coupon_value && e?.coupon_code ? parseInt(e?.total_amount) - parseInt(e?.coupon_value) : parseInt(e?.total_amount)).toLocaleString("en-IN")}/-
+                                                                            ₹{(e?.coupon_value && e?.coupon_code ? parseFloat(e?.total_amount) - parseFloat(e?.coupon_value) : parseFloat(e?.total_amount)).toFixed(2).toLocaleString("en-IN")}/-
                                                                         </td>
                                                                         <td className="account__table--body__child--items">
-                                                                            <PDFDownloadLink document={<Invoice order={e} />} fileName={`Order_${e.id}.pdf`}>
+                                                                            {/* <PDFDownloadLink document={<Invoice order={e} />} fileName={`Order_${e.id}.pdf`}>
                                                                                 {({ blob, url, loading, error }) =>
                                                                                     loading ? 'Loading document...' :
                                                                                         <>
@@ -110,7 +114,27 @@ const MyOrders = () => {
                                                                                             </button>
                                                                                         </>
                                                                                 }
-                                                                            </PDFDownloadLink>
+                                                                            </PDFDownloadLink> */}
+                                                                            <BlobProvider
+                                                                                document={<Invoice order={e} />}
+                                                                            >
+                                                                                {({ blob, url, loading, error }) => (
+                                                                                    <a
+                                                                                        href={url}
+                                                                                        target="_blank"
+                                                                                        style={{
+                                                                                            backgroundColor: "lightblue",
+                                                                                            padding: "0px 12px",
+                                                                                            fontSize: "1.5rem",
+                                                                                            fontWeight: "500",
+                                                                                            borderRadius: "10px",
+                                                                                        }}
+                                                                                    >
+                                                                                        <MdOutlineFileDownload size={20} />
+                                                                                        {/* <span>Print</span> */}
+                                                                                    </a>
+                                                                                )}
+                                                                            </BlobProvider>
                                                                         </td>
                                                                     </tr>
                                                                 )
@@ -141,14 +165,34 @@ const MyOrders = () => {
                                                                         <td className="account__table--body__child--items">
                                                                             <strong>Total</strong>
                                                                             <span>
-                                                                                ₹{(e?.coupon_value && e?.coupon_code ? parseInt(e?.total_amount) - parseInt(e?.coupon_value) : parseInt(e?.total_amount)).toLocaleString("en-IN")}/-
+                                                                                ₹{(e?.coupon_value && e?.coupon_code ? parseFloat(e?.total_amount) - parseFloat(e?.coupon_value) : parseFloat(e?.total_amount)).toFixed(2).toLocaleString("en-IN")}/-
                                                                             </span>
                                                                         </td>
                                                                         <td className="account__table--body__child--items">
-                                                                            <strong>Invoice</strong>
-                                                                            <button class="Btn_down">
+                                                                            <strong>Invoice No</strong>
+                                                                            {/* <button class="Btn_down">
                                                                                 <MdOutlineFileDownload color="rgb(214, 178, 255)" />
-                                                                            </button>
+                                                                            </button> */}
+                                                                            <BlobProvider
+                                                                                document={<Invoice order={e} />}
+                                                                            >
+                                                                                {({ blob, url, loading, error }) => (
+                                                                                    <a
+                                                                                        href={url}
+                                                                                        target="_blank"
+                                                                                        style={{
+                                                                                            backgroundColor: "lightblue",
+                                                                                            padding: "0px 12px",
+                                                                                            fontSize: "1rem",
+                                                                                            fontWeight: "500",
+                                                                                            borderRadius: "10px",
+                                                                                        }}
+                                                                                    >
+                                                                                        <MdOutlineFileDownload size={16} />
+                                                                                        {/* <span>Download</span> */}
+                                                                                    </a>
+                                                                                )}
+                                                                            </BlobProvider>
                                                                         </td>
                                                                     </tr>
                                                                 )

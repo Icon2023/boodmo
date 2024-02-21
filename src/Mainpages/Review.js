@@ -69,6 +69,8 @@ const Review = () => {
         dispatch(add_insurance_companyname(res?.data))
       }
     })
+
+    window.scrollTo(0, 0);
   }, []);
 
   const handleCompleteOrder = (data) => {
@@ -170,7 +172,7 @@ const Review = () => {
         currency: 'INR',
         products: JSON.stringify(productsArray),
         address_id: selected_value_address.id,
-        coupon_code: coupon_code?.coupon_code ? coupon_code?.coupon_code  : null,
+        coupon_code: coupon_code?.coupon_code ? coupon_code?.coupon_code : null,
         coupon_value: ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100) ? ((countTotal(login_cart)) * (coupon_code?.coupon_discount / 100)).toFixed(2) : 0),
       }
       OrderComplete(data).then((res) => {
@@ -513,7 +515,7 @@ const Review = () => {
                               </td>
                               <td className="cart__table--body__list">
                                 <span className="cart__price">
-                                ₹ {(e?.price * e?.qty).toLocaleString("en-IN")}/-
+                                  ₹ {(e?.price * e?.qty).toLocaleString("en-IN")}/-
                                 </span>
                               </td>
                             </tr>
@@ -538,7 +540,7 @@ const Review = () => {
                             Discount {add_ship?.coupon}
                           </td>
                           <td className="checkout__total--calculated__text text-right">
-                          ₹{countTotal(login_cart) *
+                            ₹{countTotal(login_cart) *
                               (coupon_code?.coupon_discount / 100)
                               ? (
                                 countTotal(login_cart) *
@@ -555,7 +557,7 @@ const Review = () => {
                             Total
                           </td>
                           <td className="checkout__total--footer__amount checkout__total--footer__list text-right">
-                          ₹{(countTotal(login_cart) -
+                            ₹{(countTotal(login_cart) -
                               countTotal(login_cart) *
                               (coupon_code?.coupon_discount / 100)
                               ? countTotal(login_cart) -

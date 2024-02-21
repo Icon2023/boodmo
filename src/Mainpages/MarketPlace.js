@@ -39,6 +39,8 @@ const MarketPlace = () => {
             setGridOpen(false)
             setTrifOpen(true)
         }
+        window.scrollTo(0, 0);
+
     }, [])
 
     const handleClick = () => {
@@ -113,7 +115,7 @@ const MarketPlace = () => {
 
                         </div>
                     </aside>
-                    <h2  style={{color:"#363062"}} className="mt-3">Our Products</h2>
+                    <h2 style={{ color: "#363062" }} className="mt-3">Our Products</h2>
                     {
                         gridOpen ?
                             <div className="row card_hover" >
@@ -134,7 +136,7 @@ const MarketPlace = () => {
                                                     </p>
                                                     <button>
                                                         <a href={`market-places/auto/${e?.id}`} style={{ color: "white" }}>
-                                                        View Product
+                                                            View Product
                                                         </a>
                                                     </button>
                                                 </div>

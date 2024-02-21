@@ -180,7 +180,7 @@ const CategoryProducts = () => {
                                     className="categories__shop--card__link"
                                     href={`/shop/${id}/${e?.id}`}
                                   >
-                                    <div className="categories__thumbnail mb-15">
+                                    <div className="categories__thumbnail new_img_height">
                                       {isLoadingImage ? (
                                         <>
                                           <img
@@ -205,7 +205,6 @@ const CategoryProducts = () => {
                                       <h2 className="categories__content--title">
                                         {e?.name}
                                       </h2>
-                                      {/* <span className="categories__content--subtitle">(20 Items)</span> */}
                                     </div>
                                   </a>
                                 </motion.div>

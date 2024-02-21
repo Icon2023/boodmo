@@ -12,6 +12,7 @@ const MarketAutoDetails = () => {
     useEffect(() => {
         const product = Products?.autopart?.find((p) => p.id === id);
         setPro(product);
+        window.scrollTo(0, 0);
     }, [])
 
 

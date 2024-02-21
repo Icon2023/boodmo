@@ -12,6 +12,8 @@ const CarMakerListAllProducts = () => {
             // console.log(res?.data);
             setMakeList(res?.data);
         });
+
+        window.scrollTo(0, 0);
     }, [])
 
     return (

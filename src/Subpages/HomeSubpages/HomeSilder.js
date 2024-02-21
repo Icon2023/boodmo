@@ -39,7 +39,7 @@ const styleOripart = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: '70%',
+  width: '90%',
   // bgcolor: "background.paper",
   // border: "2px solid #000",
   boxShadow: 24,
@@ -70,27 +70,27 @@ const HomeSilder = () => {
   const [number, setnumber] = useState("");
   const [openWindow, setopenWindow] = useState(false);
 
-  var iframe = document.getElementById('ori_part')
+  // var iframe = document.getElementById('ori_part')
   // var iframeWindow = iframe.contentWindow;
   // var iframeUrl = iframeWindow.location.href;
   // console.log('URL of the iframe', iframeUrl);
 
-  if (iframe) {
-    // Get the contentWindow of the iframe
-    var iframeWindow = iframe.contentWindow;
+  // if (iframe) {
+  //   // Get the contentWindow of the iframe
+  //   var iframeWindow = iframe.contentWindow;
 
-    // Check if the iframeWindow is not null
-    if (iframeWindow) {
-      // Get the URL from the iframe
-      var iframeUrl = iframeWindow.location.href;
+  //   // Check if the iframeWindow is not null
+  //   if (iframeWindow) {
+  //     // Get the URL from the iframe
+  //     var iframeUrl = iframeWindow.location.href;
 
-      console.log('URL of the iframe:', iframeUrl);
-    } else {
-      console.error('ContentWindow is null');
-    }
-  } else {
-    console.error('Iframe not found');
-  }
+  //     console.log('URL of the iframe:', iframeUrl);
+  //   } else {
+  //     console.error('ContentWindow is null');
+  //   }
+  // } else {
+  //   console.error('Iframe not found');
+  // }
 
 
   useEffect(() => {
@@ -374,21 +374,16 @@ const HomeSilder = () => {
                 >
                   SEARCH PARTS
                 </button> */}
-                <a
+                {/* <a
                   href={`https://oriparts.com/${carValName}/${carValModel}/${carValModei}/?back_url_pn=https://mechx.hypehy.com/search/{pn}`}
                   target="_blank"
                   className="w-100"
                 >
-                  <button className="search__filter--btn primary__btn w-100" disabled={carValModel.length <= 0 ? true : false}>
+                </a> */}
+                  <button className="search__filter--btn primary__btn w-100" onClick={openBrowser} disabled={carValModel.length <= 0 ? true : false}>
                     OEM CATALOG
                   </button>
-                </a>
               </div>
-
-              <button className="search__filter--btn primary__btn w-100" onClick={openBrowser}>
-                Open
-              </button>
-
             </div>
           </div>
         </div>
@@ -487,10 +482,9 @@ const HomeSilder = () => {
               src={`https://oriparts.com/${carValName}/${carValModel}/${carValModei}/?back_url_pn=https://boodmo.com/search/{pn}`}
               title="External Page"
               width="100%"
-              height="500px"
+              height="800px"
             ></iframe>
           </Typography>
-
         </Box>
       </Modal>
     </>

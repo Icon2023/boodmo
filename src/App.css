@@ -4947,9 +4947,11 @@ input[type="number"]::-webkit-outer-spin-button {
 .categories__card--style3 .categories__thumbnail--img {
     margin: auto;
 }
-.categories__thumbnail{
-    min-height: 120px;
+
+.categories__thumbnail {
+    /* min-height: 120px; */
 }
+
 .categories__card--style3:hover {
     border-color: var(--secondary-color);
 }
@@ -8175,17 +8177,24 @@ input.quickview__value--number {
 
 @media only screen and (min-width: 1200px) {
     .search__filter--inner {
-        padding: 0.2rem 2rem;
+        /* padding: 0.2rem 2rem; */
+    }
+}
+
+@media (max-width: 1800px) {
+    .header__sub--menu {
+        left: -79px;
     }
 }
 
 .search__filter--form__style2 {
-    gap: 2rem;
+    gap: 3rem;
+    align-items: center;
 }
 
 @media only screen and (min-width: 1200px) {
     .search__filter--form__style2 {
-        gap: 3rem;
+        gap: 2rem;
     }
 }
 
@@ -8243,6 +8252,10 @@ input.quickview__value--number {
     .search__filter--style5 {
         padding-top: 3.6rem;
     }
+}
+
+.new_img_height {
+    min-height: 171px;
 }
 
 .search__filter--inner.style5 {
